@@ -58,6 +58,9 @@
     "class": {
       "spec": false
     },
+    "serve": {
+      "port": 8084
+    },
     "component": {}
   }
 }
