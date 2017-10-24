@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
+    "body-parser": "^1.18.2",
     "core-js": "^2.4.1",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"
@@ -32,8 +33,6 @@
     "@types/jasmine": "~2.5.53",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",
-    "axios": "^0.17.0",
-    "body-parser": "^1.18.2",
     "codelyzer": "~3.2.0",
     "express": "^4.16.2",
     "jasmine-core": "~2.6.2",
