@@ -3,11 +3,12 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+const app = express();
 
 // Get our API routes
 const api = require('./api');
-
-const app = express();
 
 // Parsers for POST data
 app.use(bodyParser.json());
@@ -18,6 +19,20 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // Set our api routes
 app.use('/api', api);
+
+//connect to database: movies
+mongoose.Promise = require('bluebird');
+mongoose.connect('mongodb://localhost:27017/movies', { useMongoClient: true });
+const db = mongoose.connection;
+
+//Check if connected to database
+db.on('error', err => {
+    console.log('Error while connecting to DB: ${err.message}') ;
+});
+db.once('open', () => {
+    console.log('Server connected successfully to DB!');
+});
+
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
