@@ -59,6 +59,7 @@ typings/
 .idea
 
 # compiled output
+dist
 /dist
 /tmp
 /out-tsc
