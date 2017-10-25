@@ -13,6 +13,8 @@ let MovieSchema = new Schema({
   readMore: { type: String, default: "undefined"},
 });
 
+//Todo: User, history
+
 let Movie = mongoose.model('Movie', MovieSchema);
 
-module.exports = Movie;
+module.exports = {Movie};
