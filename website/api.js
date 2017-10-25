@@ -19,17 +19,6 @@ function handleError(res, reason, message, code) {
     res.status(code || 500).json({"error": message});
 }
 
-// Get titles
-router.get('/titles', function(req, res) {
-    db.collection('titles').find({}).toArray(function(err, docs) {
-        if (err) {
-            handleError(res, err.message, "Failed to get titles.");
-        } else {
-            res.status(200).json(docs);
-        }
-    });
-});
-
 // Register user
 router.post('/register', function(req, res){
     if (req.body.username !== '' && req.body.password !== ''){
