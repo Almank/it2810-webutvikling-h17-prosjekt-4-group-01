@@ -8,39 +8,39 @@ const movie = model.Movie;
 
 /* GET api listing. */
 router.get('/', (req, res) => {
-  res.send('api works');
-  console.log('api works');
+    res.send('api works');
+    console.log('api works');
 });
 
 //Error handler used by all.
 function handleError(res, reason, message, code) {
-  console.log("ERROR: " + reason);
-  res.status(code || 500).json({"error": message});
+    console.log("ERROR: " + reason);
+    res.status(code || 500).json({"error": message});
 }
 
 // Get titles
 router.get('/titles', function(req, res) {
-  db.collection('titles').find({}).toArray(function(err, docs) {
-    if (err) {
-      handleError(res, err.message, "Failed to get titles.");
-    } else {
-      res.status(200).json(docs);
-    }
-  });
+    db.collection('titles').find({}).toArray(function(err, docs) {
+        if (err) {
+            handleError(res, err.message, "Failed to get titles.");
+        } else {
+            res.status(200).json(docs);
+        }
+    });
 });
 
 // Add info to Database
 router.post('/titles', function(req,res) {
-  db.collection('titles')
-    .save({ title: req.body.title,
-            link: req.body.link},
-      function(err, docs) {
+    db.collection('titles')
+        .save({ title: req.body.title,
+                link: req.body.link},
+                function(err, docs) {
         if (err) {
-          handleError(res, err);
+            handleError(res, err);
         } else {
-          res.status(200).json(docs);
+            res.status(200).json(docs);
         }
-      });
+    });
 });
 
 // Add movie to database
