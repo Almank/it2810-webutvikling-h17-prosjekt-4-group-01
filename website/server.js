@@ -1,10 +1,25 @@
 // Get dependencies
+const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
 
 const app = express();
+
+//connect to database: movies
+mongoose.Promise = require('bluebird');
+mongoose.connect('mongodb://localhost:27017/movies', { useMongoClient: true });
+const db = mongoose.connection;
+module.exports = {db};
+
+//Check if connected to database
+db.on('error', err => {
+    console.log('Error while connecting to DB: ${err.message}') ;
+});
+db.once('open', () => {
+    console.log('Server connected successfully to DB!');
+});
 
 // Get our API routes
 const api = require('./api');

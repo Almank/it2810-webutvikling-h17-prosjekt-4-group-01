@@ -1,22 +1,10 @@
-const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
+const server = require('./server');
+const db = server.db;
 
 let model = require('./models');
-
-//connect to database: movies
-mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://localhost:27017/movies', { useMongoClient: true });
-const db = mongoose.connection;
-
-//Check if connected to database
-db.on('error', err => {
-  console.log('Error while connecting to DB: ${err.message}') ;
-});
-db.once('open', () => {
-  console.log('Server connected successfully to DB!');
-});
 
 /* GET api listing. */
 router.get('/', (req, res) => {
