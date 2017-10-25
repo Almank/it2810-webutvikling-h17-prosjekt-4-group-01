@@ -1,0 +1,25 @@
+<div>
+  <h2 mat-dialog-title>Movie details</h2>
+    <hr>
+  <mat-dialog-content>
+      <div *ngIf="movie">
+        <h2>{{movie.name}} details!</h2>
+        <div><label>id: </label>{{movie.id}}</div>
+        <div>
+          <label>name: </label>
+          <input [(ngModel)]="movie.name" placeholder="name"/>
+        </div>
+        <strong>{{data}}</strong>
+      <br>
+      <br>
+      <strong>{{data}}</strong>
+        </div>
+    </mat-dialog-content>
+
+    <hr>
+    <mat-dialog-actions>
+      <button mat-raised-button (click)="onCloseConfirm()">FAVORITE</button>
+      <button mat-raised-button (click)="onCloseCancel()">CANCEL</button>
+    </mat-dialog-actions>
+
+</div>
