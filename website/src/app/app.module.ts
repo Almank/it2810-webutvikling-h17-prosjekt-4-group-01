@@ -35,7 +35,7 @@ import {
   MatStepperModule,
 } from '@angular/material';
 import { FormsModule }   from '@angular/forms';
-import {MovieDetailComponent} from "./movie-detail.component";
+import {MovieDetailComponent} from "./movies/movie-detail.component";
 
 import { AppComponent } from './app.component';
 import { MoviesComponent } from './movies/movies.component';

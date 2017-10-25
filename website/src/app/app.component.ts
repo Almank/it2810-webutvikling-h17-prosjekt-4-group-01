@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Movie } from './movie';
+import { Movie } from './movies/movie';
 import { MoviesComponent } from "./movies/movies.component";
-import { MovieService } from './movie.service';
+import { MovieService } from './movies/movie.service';
 import { MatDialog } from "@angular/material";
 
 @Component({
