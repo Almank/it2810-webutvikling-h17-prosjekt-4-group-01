@@ -45,6 +45,7 @@ import { MoviesComponent } from './movies/movies.component';
     AppComponent,
     MovieDetailComponent,
     MoviesComponent,
+    MovieDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +60,7 @@ import { MoviesComponent } from './movies/movies.component';
     MatTooltipModule,
     MatDialogModule,
     MatCardModule,
+    FormsModule
   ],
 
   entryComponents: [

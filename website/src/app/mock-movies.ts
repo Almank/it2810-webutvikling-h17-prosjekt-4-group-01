@@ -11,4 +11,4 @@ export const MOVIES: Movie[] = [
   { id: 8, name: 'Pirates of the Caribbean'},
   { id: 9, name: 'It'},
   { id: 10, name: 'Logan'}
-];
+]
