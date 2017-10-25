@@ -5,6 +5,7 @@ const db = server.db;
 
 const model = require('./models');
 const movie = model.Movie;
+const user = model.User;
 
 /* GET api listing. */
 router.get('/', (req, res) => {
@@ -29,12 +30,48 @@ router.get('/titles', function(req, res) {
     });
 });
 
+// Register user
+router.post('/register', function(req, res){
+    if (req.body.username !== '' && req.body.password !== ''){
+        let new_user = new user({
+            username: req.body.username,
+            password: req.body.password,
+        });
+        db.collection('users').save(new_user,
+            function(err, docs) {
+                if (err) {
+                    handleError(res, err);
+                } else {
+                    res.status(200).json(docs);
+                }
+            }
+        );
+    } else {
+        handleError(res, "Invalid fieldinput.");
+    }
+});
+
+// Login
+router.post('/login', function(req, res){
+    const userdata = db.collection('users').find({
+        'username' : req.body.username,
+        'password' : req.body.password,
+    }).toArray(function(err, docs) {
+        if (err) {
+            handleError(res, err.message, "Failed to login.");
+        } else {
+            res.status(200).json(docs);
+        }
+    });
+});
+
 // Add info to Database
 router.post('/titles', function(req,res) {
-    db.collection('titles')
-        .save({ title: req.body.title,
-                link: req.body.link},
-                function(err, docs) {
+    db.collection('titles').save({
+        title: req.body.title,
+        link: req.body.link
+    },
+    function(err, docs) {
         if (err) {
             handleError(res, err);
         } else {
