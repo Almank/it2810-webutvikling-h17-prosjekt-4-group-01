@@ -47,7 +47,13 @@ which means that we have evolved our product around **MongoDB**, **Express**,
     
 ### Our Goal <a name="Goal"></a>
 The goal of our project is first and foremost to satisfy all the given requirements, 
-and even more. 
+and even more. We want to be able to apply the mean stack in a good manner, and program a 
+steady but dynamic and appealing front-end in addition to flexible and secure back-end.  
+The plan is to implement a mongo database of movies and users with an express/node API
+connecting us to the front-end requesting and pushing data. Here 
+on the angular client side, we want to create a main page with a visually appealing data
+model, in addition to a search and filterable list of content, and a "my page"
+containg all of your latest search history and other statistics. 
     
 ### Project Structure <a name="ProjectStructure"></a>
 
@@ -61,5 +67,3 @@ It also contains our Readme and .gitignore.
         - `environments` - development and production environment variables for
         building the distribution.
         
-
-Legg ut dokumentasjon av det planlagte systemet innen 8/11 på GitHub. Beskriv applikasjonen, data, planlagt implementasjon, valg av løsning etc.  Dette skal brukes for å evaluere/gi tilbakemeldinger på arkitektur og overordent design. Det er deltagelse i denne evalueringen som teller.  Evaluering av arkitektur og design av systemet gjøres 9/11 (det er deltagelse i evalueringen som teller og i sluttevalueringen blir det sjekket om dere følger relevante råd).
