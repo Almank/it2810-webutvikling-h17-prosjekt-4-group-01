@@ -9,9 +9,7 @@ const db = mongoose.connection;
 
 //Load movie model
 const model = require('./models');
-const movie = model.Movie;
-
-const omdb = 'http://www.omdbapi.com/?apikey=8fda5bb&' + 't=Star+Wars+the+last+jedi&' + 'type=movie';
+const movie_model = model.Movie;
 
 //Check if connected to database
 db.on('error', err => {
@@ -21,39 +19,14 @@ db.once('open', () => {
     console.log('Server connected successfully to DB!');
 });
 
+//Drop the existing database with "movies" tag
 mongoose.connection.collections['movies'].drop( function(err) {
     console.log('collection dropped');
 });
 
-let omdbData = '';
-http.get(omdb, (res) => {
-    // A chunk of data has been recieved.
-    res.on('data', (chunk) => {
-        omdbData += chunk;
-    });
-
-    // The whole response has been received. Print out the result.
-    res.on('end', () => {
-        omdbData = JSON.parse(omdbData);
-        let new_movie = new movie({
-            title: omdbData.Title,
-            year:  omdbData.Year,
-            runtime: omdbData.Runtime,
-            genre: omdbData.Genre,
-            director: omdbData.Director,
-            actors: omdbData.Actors,
-            plot: omdbData.Plot,
-            poster: omdbData.Poster,
-            readMore: omdbData.Website,
-        });
-        db.collection('movies').save(new_movie);
-        console.log(new_movie);
-    });
-
-}).on("error", (err) => {
-    console.log("Error: " + err.message);
-});
-
+//Complete list of all movies.
+//Has to be in the script, as javascript fileReader cannot read strings with special characters,
+//and javascript cannot access the filesystem due to web-security reasons.
 list_of_movies = [
     "Star+Wars:+The+Last+Jedi",
     "Justice+League",
@@ -378,3 +351,38 @@ list_of_movies = [
     "Justice",
     "Big+Jake",
 ];
+
+let progress = 0;
+// Access omdb api with movie as query, extract wanted data and save to database.
+for(let movie in list_of_movies){
+    setTimeout(function () {
+        let omdb = 'http://www.omdbapi.com/?apikey=8fda5bb&t=' + list_of_movies[movie] + '&type=movie';
+        let omdbData = '';
+        http.get(omdb, (res) => {
+            // A chunk of data has been recieved.
+            res.on('data', (chunk) => {
+                omdbData += chunk;
+            });
+            // The whole response has been received. save the result to db.
+            res.on('end', () => {
+                omdbData = JSON.parse(omdbData);
+                let new_movie = new movie_model({
+                    title: omdbData.Title,
+                    year:  omdbData.Year,
+                    runtime: omdbData.Runtime,
+                    genre: omdbData.Genre,
+                    director: omdbData.Director,
+                    actors: omdbData.Actors,
+                    plot: omdbData.Plot,
+                    poster: omdbData.Poster,
+                    readMore: omdbData.Website,
+                });
+                db.collection('movies').save(new_movie);
+                progress += 1;
+                console.log(parseFloat(Math.round((100/list_of_movies.length) * progress)).toFixed(2) + "% of data transfered");
+            });
+        }).on("error", (err) => {
+            console.log("Error: " + err.message);
+        });
+    }, 250);
+}
