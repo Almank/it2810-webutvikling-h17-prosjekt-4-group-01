@@ -1,0 +1,8 @@
+{
+  "spec_dir": "spec",
+  "spec_files": [
+    "apiSpec.js"
+  ],
+  "stopSpecOnExpectationFailure": false,
+  "random": false
+}

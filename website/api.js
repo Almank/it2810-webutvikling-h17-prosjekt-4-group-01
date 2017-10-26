@@ -10,7 +10,7 @@ const user = model.User;
 // GET api listing.
 router.get('/', (req, res) => {
     res.send('api works');
-    console.log('api works');
+
 });
 
 //Error handler used by all.
