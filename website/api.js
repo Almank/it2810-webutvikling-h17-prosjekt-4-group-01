@@ -10,7 +10,7 @@ const user = model.User;
 // GET api listing.
 router.get('/', (req, res) => {
     res.send('api works');
-    console.log('api works');
+
 });
 
 //Error handler used by all.
@@ -50,6 +50,7 @@ router.post('/login', function(req, res){
             handleError(res, err.message, "Failed to login.");
         } else {
             res.status(200).json(docs);
+            next();
         }
     });
 });
@@ -73,6 +74,7 @@ router.post('/movies', function (req, res) {
                 handleError(res, err);
             } else {
                 res.status(200).json(docs);
+                next();
             }
         }
     );
@@ -85,6 +87,7 @@ router.get('/movies', function(req, res) {
             handleError(res, err.message, "Failed to get movies.");
         } else {
             res.status(200).json(docs);
+            next();
         }
     });
 });
