@@ -27,32 +27,31 @@ mongoose.connection.collections['movies'].drop( function(err) {
 
 let omdbData = '';
 http.get(omdb, (res) => {
-  // A chunk of data has been recieved.
-  res.on('data', (chunk) => {
-    omdbData += chunk;
-  });
-
-  // The whole response has been received. Print out the result.
-  res.on('end', () => {
-    omdbData = JSON.parse(omdbData);
-    let new_movie = new movie({
-      title: omdbData.Title,
-      year:  omdbData.Year,
-      runtime: omdbData.Runtime,
-      genre: omdbData.Genre,
-      director: omdbData.Director,
-      actors: omdbData.Actors,
-      plot: omdbData.Plot,
-      poster: omdbData.Poster,
-      readMore: omdbData.Website,
+    // A chunk of data has been recieved.
+    res.on('data', (chunk) => {
+        omdbData += chunk;
     });
 
-    db.collection('movies').save(new_movie);
-    console.log(new_movie);
-  });
+    // The whole response has been received. Print out the result.
+    res.on('end', () => {
+        omdbData = JSON.parse(omdbData);
+        let new_movie = new movie({
+            title: omdbData.Title,
+            year:  omdbData.Year,
+            runtime: omdbData.Runtime,
+            genre: omdbData.Genre,
+            director: omdbData.Director,
+            actors: omdbData.Actors,
+            plot: omdbData.Plot,
+            poster: omdbData.Poster,
+            readMore: omdbData.Website,
+        });
+        db.collection('movies').save(new_movie);
+        console.log(new_movie);
+    });
 
 }).on("error", (err) => {
-  console.log("Error: " + err.message);
+    console.log("Error: " + err.message);
 });
 
 list_of_movies = [
