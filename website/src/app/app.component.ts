@@ -135,15 +135,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMovies();
-    this.http.get('/api/movies').subscribe(data => {
+    this.http.get('/api/movies/asc').subscribe(data => {
       // Read the result field from the JSON response.
-      let apekatt: UserData = isObject(data)
-          ? (<UserData> data)
-          : {}
-      console.log(apekatt.genre);
-
-
+      if (isObject(data)) {
+        const movieData = ((<UserData> data));
+        // Prints the first movie title.
+        console.log(movieData[0].title);
+      }
     });
+
     this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator);
   }
 
