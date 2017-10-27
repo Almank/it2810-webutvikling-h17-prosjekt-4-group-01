@@ -39,6 +39,7 @@ import {MovieDetailComponent} from "./movies/movie-detail.component";
 
 import { AppComponent } from './app.component';
 import { MoviesComponent } from './movies/movies.component';
+import {CdkTableModule} from '@angular/cdk/table';
 
 @NgModule({
   declarations: [
@@ -50,16 +51,38 @@ import { MoviesComponent } from './movies/movies.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CdkTableModule,
+    MatAutocompleteModule,
     MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
     MatCheckboxModule,
-    MatMenuModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatCardModule,
-    FormsModule,
-    MatTooltipModule,
+    MatChipsModule,
+    MatStepperModule,
+    MatDatepickerModule,
     MatDialogModule,
-    MatCardModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
     FormsModule
   ],
 
