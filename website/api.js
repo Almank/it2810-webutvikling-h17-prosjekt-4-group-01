@@ -50,7 +50,6 @@ router.post('/login', function(req, res){
             handleError(res, err.message, "Failed to login.");
         } else {
             res.status(200).json(docs);
-            next();
         }
     });
 });
@@ -74,7 +73,6 @@ router.post('/movies', function (req, res) {
                 handleError(res, err);
             } else {
                 res.status(200).json(docs);
-                next();
             }
         }
     );
@@ -87,9 +85,52 @@ router.get('/movies', function(req, res) {
             handleError(res, err.message, "Failed to get movies.");
         } else {
             res.status(200).json(docs);
-            next();
         }
     });
+});
+
+// Get movies title ascending
+router.get('/movies/asc', function(req, res) {
+  db.collection('movies').find({}).sort({'title': 1}).toArray(function(err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get movies.");
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
+
+// Get movies title descending
+router.get('/movies/desc', function(req, res) {
+  db.collection('movies').find({}).sort({'title': -1}).toArray(function(err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get movies.");
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
+
+// Get movies asc year
+router.get('/movies/ascyear', function(req, res) {
+  db.collection('movies').find({}).sort({'year': 1}).toArray(function(err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get movies.");
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
+
+// Get movies asc year
+router.get('/movies/descyear', function(req, res) {
+  db.collection('movies').find({}).sort({'year': -1}).toArray(function(err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get movies.");
+    } else {
+      res.status(200).json(docs);
+    }
+  });
 });
 
 module.exports = router;
