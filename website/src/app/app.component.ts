@@ -12,6 +12,8 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import {MOVIES} from "./movies/mock-movies";
+import {HttpClient} from "@angular/common/http";
+import {isObject} from "util";
 
 @Component({
   selector: 'app-root',
@@ -39,7 +41,7 @@ import {MOVIES} from "./movies/mock-movies";
             The actual rendered columns are set as a property on the row definition" -->
 
       <!-- ID Column -->
-      <ng-container matColumnDef="id">
+      <ng-container matColumnDef="_id">
         <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
       </ng-container>
@@ -105,7 +107,7 @@ import {MOVIES} from "./movies/mock-movies";
       <li *ngFor="let movie of movies"
         [class.selected]="movie === selectedMovie"
         (click)="openDialog(movie)">
-        <span class="badge">{{movie.id}}</span> {{movie.title}}
+        <span class="badge">{{movie._id}}</span> {{movie.title}}
       </li>
     </ul>
     <movie-detail [movie]="selectedMovie"></movie-detail>
@@ -119,13 +121,13 @@ export class AppComponent implements OnInit {
   movies: Movie[];
   selectedMovie: Movie;
   dialogResult: "";
-  displayedColumns = ['id', 'title', 'year', 'genre', 'plot', 'actors', 'director', 'runtime' ];
+  displayedColumns = ['_id', 'title', 'year', 'genre', 'plot', 'actors', 'director', 'runtime' ];
   exampleDatabase = new ExampleDatabase();
   dataSource: ExampleDataSource | null;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private movieService: MovieService, public dialog: MatDialog) { }
+  constructor(private movieService: MovieService, public dialog: MatDialog, private http: HttpClient) { }
 
   getMovies(): void {
     this.movieService.getMovies().then(movies => this.movies = movies);
@@ -133,6 +135,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMovies();
+    this.http.get('/api/movies').subscribe(data => {
+      // Read the result field from the JSON response.
+      let apekatt: UserData = isObject(data)
+          ? (<UserData> data)
+          : {}
+      console.log(apekatt.genre);
+
+
+    });
     this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator);
   }
 
@@ -149,21 +160,21 @@ export class AppComponent implements OnInit {
   }
 }
 
-// Mock movie list
+var dbMovies;
 const myMovies = [
-  { id: 1,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona',
+  { _id: 1,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona',
     genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
-  { id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'50min', year: 2008, title: 'Beauty  the Beast'},
-  { id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'},
-  { id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'},
-  { id: 3,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and  Beast'},
-  { id: 4,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
-  { id: 5,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
-  { id: 6,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: ' and the Beast'},
-  { id: 7,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
-  { id: 8,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and  Beast'},
-  { id: 9,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
-  { id: 10, readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'}
+  { _id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'GDS', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'50min', year: 2008, title: 'Beauty  the Beast'},
+  { _id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'},
+  { _id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'},
+  { _id: 3,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and  Beast'},
+  { _id: 4,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
+  { _id: 5,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
+  { _id: 6,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: ' and the Beast'},
+  { _id: 7,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
+  { _id: 8,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and  Beast'},
+  { _id: 9,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
+  { _id: 10, readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'}
 ]
 
   /* [{"_id":
@@ -183,16 +194,16 @@ const myMovies = [
 
 
 export interface UserData {
-  id: string;
-  readMore: string;
-  poster: string;
-  plot: string;
-  actors: string;
-  director: string;
-  genre: string;
-  runtime: string;
-  year: number;
-  title: string;
+  _id?: string;
+  readMore?: string;
+  poster?: string;
+  plot?: string;
+  actors?: string;
+  director?: string;
+  genre?: string;
+  runtime?: string;
+  year?: number;
+  title?: string;
 }
 
 /** An example database that the data source uses to retrieve data for the table. */
@@ -201,12 +212,14 @@ export class ExampleDatabase {
   dataChange: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>([]);
 
 
-  get data(): UserData[] { return this.dataChange.value; }
+  get data(): UserData[] {
+    return this.dataChange.value; }
 
   constructor() {
     const movieList = myMovies;
+
     // Fill up the database with 100 users.
-    for (let i = 0; i < movieList.length; i++) { this.addUser(i, movieList); }
+    for (let i = 0; i < movieList.length; i++) { this.addUser(i, movieList);}
   }
 
 
@@ -236,7 +249,7 @@ export class ExampleDatabase {
 
 
     return {
-      id: (this.data.length + 1).toString(),
+      _id: (this.data.length + 1).toString(),
       readMore: readMore,
       poster: poster,
       plot: plot,
