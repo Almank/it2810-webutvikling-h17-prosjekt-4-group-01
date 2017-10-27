@@ -5,6 +5,11 @@
   src: url(assets/fonts/GeosansLight.ttf);
 }
 
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
 .example-spacer{
   padding-right: 20px;
 }
@@ -25,8 +30,8 @@ flex: 1 1 auto;
 
 .profileIcon {
   font-size: 30px;
-  margin-top: 8px;
   text-align: center;
+  margin-bottom: 4px;
 }
 
 .pageTitle {
@@ -79,4 +84,52 @@ flex: 1 1 auto;
   height: 1.8em;
   margin-right: .8em;
   border-radius: 4px 0 0 4px;
+}
+
+/* Structure: Table */
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  width: 90%;
+  margin: auto;
+
+}
+
+.example-header {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  padding-left: 24px;
+  font-size: 20px;
+}
+
+.mat-table {
+  overflow: auto;
+  height: auto;
+}
+
+
+/* Structure: Search form */
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  display: block;
+  margin: auto;
+  padding-top: 25px;
+  padding-bottom: 18px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.mat-form-field-infix {
+  text-align: center;
+}
+
+.mat-hint {
+  padding-left: 25px;
 }
