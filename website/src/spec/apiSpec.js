@@ -2,7 +2,6 @@ const request = require("request");
 
 const base_url = "http://localhost:8084/api";
 
-
 // Testing if server is up and running.
 describe("GET /", function() {
   it("returns status code 200", function(done) {
@@ -33,5 +32,3 @@ describe("GET /", function() {
     });
   });
 });
-
-
