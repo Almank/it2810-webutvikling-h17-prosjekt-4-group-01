@@ -1,0 +1,29 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+@font-face {
+  font-family: GeosansLight;
+  src: url(assets/fonts/GeosansLight.ttf);
+}
+
+.example-spacer{
+  padding-right: 20px;
+}
+
+.example-fill-remaining-space {
+// This fills the remaining space, by using flexbox.
+// Every toolbar row uses a flexbox row layout.
+flex: 1 1 auto;
+}
+
+.example-spacer{
+  flex: 1;
+}
+
+.profileIcon {
+  font-size: 30px;
+}
+
+.pageTitle {
+  font-family: GeosansLight;
+  font-size: 40px;
+}
