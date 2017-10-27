@@ -5,42 +5,54 @@ const db = server.db;
 
 const model = require('./models');
 const movie = model.Movie;
+const user = model.User;
 
-/* GET api listing. */
+// GET api listing.
 router.get('/', (req, res) => {
-  res.send('api works');
-  console.log('api works');
+    res.send('api works');
+
 });
 
 //Error handler used by all.
 function handleError(res, reason, message, code) {
-  console.log("ERROR: " + reason);
-  res.status(code || 500).json({"error": message});
+    console.log("ERROR: " + reason);
+    res.status(code || 500).json({"error": message});
 }
 
-// Get titles
-router.get('/titles', function(req, res) {
-  db.collection('titles').find({}).toArray(function(err, docs) {
-    if (err) {
-      handleError(res, err.message, "Failed to get titles.");
+// Register user
+router.post('/register', function(req, res){
+    if (req.body.username !== '' && req.body.password !== ''){
+        let new_user = new user({
+            username: req.body.username,
+            password: req.body.password,
+        });
+        db.collection('users').save(new_user,
+            function(err, docs) {
+                if (err) {
+                    handleError(res, err);
+                } else {
+                    res.status(200).json(docs);
+                }
+            }
+        );
     } else {
-      res.status(200).json(docs);
+        handleError(res, "Invalid fieldinput.");
     }
-  });
 });
 
-// Add info to Database
-router.post('/titles', function(req,res) {
-  db.collection('titles')
-    .save({ title: req.body.title,
-            link: req.body.link},
-      function(err, docs) {
+// Login
+router.post('/login', function(req, res){
+    db.collection('users').find({
+        'username' : req.body.username,
+        'password' : req.body.password,
+    }).toArray(function(err, docs) {
         if (err) {
-          handleError(res, err);
+            handleError(res, err.message, "Failed to login.");
         } else {
-          res.status(200).json(docs);
+            res.status(200).json(docs);
+            next();
         }
-      });
+    });
 });
 
 // Add movie to database
@@ -62,6 +74,7 @@ router.post('/movies', function (req, res) {
                 handleError(res, err);
             } else {
                 res.status(200).json(docs);
+                next();
             }
         }
     );
@@ -74,6 +87,7 @@ router.get('/movies', function(req, res) {
             handleError(res, err.message, "Failed to get movies.");
         } else {
             res.status(200).json(docs);
+            next();
         }
     });
 });
