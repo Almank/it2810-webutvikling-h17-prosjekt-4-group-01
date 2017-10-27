@@ -11,6 +11,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
+import {MOVIES} from "./movies/mock-movies";
 
 @Component({
   selector: 'app-root',
@@ -82,7 +83,7 @@ import 'rxjs/add/operator/map';
       </li>
     </ul>
     <movie-detail [movie]="selectedMovie"></movie-detail>
-  `,
+    </div> `,
 
   providers: [MovieService]
 })
@@ -107,7 +108,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.getMovies();
     this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator);
-
   }
 
   openDialog() {
@@ -130,6 +130,24 @@ const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
   'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
   'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
 
+const myMovies = [
+  { id: 1, name: 'Beauty and the Beast'},
+  { id: 2, name: 'The Fate of the Furious'},
+  { id: 3, name: 'Despicable Me 3'},
+  { id: 4, name: 'Spider-Man: Homecoming'},
+  { id: 5, name: 'Wolf Warrior 2'},
+  { id: 6, name: 'Guardians of the Galaxy'},
+  { id: 7, name: 'Wonder Woman'},
+  { id: 8, name: 'Pirates of the Caribbean'},
+  { id: 9, name: 'It'},
+  { id: 10, name: 'Logan'}
+]
+
+
+
+
+
+
 export interface UserData {
   id: string;
   name: string;
@@ -141,25 +159,30 @@ export interface UserData {
 export class ExampleDatabase {
   /** Stream that emits whenever the data has been modified. */
   dataChange: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>([]);
+
+
   get data(): UserData[] { return this.dataChange.value; }
 
   constructor() {
+    const movieList = myMovies;
     // Fill up the database with 100 users.
-    for (let i = 0; i < 100; i++) { this.addUser(); }
+    for (let i = 0; i < movieList.length; i++) { this.addUser(i, movieList); }
   }
 
+
   /** Adds a new user to the database. */
-  addUser() {
+  addUser(i, movieList) {
+
+
     const copiedData = this.data.slice();
-    copiedData.push(this.createNewUser());
+    copiedData.push(this.createNewUser(i, movieList));
     this.dataChange.next(copiedData);
   }
 
   /** Builds and returns a new User. */
-  private createNewUser() {
-    const name =
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
+  private createNewUser(i, movieList) {
+    const name =  movieList[i].name
+
 
     return {
       id: (this.data.length + 1).toString(),
