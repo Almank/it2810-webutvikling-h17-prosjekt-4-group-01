@@ -39,29 +39,55 @@ import {MOVIES} from "./movies/mock-movies";
             The actual rendered columns are set as a property on the row definition" -->
 
       <!-- ID Column -->
-      <ng-container matColumnDef="userId">
+      <ng-container matColumnDef="id">
         <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
       </ng-container>
 
-      <!-- Progress Column -->
-      <ng-container matColumnDef="progress">
+      <!-- Title Column -->
+      <ng-container matColumnDef="title">
         <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.progress}}% </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.title}} </mat-cell>
       </ng-container>
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="userName">
+      <!-- Year Column -->
+      <ng-container matColumnDef="year">
         <mat-header-cell *matHeaderCellDef> Year </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.year}} </mat-cell>
       </ng-container>
 
-      <!-- Color Column -->
-      <ng-container matColumnDef="color">
+      <!-- Genre Column -->
+      <ng-container matColumnDef="genre">
         <mat-header-cell *matHeaderCellDef> Genre </mat-header-cell>
-        <mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.genre}} </mat-cell>
+      </ng-container>
+      
+      <!-- Plot Column -->
+      <ng-container matColumnDef="plot">
+        <mat-header-cell *matHeaderCellDef> Plot </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.plot}} </mat-cell>
       </ng-container>
 
+      <!-- Actors Column -->
+      <ng-container matColumnDef="actors">
+        <mat-header-cell *matHeaderCellDef> Actors </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.actors}} </mat-cell>
+      </ng-container>
+
+      <!-- Director Column -->
+      <ng-container matColumnDef="director">
+        <mat-header-cell *matHeaderCellDef> Director </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.director}} </mat-cell>
+      </ng-container>
+
+      <!-- Progress Column -->
+      <ng-container matColumnDef="runtime">
+        <mat-header-cell *matHeaderCellDef> Runtime </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.runtime}} </mat-cell>
+      </ng-container>
+      
+
+      
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
@@ -79,7 +105,7 @@ import {MOVIES} from "./movies/mock-movies";
       <li *ngFor="let movie of movies"
         [class.selected]="movie === selectedMovie"
         (click)="openDialog(movie)">
-        <span class="badge">{{movie.id}}</span> {{movie.name}}
+        <span class="badge">{{movie.id}}</span> {{movie.title}}
       </li>
     </ul>
     <movie-detail [movie]="selectedMovie"></movie-detail>
@@ -93,7 +119,7 @@ export class AppComponent implements OnInit {
   movies: Movie[];
   selectedMovie: Movie;
   dialogResult: "";
-  displayedColumns = ['userId', 'userName', 'progress', 'color'];
+  displayedColumns = ['id', 'title', 'year', 'genre', 'plot', 'actors', 'director', 'runtime' ];
   exampleDatabase = new ExampleDatabase();
   dataSource: ExampleDataSource | null;
 
@@ -123,25 +149,33 @@ export class AppComponent implements OnInit {
   }
 }
 
-/** Constants used to fill up our data base. */
-const COLORS = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
-  'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
-const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-  'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-  'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
-
+// Mock movie list
 const myMovies = [
-  { id: 1, name: 'Beauty and the Beast'},
-  { id: 2, name: 'The Fate of the Furious'},
-  { id: 3, name: 'Despicable Me 3'},
-  { id: 4, name: 'Spider-Man: Homecoming'},
-  { id: 5, name: 'Wolf Warrior 2'},
-  { id: 6, name: 'Guardians of the Galaxy'},
-  { id: 7, name: 'Wonder Woman'},
-  { id: 8, name: 'Pirates of the Caribbean'},
-  { id: 9, name: 'It'},
-  { id: 10, name: 'Logan'}
+  { id: 1,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona',
+    genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
+  { id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'50min', year: 2008, title: 'Beauty  the Beast'},
+  { id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'},
+  { id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'},
+  { id: 3,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and  Beast'},
+  { id: 4,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
+  { id: 5,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
+  { id: 6,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: ' and the Beast'},
+  { id: 7,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
+  { id: 8,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and  Beast'},
+  { id: 9,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
+  { id: 10, readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'}
 ]
+
+  /* [{"_id":
+  "readMore":
+  "poster":
+  "plot":
+  "actors":
+  "director":
+  "genre":
+  "runtime":
+  "year":
+  "title": */
 
 
 
@@ -150,9 +184,15 @@ const myMovies = [
 
 export interface UserData {
   id: string;
-  name: string;
-  progress: string;
-  color: string;
+  readMore: string;
+  poster: string;
+  plot: string;
+  actors: string;
+  director: string;
+  genre: string;
+  runtime: string;
+  year: number;
+  title: string;
 }
 
 /** An example database that the data source uses to retrieve data for the table. */
@@ -181,14 +221,32 @@ export class ExampleDatabase {
 
   /** Builds and returns a new User. */
   private createNewUser(i, movieList) {
-    const name =  movieList[i].name
+
+    const readMore = movieList[i].readMore;
+    const poster = movieList[i].poster;
+    const plot = movieList[i].plot;
+    const actors = movieList[i].actors;
+    const director= movieList[i].director;
+    const genre= movieList[i].genre;
+    const runtime = movieList[i].runtime;
+    const year = movieList[i].year;
+    const title =  movieList[i].title;
+
+
 
 
     return {
       id: (this.data.length + 1).toString(),
-      name: name,
-      progress: Math.round(Math.random() * 100).toString(),
-      color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
+      readMore: readMore,
+      poster: poster,
+      plot: plot,
+      actors: actors,
+      director: director,
+      genre: genre,
+      runtime: runtime,
+      year: year,
+      title: title
+
     };
   }
 }
