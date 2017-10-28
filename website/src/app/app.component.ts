@@ -43,7 +43,7 @@ import {isObject} from "util";
       <!-- ID Column -->
       <ng-container matColumnDef="_id">
         <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row._id}} </mat-cell>
       </ng-container>
 
       <!-- Title Column -->
@@ -117,7 +117,7 @@ import {isObject} from "util";
 })
 
 export class AppComponent implements OnInit {
-  title = 'Movies';
+  title : 'Movies';
   movies: Movie[];
   selectedMovie: Movie;
   dialogResult: "";
@@ -138,8 +138,9 @@ export class AppComponent implements OnInit {
     this.http.get('/api/movies/asc').subscribe(data => {
       // Read the result field from the JSON response.
       if (isObject(data)) {
-        const movieData = ((<UserData> data));
+        const movieData = ((<MovieData> data));
         // Prints the first movie title.
+        const dbMovies = movieData;
         console.log(movieData[0].title);
       }
     });
@@ -160,7 +161,8 @@ export class AppComponent implements OnInit {
   }
 }
 
-var dbMovies;
+
+
 const myMovies = [
   { _id: 1,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona',
     genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
@@ -193,7 +195,7 @@ const myMovies = [
 
 
 
-export interface UserData {
+export interface MovieData {
   _id?: string;
   readMore?: string;
   poster?: string;
@@ -209,31 +211,32 @@ export interface UserData {
 /** An example database that the data source uses to retrieve data for the table. */
 export class ExampleDatabase {
   /** Stream that emits whenever the data has been modified. */
-  dataChange: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>([]);
+  dataChange: BehaviorSubject<MovieData[]> = new BehaviorSubject<MovieData[]>([]);
 
 
-  get data(): UserData[] {
+  get data(): MovieData[] {
     return this.dataChange.value; }
 
   constructor() {
     const movieList = myMovies;
-
+    console.log("running");
+    console.log( "FFS");
     // Fill up the database with 100 users.
-    for (let i = 0; i < movieList.length; i++) { this.addUser(i, movieList);}
+    for (let i = 0; i < movieList.length; i++) { this.addMovie(i, movieList);}
   }
 
 
-  /** Adds a new user to the database. */
-  addUser(i, movieList) {
+  /** Adds a new movie to the database. */
+  addMovie(i, movieList) {
 
 
     const copiedData = this.data.slice();
-    copiedData.push(this.createNewUser(i, movieList));
+    copiedData.push(this.createNewMovie(i, movieList));
     this.dataChange.next(copiedData);
   }
 
-  /** Builds and returns a new User. */
-  private createNewUser(i, movieList) {
+  /** Builds and returns a new movie. */
+  private createNewMovie(i, movieList) {
 
     const readMore = movieList[i].readMore;
     const poster = movieList[i].poster;
@@ -277,7 +280,7 @@ export class ExampleDataSource extends DataSource<any> {
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<UserData[]> {
+  connect(): Observable<MovieData[]> {
     const displayDataChanges = [
       this._exampleDatabase.dataChange,
       this._paginator.page,
