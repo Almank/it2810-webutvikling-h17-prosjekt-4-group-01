@@ -107,6 +107,7 @@ flex: 1 1 auto;
 .mat-table {
   overflow: auto;
   height: auto;
+  padding-bottom: 20px;
 }
 
 

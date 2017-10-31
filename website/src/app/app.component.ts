@@ -1,8 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { Movie } from './movies/movie';
 import { MoviesComponent } from "./movies/movies.component";
-import { MovieService } from './movies/movie.service';
 import { MatDialog } from "@angular/material";
 import {DataSource} from '@angular/cdk/collections';
 import {MatPaginator} from '@angular/material';
@@ -11,14 +8,13 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import {MOVIES} from "./movies/mock-movies";
 import {HttpClient} from "@angular/common/http";
 import {isObject} from "util";
-import {MovieDb} from "./movies/movie-db";
 
 @Component({
   selector: 'app-root',
-  template: `<mat-toolbar color="primary">
+  template: `
+    <mat-toolbar color="primary">
       <span class="pageTitle">top 5<mat-icon class="playIcon">play_circle_filled</mat-icon> movies</span>
       <span class="example-spacer"></span>
     <span matTooltip="Profile">
@@ -26,7 +22,6 @@ import {MovieDb} from "./movies/movie-db";
        <mat-icon class="profileIcon">account_circle</mat-icon></button>
       </span>
     </mat-toolbar>
-    <div>
   <div class="searchWrap">    
   <form class="example-form">
     <mat-form-field class="example-full-width">
@@ -40,12 +35,6 @@ import {MovieDb} from "./movies/movie-db";
 
       <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
-
-      <!-- ID Column -->
-      <ng-container matColumnDef="_id">
-        <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row._id}} </mat-cell>
-      </ng-container>
 
       <!-- Title Column -->
       <ng-container matColumnDef="title">
@@ -64,18 +53,6 @@ import {MovieDb} from "./movies/movie-db";
         <mat-header-cell *matHeaderCellDef> Genre </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.genre}} </mat-cell>
       </ng-container>
-      
-      <!-- Plot Column -->
-      <ng-container matColumnDef="plot">
-        <mat-header-cell *matHeaderCellDef> Plot </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.plot}} </mat-cell>
-      </ng-container>
-
-      <!-- Actors Column -->
-      <ng-container matColumnDef="actors">
-        <mat-header-cell *matHeaderCellDef> Actors </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.actors}} </mat-cell>
-      </ng-container>
 
       <!-- Director Column -->
       <ng-container matColumnDef="director">
@@ -89,8 +66,6 @@ import {MovieDb} from "./movies/movie-db";
         <mat-cell *matCellDef="let row"> {{row.runtime}} </mat-cell>
       </ng-container>
       
-
-      
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
@@ -101,53 +76,24 @@ import {MovieDb} from "./movies/movie-db";
                    [pageSize]="10"
                    [pageSizeOptions]="[10, 25, 50]">
     </mat-paginator>
-  </div>
-  
-  
-    <ul class="movies">
-      <li *ngFor="let movie of movies"
-        [class.selected]="movie === selectedMovie"
-        (click)="openDialog(movie)">
-        <span class="badge">{{movie._id}}</span> {{movie.title}}
-      </li>
-    </ul>
-    <movie-detail [movie]="selectedMovie"></movie-detail>
-    </div> `,
+  </div>`,
 
-  providers: [MovieService]
 })
 
-
-
 export class AppComponent implements OnInit {
-  movies: Movie[];
-  selectedMovie: Movie;
   dialogResult: "";
-  displayedColumns = ['_id', 'title', 'year', 'genre', 'plot', 'actors', 'director', 'runtime' ];
-  dataSource: ExampleDataSource | null;
-
-
+  displayedColumns = ['title', 'year', 'genre', 'director', 'runtime' ];
+  dataSource: ExampleMovieSource | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private http: HttpClient, private movieService: MovieService, public dialog: MatDialog) {
-    console.log("construct appcomp");
-
+  constructor(private http: HttpClient, public dialog: MatDialog) {
   }
-
-  getMovies(): void {
-    console.log("getMovies");
-    this.movieService.getMovies().then(movies => this.movies = movies);
-  }
-
-
 
   ngOnInit(): void {
-
     this.generateList();
-    this.getMovies();
-
-    this.dataSource = new ExampleDataSource(this, this.paginator);
+    this.dataSource = new ExampleMovieSource(this, this.paginator);
   }
+
 
   generateList(){
     this.http.get('/api/movies/asc').subscribe(data => {
@@ -159,39 +105,13 @@ export class AppComponent implements OnInit {
     });
   }
 
-  openDialog() {
-    console.log("Dialog");
-    let dialogRef = this.dialog.open(MoviesComponent, {
-      width: '600px',
-      data: 'This text is passed into the dialog'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog closed: ${result}`);
-      this.dialogResult = result;
-    })
-  }
-
-  dataChange: BehaviorSubject<MovieData[]> = new BehaviorSubject<MovieData[]>([]);
-
-
-  get data(): MovieData[] {
-    console.log("get data");
-    return this.dataChange.value; }
-
   createList(movieData){
-    const movieList = myMovies;
-    console.log("constructor ExampleDB", movieList);
     // Fill up the database with 100 movies.
     for (let i = 0; i < 100 ; i++) { this.addMovie(i, movieData);}
   }
 
-
   /** Adds a new movie to the database. */
   addMovie(i, movieList) {
-    console.log("Addmovie");
-
-
     const copiedData = this.data.slice();
     copiedData.push(this.createNewMovie(i, movieList));
     this.dataChange.next(copiedData);
@@ -199,8 +119,6 @@ export class AppComponent implements OnInit {
 
   /** Builds and returns a new movie. */
   private createNewMovie(i, movieList) {
-    console.log("createNewMovie");
-
     const readMore = movieList[i].readMore;
     const poster = movieList[i].poster;
     const plot = movieList[i].plot;
@@ -210,12 +128,13 @@ export class AppComponent implements OnInit {
     const runtime = movieList[i].runtime;
     const year = movieList[i].year;
     const title =  movieList[i].title;
+    const _id = movieList[i]._id;
 
 
 
 
     return {
-      _id: (this.data.length + 1).toString(),
+      _id: _id,
       readMore: readMore,
       poster: poster,
       plot: plot,
@@ -229,44 +148,27 @@ export class AppComponent implements OnInit {
     };
   }
 
+  dataChange: BehaviorSubject<MovieData[]> = new BehaviorSubject<MovieData[]>([]);
+
+  get data(): MovieData[] {
+    return this.dataChange.value;
+  }
+
+  openDialog() {
+    let dialogRef = this.dialog.open(MoviesComponent, {
+      width: '600px',
+      data: 'This text is passed into the dialog'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog closed: ${result}`);
+      this.dialogResult = result;
+    });
+  }
 }
 
-
-
-const myMovies = [
-  { _id: 1,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona',
-    genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
-  { _id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'GDS', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'50min', year: 2008, title: 'Beauty  the Beast'},
-  { _id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'},
-  { _id: 2,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'},
-  { _id: 3,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and  Beast'},
-  { _id: 4,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
-  { _id: 5,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
-  { _id: 6,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: ' and the Beast'},
-  { _id: 7,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
-  { _id: 8,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and  Beast'},
-  { _id: 9,  readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty and the Beast'},
-  { _id: 10, readMore: 'Websitelol', poster: 'ayylmao', plot: 'ffs', actors:'Bryce Dallas', director: 'J.A Bayona', genre:'Action, adventure', runtime:'N/A', year: 2008, title: 'Beauty  the Beast'}
-]
-
-  /* [{"_id":
-  "readMore":
-  "poster":
-  "plot":
-  "actors":
-  "director":
-  "genre":
-  "runtime":
-  "year":
-  "title": */
-
-
-
-
-
-
 export interface MovieData {
-  _id?: string;
+  _id?: number;
   readMore?: string;
   poster?: string;
   plot?: string;
@@ -278,31 +180,25 @@ export interface MovieData {
   title?: string;
 }
 
-/** An example database that the data source uses to retrieve data for the table. */
-
 /**
  * Data source to provide what data should be rendered in the table. Note that the data source
  * can retrieve its data in any way. In this case, the data source is provided a reference
- * to a common data base, ExampleDatabase. It is not the data source's responsibility to manage
+ * It is not the data source's responsibility to manage
  * the underlying data. Instead, it only needs to take the data and send the table exactly what
  * should be rendered.
- */
-export class ExampleDataSource extends DataSource<any> {
+ **/
+export class ExampleMovieSource extends DataSource<any> {
   constructor(private _appComponent: AppComponent, private _paginator: MatPaginator) {
     super();
   }
-
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<MovieData[]> {
-    console.log("connect");
     const displayDataChanges = [
       this._appComponent.dataChange,
       this._paginator.page,
     ];
-
     return Observable.merge(...displayDataChanges).map(() => {
       const data = this._appComponent.data.slice();
-
       // Grab the page's slice of data.
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
       return data.splice(startIndex, this._paginator.pageSize);
