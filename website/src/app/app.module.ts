@@ -36,7 +36,6 @@ import {
   MatStepperModule,
 } from '@angular/material';
 import { FormsModule }   from '@angular/forms';
-import {MovieDetailComponent} from "./movies/movie-detail.component";
 
 import { AppComponent } from './app.component';
 import { MoviesComponent } from './movies/movies.component';
@@ -45,9 +44,7 @@ import {CdkTableModule} from '@angular/cdk/table';
 @NgModule({
   declarations: [
     AppComponent,
-    MovieDetailComponent,
     MoviesComponent,
-    MovieDetailComponent
   ],
   imports: [
     BrowserModule,
