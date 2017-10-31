@@ -4,7 +4,7 @@ export {DataSource} from '@angular/cdk/collections';
 export {MatPaginator} from '@angular/material';
 export {BehaviorSubject} from 'rxjs/BehaviorSubject';
 export {Observable} from 'rxjs/Observable';
-export {HttpClient} from "@angular/common/http";
+export {HttpClient, HttpParams} from "@angular/common/http";
 export {isObject} from "util";
 export { TestBed, async } from '@angular/core/testing';
 export {MovieListComponent} from "./movie-list.component";

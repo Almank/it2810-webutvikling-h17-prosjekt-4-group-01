@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject, Observable, HttpClient, isObject } from './import-module';
+import { Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject, Observable, HttpClient, HttpParams, isObject } from './import-module';
 import  'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -23,7 +23,9 @@ export class MovieListComponent implements OnInit {
   }
 
   generateList(){
-    this.http.get('/api/movies/asc').subscribe(data => {
+    const params = new HttpParams()
+      .set('limit', '25').set('page', '1');
+    this.http.get('/api/movies/asc', {params}).subscribe(data => {
       // Read the result field from the JSON response.
       if (isObject(data)) {
         const movieData = ((<MovieData> data));
@@ -34,7 +36,7 @@ export class MovieListComponent implements OnInit {
 
   createList(movieData){
     // Fill up the database with 100 movies.
-    for (let i = 0; i < 100 ; i++) { this.addMovie(i, movieData);}
+    for (let i = 0; i < 25 ; i++) { this.addMovie(i, movieData);}
   }
 
   /** Adds a new movie to the database. */
