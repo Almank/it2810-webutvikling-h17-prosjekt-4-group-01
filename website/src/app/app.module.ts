@@ -38,13 +38,15 @@ import {
 import { FormsModule }   from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { MoviesComponent } from './movies/movies.component';
 import {CdkTableModule} from '@angular/cdk/table';
+import { MovieListComponent } from './movie-list/movie-list.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MoviesComponent,
+    MovieListComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,10 +85,6 @@ import {CdkTableModule} from '@angular/cdk/table';
     MatTooltipModule,
     HttpClientModule,
     FormsModule
-  ],
-
-  entryComponents: [
-    MoviesComponent
   ],
 
   providers: [],
