@@ -10,7 +10,6 @@ const user = model.User;
 // GET api listing.
 router.get('/', (req, res) => {
     res.send('api works');
-
 });
 
 //Error handler used by all.
@@ -112,7 +111,7 @@ router.get('/movies/desc', function(req, res) {
 });
 
 // Get movies asc year
-router.get('/movies/ascyear', function(req, res) {
+router.get('/movies/year/asc', function(req, res) {
   db.collection('movies').find({}).sort({'year': 1}).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get movies.");
@@ -123,7 +122,7 @@ router.get('/movies/ascyear', function(req, res) {
 });
 
 // Get movies asc year
-router.get('/movies/descyear', function(req, res) {
+router.get('/movies/year/desc', function(req, res) {
   db.collection('movies').find({}).sort({'year': -1}).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get movies.");
