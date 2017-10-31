@@ -93,6 +93,7 @@ flex: 1 1 auto;
   min-width: 300px;
   width: 90%;
   margin: auto;
+  text-align: center;
 
 }
 
@@ -107,6 +108,7 @@ flex: 1 1 auto;
 .mat-table {
   overflow: auto;
   height: auto;
+  padding-bottom: 20px;
 }
 
 
