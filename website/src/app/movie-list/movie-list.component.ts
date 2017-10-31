@@ -14,8 +14,7 @@ export class MovieListComponent implements OnInit {
   dataSource: ExampleMovieSource | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {
-  }
+  constructor(private http: HttpClient, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.generateList();
@@ -69,7 +68,6 @@ export class MovieListComponent implements OnInit {
       runtime: runtime,
       year: year,
       title: title
-
     };
   }
 
@@ -78,7 +76,6 @@ export class MovieListComponent implements OnInit {
   get data(): MovieData[] {
     return this.dataChange.value;
   }
-
 }
 
 export interface MovieData {
@@ -118,6 +115,5 @@ export class ExampleMovieSource extends DataSource<any> {
       return data.splice(startIndex, this._paginator.pageSize);
     });
   }
-
   disconnect() {}
 }
