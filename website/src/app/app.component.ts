@@ -14,6 +14,7 @@ import 'rxjs/add/operator/map';
 import {MOVIES} from "./movies/mock-movies";
 import {HttpClient} from "@angular/common/http";
 import {isObject} from "util";
+import {MovieDb} from "./movies/movie-db";
 
 @Component({
   selector: 'app-root',
@@ -82,7 +83,7 @@ import {isObject} from "util";
         <mat-cell *matCellDef="let row"> {{row.director}} </mat-cell>
       </ng-container>
 
-      <!-- Progress Column -->
+      <!-- Runtime Column -->
       <ng-container matColumnDef="runtime">
         <mat-header-cell *matHeaderCellDef> Runtime </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.runtime}} </mat-cell>
@@ -95,7 +96,7 @@ import {isObject} from "util";
     </mat-table>
 
     <mat-paginator #paginator
-                   [length]="exampleDatabase.data.length"
+                   [length]="this.data.length"
                    [pageIndex]="0"
                    [pageSize]="10"
                    [pageSizeOptions]="[10, 25, 50]">
@@ -116,39 +117,50 @@ import {isObject} from "util";
   providers: [MovieService]
 })
 
+
+
 export class AppComponent implements OnInit {
-  title : 'Movies';
   movies: Movie[];
   selectedMovie: Movie;
   dialogResult: "";
   displayedColumns = ['_id', 'title', 'year', 'genre', 'plot', 'actors', 'director', 'runtime' ];
-  exampleDatabase = new ExampleDatabase();
   dataSource: ExampleDataSource | null;
+
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private movieService: MovieService, public dialog: MatDialog, private http: HttpClient) { }
+  constructor(private http: HttpClient, private movieService: MovieService, public dialog: MatDialog) {
+    console.log("construct appcomp");
+
+  }
 
   getMovies(): void {
+    console.log("getMovies");
     this.movieService.getMovies().then(movies => this.movies = movies);
   }
 
+
+
   ngOnInit(): void {
+
+    this.generateList();
     this.getMovies();
+
+    this.dataSource = new ExampleDataSource(this, this.paginator);
+  }
+
+  generateList(){
     this.http.get('/api/movies/asc').subscribe(data => {
       // Read the result field from the JSON response.
       if (isObject(data)) {
         const movieData = ((<MovieData> data));
-        // Prints the first movie title.
-        const dbMovies = movieData;
-        console.log(movieData[0].title);
+        this.createList(movieData);
       }
     });
-
-    this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator);
   }
 
   openDialog() {
+    console.log("Dialog");
     let dialogRef = this.dialog.open(MoviesComponent, {
       width: '600px',
       data: 'This text is passed into the dialog'
@@ -159,6 +171,64 @@ export class AppComponent implements OnInit {
       this.dialogResult = result;
     })
   }
+
+  dataChange: BehaviorSubject<MovieData[]> = new BehaviorSubject<MovieData[]>([]);
+
+
+  get data(): MovieData[] {
+    console.log("get data");
+    return this.dataChange.value; }
+
+  createList(movieData){
+    const movieList = myMovies;
+    console.log("constructor ExampleDB", movieList);
+    // Fill up the database with 100 movies.
+    for (let i = 0; i < 100 ; i++) { this.addMovie(i, movieData);}
+  }
+
+
+  /** Adds a new movie to the database. */
+  addMovie(i, movieList) {
+    console.log("Addmovie");
+
+
+    const copiedData = this.data.slice();
+    copiedData.push(this.createNewMovie(i, movieList));
+    this.dataChange.next(copiedData);
+  }
+
+  /** Builds and returns a new movie. */
+  private createNewMovie(i, movieList) {
+    console.log("createNewMovie");
+
+    const readMore = movieList[i].readMore;
+    const poster = movieList[i].poster;
+    const plot = movieList[i].plot;
+    const actors = movieList[i].actors;
+    const director= movieList[i].director;
+    const genre= movieList[i].genre;
+    const runtime = movieList[i].runtime;
+    const year = movieList[i].year;
+    const title =  movieList[i].title;
+
+
+
+
+    return {
+      _id: (this.data.length + 1).toString(),
+      readMore: readMore,
+      poster: poster,
+      plot: plot,
+      actors: actors,
+      director: director,
+      genre: genre,
+      runtime: runtime,
+      year: year,
+      title: title
+
+    };
+  }
+
 }
 
 
@@ -209,63 +279,6 @@ export interface MovieData {
 }
 
 /** An example database that the data source uses to retrieve data for the table. */
-export class ExampleDatabase {
-  /** Stream that emits whenever the data has been modified. */
-  dataChange: BehaviorSubject<MovieData[]> = new BehaviorSubject<MovieData[]>([]);
-
-
-  get data(): MovieData[] {
-    return this.dataChange.value; }
-
-  constructor() {
-    const movieList = myMovies;
-    console.log("running");
-    console.log( "FFS");
-    // Fill up the database with 100 users.
-    for (let i = 0; i < movieList.length; i++) { this.addMovie(i, movieList);}
-  }
-
-
-  /** Adds a new movie to the database. */
-  addMovie(i, movieList) {
-
-
-    const copiedData = this.data.slice();
-    copiedData.push(this.createNewMovie(i, movieList));
-    this.dataChange.next(copiedData);
-  }
-
-  /** Builds and returns a new movie. */
-  private createNewMovie(i, movieList) {
-
-    const readMore = movieList[i].readMore;
-    const poster = movieList[i].poster;
-    const plot = movieList[i].plot;
-    const actors = movieList[i].actors;
-    const director= movieList[i].director;
-    const genre= movieList[i].genre;
-    const runtime = movieList[i].runtime;
-    const year = movieList[i].year;
-    const title =  movieList[i].title;
-
-
-
-
-    return {
-      _id: (this.data.length + 1).toString(),
-      readMore: readMore,
-      poster: poster,
-      plot: plot,
-      actors: actors,
-      director: director,
-      genre: genre,
-      runtime: runtime,
-      year: year,
-      title: title
-
-    };
-  }
-}
 
 /**
  * Data source to provide what data should be rendered in the table. Note that the data source
@@ -275,19 +288,20 @@ export class ExampleDatabase {
  * should be rendered.
  */
 export class ExampleDataSource extends DataSource<any> {
-  constructor(private _exampleDatabase: ExampleDatabase, private _paginator: MatPaginator) {
+  constructor(private _appComponent: AppComponent, private _paginator: MatPaginator) {
     super();
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<MovieData[]> {
+    console.log("connect");
     const displayDataChanges = [
-      this._exampleDatabase.dataChange,
+      this._appComponent.dataChange,
       this._paginator.page,
     ];
 
     return Observable.merge(...displayDataChanges).map(() => {
-      const data = this._exampleDatabase.data.slice();
+      const data = this._appComponent.data.slice();
 
       // Grab the page's slice of data.
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
