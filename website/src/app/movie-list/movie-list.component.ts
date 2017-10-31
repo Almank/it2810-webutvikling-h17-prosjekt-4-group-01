@@ -17,7 +17,7 @@ export class MovieListComponent implements OnInit {
   constructor(private http: HttpClient, public dialog: MatDialog) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.generateList();
     this.dataSource = new ExampleMovieSource(this, this.paginator);
   }
@@ -26,7 +26,7 @@ export class MovieListComponent implements OnInit {
     const params = new HttpParams()
       .set('limit', '25').set('page', '1');
     this.http.get('/api/movies/asc', {params}).subscribe(data => {
-      // Read the result field from the JSON response.
+      /** Read the result field from the JSON response. */
       if (isObject(data)) {
         const movieData = ((<MovieData> data));
         this.createList(movieData);
@@ -35,8 +35,8 @@ export class MovieListComponent implements OnInit {
   }
 
   createList(movieData){
-    // Fill up the database with 100 movies.
-    for (let i = 0; i < 25 ; i++) { this.addMovie(i, movieData);}
+    /** Fill up the database with 100 movies. */
+    for (let i = 0; i < 100 ; i++) { this.addMovie(i, movieData);}
   }
 
   /** Adds a new movie to the database. */
@@ -113,7 +113,7 @@ export class ExampleMovieSource extends DataSource<any> {
     ];
     return Observable.merge(...displayDataChanges).map(() => {
       const data = this._movieComponent.data.slice();
-      // Grab the page's slice of data.
+  /** Grab the page's slice of data. */
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
       return data.splice(startIndex, this._paginator.pageSize);
     });

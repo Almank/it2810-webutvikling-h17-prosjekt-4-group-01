@@ -1,17 +1,13 @@
 <div class="searchWrap">
   <form class="example-form">
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Search for Top 50 Movies">
+      <input matInput placeholder="Search for Top Movies">
       <mat-hint><strong></strong>Type in Title, Year or Genre and hit enter to save the search if you are logged in </mat-hint>
     </mat-form-field>
   </form>
 </div>
 <div class="example-container mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource">
-
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-
     <!-- Title Column -->
     <ng-container matColumnDef="title">
       <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
