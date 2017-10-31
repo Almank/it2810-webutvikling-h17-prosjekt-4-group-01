@@ -121,8 +121,3 @@ export class ExampleMovieSource extends DataSource<any> {
 
   disconnect() {}
 }
-
-
-
-
-
