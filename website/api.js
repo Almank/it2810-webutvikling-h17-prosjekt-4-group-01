@@ -79,7 +79,8 @@ router.post('/movies', function (req, res) {
 
 // Get movies
 router.get('/movies', function(req, res) {
-    db.collection('movies').find({}).toArray(function(err, docs) {
+    const page = req.query.page * 25;
+    db.collection('movies').find({}).sort().limit(25).skip(page).toArray(function(err, docs) {
         if (err) {
             handleError(res, err.message, "Failed to get movies.");
         } else {
@@ -90,7 +91,8 @@ router.get('/movies', function(req, res) {
 
 // Get movies title ascending
 router.get('/movies/asc', function(req, res) {
-  db.collection('movies').find({}).sort({'title': 1}).toArray(function(err, docs) {
+  const page = req.query.page * 25;
+  db.collection('movies').find({}).sort({'title': 1}).skip(page).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get movies.");
     } else {
@@ -101,7 +103,8 @@ router.get('/movies/asc', function(req, res) {
 
 // Get movies title descending
 router.get('/movies/desc', function(req, res) {
-  db.collection('movies').find({}).sort({'title': -1}).toArray(function(err, docs) {
+  const page = req.query.page * 25;
+  db.collection('movies').find({}).sort({'title': -1}).skip(page).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get movies.");
     } else {
@@ -112,7 +115,8 @@ router.get('/movies/desc', function(req, res) {
 
 // Get movies asc year
 router.get('/movies/year/asc', function(req, res) {
-  db.collection('movies').find({}).sort({'year': 1}).toArray(function(err, docs) {
+  const page = req.query.page * 25;
+  db.collection('movies').find({}).sort({'year': 1}).skip(page).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get movies.");
     } else {
@@ -123,7 +127,8 @@ router.get('/movies/year/asc', function(req, res) {
 
 // Get movies asc year
 router.get('/movies/year/desc', function(req, res) {
-  db.collection('movies').find({}).sort({'year': -1}).toArray(function(err, docs) {
+  const page = req.query.page * 25;
+  db.collection('movies').find({}).sort({'year': -1}).skip(page).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get movies.");
     } else {

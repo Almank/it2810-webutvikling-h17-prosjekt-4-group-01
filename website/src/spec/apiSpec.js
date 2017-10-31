@@ -7,6 +7,7 @@ describe("GET /", function() {
   it("returns status code 200", function(done) {
     request.get('http://localhost:8084', function(error, response, body) {
       expect(response.statusCode).toBe(200);
+      expect(response.body.length).toBe(805);
       done();
     });
   });
