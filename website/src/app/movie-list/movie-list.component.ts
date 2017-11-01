@@ -38,9 +38,9 @@ export class MovieListComponent implements OnInit {
         'genre': data.genre,
         'year': data.year,
       };
-      const dialogRef = this.dialog.open(MovieDetailsComponent, {
-        width: '600px', data
-      });
+    const dialogRef = this.dialog.open(MovieDetailsComponent, {
+      data,
+    });
 
       dialogRef.afterClosed().subscribe(result => {
         this.dialogResult = result;
