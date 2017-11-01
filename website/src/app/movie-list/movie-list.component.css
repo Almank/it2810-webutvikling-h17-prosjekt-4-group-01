@@ -1,3 +1,6 @@
+.mat-form-field-infix {
+  text-align: center;
+}
 
 .selected {
   background-color: #CFD8DC !important;
@@ -72,7 +75,6 @@
   padding-bottom: 20px;
 }
 
-
 /* Structure: Search form */
 .example-form {
   min-width: 150px;
@@ -89,14 +91,6 @@
   width: 100%;
 }
 
-.mat-form-field-infix {
-  text-align: center !important;
-}
-
 .mat-hint {
   padding-left: 25px;
-}
-
-.mat-form-field-infix {
-  text-align: center !important;
 }
