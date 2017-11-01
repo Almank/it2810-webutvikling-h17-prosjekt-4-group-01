@@ -23,7 +23,7 @@ export class MovieListComponent implements OnInit {
 
   generateList() {
     const params = new HttpParams()
-      .set('limit', '25').set('page', '0').set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber');
+      .set('limit', '25').set('page', '0').set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay');
     this.http.get('/api/movies', {params}).subscribe(data => {
       /** Read the result field from the JSON response. */
       if (isObject(data)) {
