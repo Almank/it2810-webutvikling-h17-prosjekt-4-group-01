@@ -83,11 +83,11 @@ router.get('/movies/list', function(req, res) {
     const page = parseInt(req.query.page * 25);
     const limit = parseInt(req.query.limit);
 
-    let year = splitYear(req.query.year);
-    let genre = splitElements(req.query.genre);
-    let actors = splitElements(req.query.actors);
-    let director = splitElements(req.query.director);
-  
+    const year = splitYear(req.query.year);
+    const genre = splitElements(req.query.genre);
+    const actors = splitElements(req.query.actors);
+    const director = splitElements(req.query.director);
+
     db.collection('movies').find(
       // Filter correct values
       { genre: genre,
@@ -98,8 +98,6 @@ router.get('/movies/list', function(req, res) {
       { poster: 0,
         readMore: 0,
         plot: 0,
-        actors: 0,
-        director: 0,
         runtime: 0
       })
       // Sort and limit matches
@@ -116,26 +114,11 @@ router.get('/movies/list', function(req, res) {
 router.get('/movies/modal', function(req, res) {
   const page = parseInt(req.query.page * 25);
   const limit = parseInt(req.query.limit);
-  let year = splitYear(req.query.year);
 
-  let genre = splitElements(req.query.genre);
-  if (req.query.genre === '' || req.query.genre === undefined){
-    genre = categories
-  }
-
-  let actors = req.query.actors;
-  if (actors === undefined || actors === '') {
-    actors = {$exists:true};
-  } else {
-    actors = {$in: splitElements(req.query.actors)};
-  }
-
-  let director = req.query.director;
-  if (director === undefined || director === '') {
-    director = {$exists:true};
-  } else {
-    director = {$in: splitElements(req.query.director)};
-  }
+  const year = splitYear(req.query.year);
+  const genre = splitElements(req.query.genre);
+  const actors = splitElements(req.query.actors);
+  const director = splitElements(req.query.director);
 
   db.collection('movies').find(
     // Filter correct values
@@ -144,12 +127,11 @@ router.get('/movies/modal', function(req, res) {
       actors: actors,
       director: director },
     // Remove properties from query
-    { poster: 0,
-      readMore: 0,
-      plot: 0,
+    { readMore: 0,
+      genre: 0,
+      year: 0,
       actors: 0,
       director: 0,
-      runtime: 0
     })
   // Sort and limit matches
     .sort().limit(limit).skip(page).toArray(function(err, docs) {
