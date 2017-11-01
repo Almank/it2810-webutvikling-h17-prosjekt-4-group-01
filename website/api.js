@@ -2,14 +2,8 @@ const express = require('express');
 const router = express.Router();
 const server = require('./server');
 const db = server.db;
-
 const model = require('./models');
 const user = model.User;
-
-const categories = ['Action', 'Animation', 'Comedy', 'Documentary', 'Family', 'Film-Noir',
-  'Horror', 'Musical', 'Romance', 'Sport', 'War', 'Adventure', 'Biography',
-  'Crime', 'Drama', 'Fantasy', 'History', 'Music', 'Mystery', 'Sci-Fi',
-  'Thriller', 'Western'];
 
 function splitElements(str) {
   console.log(str);
