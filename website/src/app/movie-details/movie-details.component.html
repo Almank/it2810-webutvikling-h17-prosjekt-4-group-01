@@ -1,0 +1,16 @@
+<div>
+  <h2 mat-dialog-title>{{data.title}} ({{data.year}})</h2>
+  <hr>
+  <mat-dialog-content>
+    <p>{{data.genre}}</p>
+    <br>
+    <p>{{data.director}}</p>
+    <br>
+    <p>{{data.runtime}}</p>
+  </mat-dialog-content>
+  <hr>
+  <mat-dialog-actions>
+    <button mat-raised-button (click)="onCloseConfirm()"><mat-icon class="playIcon">stars</mat-icon></button>
+    <button mat-raised-button (click)="onCloseCancel()"><mat-icon class="playIcon">cancel</mat-icon></button>
+  </mat-dialog-actions>
+</div>
