@@ -1,3 +1,27 @@
-<p>
-  profile works!
-</p>
+<div class="profile-container">
+  <mat-card class="profile-card">
+
+    <mat-tab-group selectedIndex="0" [@.disabled]="true">
+
+      <mat-tab label="Profile">
+
+        <mat-card-header class="mat-card-header">
+          <mat-card-title>
+            <strong>Username</strong>
+          </mat-card-title>
+          <img src="https://source.unsplash.com/random/200x200">
+        </mat-card-header>
+        <hr class="card-hr">
+        <mat-card-content class="mat-card-content">
+
+        </mat-card-content>
+      </mat-tab>
+
+      <mat-tab label="Search History">
+        <h3>Lunch option</h3>
+        <p>Club sandwich</p>
+      </mat-tab>
+
+    </mat-tab-group>
+  </mat-card>
+</div>
