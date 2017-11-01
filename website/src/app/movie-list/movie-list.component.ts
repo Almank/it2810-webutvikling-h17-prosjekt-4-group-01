@@ -24,7 +24,6 @@ export class MovieListComponent implements OnInit {
   generateList() {
     const params = new HttpParams()
       .set('limit', '25').set('page', '1').set('genre', 'Action');
-    console.log(params);
     this.http.get('/api/movies', {params}).subscribe(data => {
       /** Read the result field from the JSON response. */
       if (isObject(data)) {
@@ -36,7 +35,7 @@ export class MovieListComponent implements OnInit {
 
   createList(movieData){
     /** Fill up the database with 100 movies. */
-    for (let i = 0; i < 100 ; i++) { this.addMovie(i, movieData);}
+    for (let i = 0; i < 25 ; i++) { this.addMovie(i, movieData);}
   }
 
   /** Adds a new movie to the database. */

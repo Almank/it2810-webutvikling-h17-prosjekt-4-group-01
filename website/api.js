@@ -7,6 +7,11 @@ const model = require('./models');
 const movie = model.Movie;
 const user = model.User;
 
+const categories = ['Action', 'Animation', 'Comedy', 'Documentary', 'Family', 'Film-Noir',
+  'Horror', 'Musical', 'Romance', 'Sport', 'War', 'Adventure', 'Biography',
+  'Crime', 'Drama', 'Fantasy', 'History', 'Music', 'Mystery', 'Sci-Fi',
+  'Thriller', 'Western'];
+
 function splitElements(str){
   if (str !== undefined){
     return str.split(",").map((item) => {
@@ -90,6 +95,9 @@ router.get('/movies', function(req, res) {
     const page = parseInt(req.query.page * 25);
     const limit = parseInt(req.query.limit);
     let genre = splitElements(req.query.genre);
+    if (req.query.genre === '' || req.query.genre === undefined){
+        genre = categories
+    }
     db.collection('movies').find({genre: {$in: genre}}).sort().limit(limit).skip(page).toArray(function(err, docs) {
         if (err) {
             handleError(res, err.message, "Failed to get movies.");
