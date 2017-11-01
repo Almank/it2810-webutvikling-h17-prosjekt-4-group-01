@@ -1,0 +1,44 @@
+/* Structure: Table */
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  width: 90%;
+  margin: auto;
+  text-align: center;
+
+}
+
+.example-header {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  padding-left: 24px;
+  font-size: 20px;
+}
+
+.mat-table {
+  overflow: auto;
+  height: auto;
+  padding-bottom: 20px;
+}
+
+/* Structure: Search form */
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  display: block;
+  margin: auto;
+  padding-top: 25px;
+  padding-bottom: 18px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.mat-hint {
+  padding-left: 25px;
+}
