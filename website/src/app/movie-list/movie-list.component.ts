@@ -35,6 +35,7 @@ export class MovieListComponent implements OnInit {
 
   createList(movieData){
     /** Fill up the database with 100 movies. */
+    console.log(movieData)
     for (let i = 0; i < 100 ; i++) { this.addMovie(i, movieData);}
   }
 
