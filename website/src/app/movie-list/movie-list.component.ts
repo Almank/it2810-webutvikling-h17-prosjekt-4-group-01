@@ -21,7 +21,7 @@ export class MovieListComponent implements OnInit {
 
   openDialog(data) {
     let dialogRef = this.dialog.open(MovieDetailsComponent, {
-      width: '600px', data,
+      data,
     });
 
     dialogRef.afterClosed().subscribe(result => {

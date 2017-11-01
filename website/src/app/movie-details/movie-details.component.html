@@ -1,11 +1,13 @@
-<div>
+<div id="popUpBox">
   <h2 mat-dialog-title>{{data.title}} ({{data.year}})</h2>
   <hr>
   <mat-dialog-content>
-    <p><img src="{{data.poster}}"/></p>
-    <p>{{data.genre}}</p>
-    <p>{{data.director}}</p>
-    <p>{{data.runtime}}</p>
+    <p id="imageWrap"><img src="{{data.poster}}" class="posterImage"/></p>
+    <p><span class="infoType">Genre:</span> {{data.genre}}</p>
+    <p><span class="infoType">Director:</span> {{data.director}}</p>
+    <p><span class="infoType">Runtime:</span> {{data.runtime}}</p>
+    <p><span class="infoType">Actors:</span> {{data.actors}}</p>
+    <p><span class="infoType">Plot:</span> {{data.plot}}</p>
   </mat-dialog-content>
   <hr>
   <mat-dialog-actions>
