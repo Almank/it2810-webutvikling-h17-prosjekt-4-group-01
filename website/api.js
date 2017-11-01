@@ -12,11 +12,19 @@ const categories = ['Action', 'Animation', 'Comedy', 'Documentary', 'Family', 'F
   'Crime', 'Drama', 'Fantasy', 'History', 'Music', 'Mystery', 'Sci-Fi',
   'Thriller', 'Western'];
 
-function splitElements(str){
+function splitElements(str) {
   if (str !== undefined){
     return str.split(",").map((item) => {
       return item.trim();
     })
+  }
+}
+
+function splitYear(str) {
+  if (str !== undefined) {
+    return str.split("-").map((item) => {
+      return parseInt(item.trim());
+    });
   }
 }
 
@@ -94,11 +102,15 @@ router.post('/movies', function (req, res) {
 router.get('/movies', function(req, res) {
     const page = parseInt(req.query.page * 25);
     const limit = parseInt(req.query.limit);
+    let year = splitYear(req.query.year);
+    if (year === undefined || req.query.year === ''){
+      year = [0,9999]
+    }
     let genre = splitElements(req.query.genre);
     if (req.query.genre === '' || req.query.genre === undefined){
         genre = categories
     }
-    db.collection('movies').find({genre: {$in: genre}}).sort().limit(limit).skip(page).toArray(function(err, docs) {
+    db.collection('movies').find({genre: {$in: genre}, year: {$gte: year[0], $lte: year[1]}}).sort().limit(limit).skip(page).toArray(function(err, docs) {
         if (err) {
             handleError(res, err.message, "Failed to get movies.");
         } else {
