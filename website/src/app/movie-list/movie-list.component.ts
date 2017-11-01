@@ -11,7 +11,7 @@ import {MovieDetailsComponent} from "../movie-details/movie-details.component";
 })
 
 export class MovieListComponent implements OnInit {
-  displayedColumns = ['title', 'year', 'genre', 'director', 'runtime' ];
+  displayedColumns = ['title', 'year', 'genre',];
   dataSource: ExampleMovieSource | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -37,8 +37,8 @@ export class MovieListComponent implements OnInit {
 
   generateList() {
     const params = new HttpParams()
-      .set('limit', '25').set('page', '0').set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay');
-    this.http.get('/api/movies', {params}).subscribe(data => {
+      .set('limit', '25').set('page', '0');/** .set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay'); */
+    this.http.get('/api/movies/asc', {params}).subscribe(data => {
       /** Read the result field from the JSON response. */
       if (isObject(data)) {
         const movieData = ((<MovieData> data));
