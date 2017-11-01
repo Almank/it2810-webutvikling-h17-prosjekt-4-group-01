@@ -1,0 +1,19 @@
+.login-container{
+  display: flex;
+  justify-content: center;
+}
+
+.login-card{
+  margin: 20px;
+  width: 70%;
+}
+
+.password-form{
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.login-password, .login-username{
+  display: flex;
+}

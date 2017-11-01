@@ -13,9 +13,11 @@ import { MovieListComponent } from './movie-list/movie-list.component';
 import { HeaderComponent } from './header/header.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthComponent } from './auth/auth.component';
 
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
+  { path: 'login', component: AuthComponent},
   { path: '**', component: MovieListComponent }
 ];
 
@@ -25,6 +27,7 @@ const appRoutes: Routes = [
     MovieListComponent,
     HeaderComponent,
     ProfileComponent,
+    AuthComponent,
   ],
   imports: [
     BrowserModule,
