@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, Beha
 import  'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
+import {MovieDetailsComponent} from "../movie-details/movie-details.component";
 
 @Component({
   selector: 'movieList',
@@ -14,7 +15,20 @@ export class MovieListComponent implements OnInit {
   dataSource: ExampleMovieSource | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  dialogResult = "";
+
   constructor(private http: HttpClient, public dialog: MatDialog) {}
+
+  openDialog(data) {
+    let dialogRef = this.dialog.open(MovieDetailsComponent, {
+      width: '600px', data,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog closed: ${result}`);
+      this.dialogResult = result;
+    })
+  }
 
   ngOnInit() {
     this.generateList();
