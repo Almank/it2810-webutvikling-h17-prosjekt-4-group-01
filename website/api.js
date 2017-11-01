@@ -7,6 +7,14 @@ const model = require('./models');
 const movie = model.Movie;
 const user = model.User;
 
+function splitElements(str){
+  if (str !== undefined){
+    return str.split(",").map((item) => {
+      return item.trim();
+    })
+  }
+}
+
 // GET api listing.
 router.get('/', (req, res) => {
     res.send('api works');
@@ -81,8 +89,8 @@ router.post('/movies', function (req, res) {
 router.get('/movies', function(req, res) {
     const page = parseInt(req.query.page * 25);
     const limit = parseInt(req.query.limit);
-    //'title year genre director runtime'
-    db.collection('movies').find().sort().limit(limit).skip(page).toArray(function(err, docs) {
+    let genre = splitElements(req.query.genre);
+    db.collection('movies').find({genre: {$in: genre}}).sort().limit(limit).skip(page).toArray(function(err, docs) {
         if (err) {
             handleError(res, err.message, "Failed to get movies.");
         } else {

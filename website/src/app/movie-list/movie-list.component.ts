@@ -21,10 +21,11 @@ export class MovieListComponent implements OnInit {
     this.dataSource = new ExampleMovieSource(this, this.paginator);
   }
 
-  generateList(){
+  generateList() {
     const params = new HttpParams()
-      .set('limit', '25').set('page', '1');
-    this.http.get('/api/movies/asc', {params}).subscribe(data => {
+      .set('limit', '25').set('page', '1').set('genre', 'Action');
+    console.log(params);
+    this.http.get('/api/movies', {params}).subscribe(data => {
       /** Read the result field from the JSON response. */
       if (isObject(data)) {
         const movieData = ((<MovieData> data));
