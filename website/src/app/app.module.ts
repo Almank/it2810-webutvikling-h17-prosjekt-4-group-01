@@ -8,12 +8,20 @@ import { AppComponent } from './app.component';
 import {CdkTableModule} from '@angular/cdk/table';
 import { MovieListComponent } from './movie-list/movie-list.component';
 import { HeaderComponent } from './header/header.component';
+import { ProfileComponent } from './profile/profile.component';
+import { RouterModule, Routes } from '@angular/router';
+
+const appRoutes: Routes = [
+  { path: 'profile', component: ProfileComponent },
+  { path: '**', component: MovieListComponent }
+];
 
 @NgModule({
   declarations: [
     AppComponent,
     MovieListComponent,
     HeaderComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,7 +37,10 @@ import { HeaderComponent } from './header/header.component';
     MatToolbarModule,
     MatTooltipModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    RouterModule.forRoot(
+      appRoutes,
+    ),
   ],
 
   providers: [],
