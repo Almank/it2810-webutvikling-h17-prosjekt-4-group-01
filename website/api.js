@@ -6,7 +6,6 @@ const model = require('./models');
 const user = model.User;
 
 function splitElements(str) {
-  console.log(str);
   if (str === '' || str === undefined){
       return {$exists:true};
   } else {
@@ -106,29 +105,21 @@ router.get('/movies/list', function(req, res) {
 });
 
 router.get('/movies/modal', function(req, res) {
-  const page = parseInt(req.query.page * 25);
-  const limit = parseInt(req.query.limit);
-
-  const year = splitYear(req.query.year);
-  const genre = splitElements(req.query.genre);
-  const actors = splitElements(req.query.actors);
-  const director = splitElements(req.query.director);
 
   db.collection('movies').find(
     // Filter correct values
-    { genre: { $in: genre },
-      year: { $gte: year[0], $lte: year[1] },
-      actors: actors,
-      director: director },
+    { title: req.query.title },
     // Remove properties from query
-    { readMore: 0,
+    {
+      title: 0,
+      readMore: 0,
       genre: 0,
       year: 0,
       actors: 0,
       director: 0,
     })
   // Sort and limit matches
-    .sort().limit(limit).skip(page).toArray(function(err, docs) {
+    .sort().toArray(function(err, docs) {
 
     if (err) {
       handleError(res, err.message, "Failed to get movies with no actors.");
