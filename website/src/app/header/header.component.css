@@ -1,0 +1,28 @@
+.example-spacer{
+  padding-right: 20px;
+}
+
+.example-fill-remaining-space {
+// This fills the remaining space, by using flexbox.
+// Every toolbar row uses a flexbox row layout.
+flex: 1 1 auto;
+}
+
+.example-spacer{
+  flex: 1;
+}
+
+.playIcon {
+  font-size: 32px;
+}
+
+.profileIcon {
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.pageTitle {
+  font-family: GeosansLight;
+  font-size: 40px;
+}
