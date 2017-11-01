@@ -19,15 +19,9 @@ export class MovieListComponent implements OnInit {
 
   constructor(private http: HttpClient, public dialog: MatDialog) {}
 
-  openDialog() {
+  openDialog(data) {
     let dialogRef = this.dialog.open(MovieDetailsComponent, {
-      width: '600px',
-      data: {
-        title: 'Architects of Denial',
-        year: '2017',
-        genre: 'Documentary',
-        director: 'David Lee George',
-        runtime: '102 min'},
+      width: '600px', data,
     });
 
     dialogRef.afterClosed().subscribe(result => {
