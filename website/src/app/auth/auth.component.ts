@@ -8,7 +8,7 @@ import { isObject } from 'util';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
   }
@@ -27,5 +27,7 @@ export class AuthComponent implements OnInit {
         console.log(data);
       }
     });
+
+    // TODO if login == successfull -> localstorage save
   }
 }

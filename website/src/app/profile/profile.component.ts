@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -10,7 +11,10 @@ export class ProfileComponent implements OnInit {
   http: HttpClient;
 
   // TODO get username from api
-  constructor() {
+  constructor(private router: Router) {
+    if (localStorage.getItem('token') === null) {
+      this.router.navigate(['/login']);
+    }
   }
 
   ngOnInit() {
