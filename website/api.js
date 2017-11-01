@@ -127,7 +127,7 @@ router.get('/movies', function(req, res) {
       director = {$in: splitElements(req.query.director)};
     }
 
-    db.collection('movies').find({genre: {$in: genre}, year: {$gte: year[0], $lte: year[1]}, actors: actors, director: director }).sort().limit(limit).skip(page).toArray(function(err, docs) {
+    db.collection('movies').find({genre: {$in: genre}, year: {$gte: year[0], $lte: year[1]}, actors: actors, director: director}, { poster: 0, readMore: 0, plot: 0, actors: 0, director: 0, runtime: 0}).sort().limit(limit).skip(page).toArray(function(err, docs) {
       if (err) {
         handleError(res, err.message, "Failed to get movies with no actors.");
       } else {
