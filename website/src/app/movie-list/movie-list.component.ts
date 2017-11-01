@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject, Observable, HttpClient, HttpParams, isObject } from './import-module';
-import  'rxjs/add/operator/startWith';
+import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
+          Observable, HttpClient, MovieDetailsComponent } from '../import-module';
+import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import {MovieDetailsComponent} from "../movie-details/movie-details.component";
+import { MovieListService } from './movie-list.service';
 
 @Component({
   selector: 'movieList',
@@ -11,45 +12,52 @@ import {MovieDetailsComponent} from "../movie-details/movie-details.component";
 })
 
 export class MovieListComponent implements OnInit {
-  displayedColumns = ['title', 'year', 'genre',];
+  displayedColumns = ['title', 'year', 'genre', ];
   dataSource: ExampleMovieSource | null;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  dataChange: BehaviorSubject<MovieData[]> = new BehaviorSubject<MovieData[]>([]);
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+  dialogResult = '';
+  movieList: MovieList[];
 
-  dialogResult = "";
+  constructor(public dialog: MatDialog, private movieListService: MovieListService) {}
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {}
+  getMovieList(): void {
+    this.movieListService.getMovieList().then(movies => this.createList(movies));
+  }
 
   openDialog(data) {
-    let dialogRef = this.dialog.open(MovieDetailsComponent, {
+    this.movieListService.getMovieModal(data).then( movies => {
+      data = {
+        'title': data.title,
+        'poster': movies[0].poster,
+        'plot': movies[0].plot,
+        'runtime': movies[0].runtime,
+        'actors': data.actors,
+        'director': data.director,
+        'genre': data.genre,
+        'year': data.year,
+      };
+    const dialogRef = this.dialog.open(MovieDetailsComponent, {
       data,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog closed: ${result}`);
-      this.dialogResult = result;
-    })
-  }
-
-  ngOnInit() {
-    this.generateList();
-    this.dataSource = new ExampleMovieSource(this, this.paginator);
-  }
-
-  generateList() {
-    const params = new HttpParams()
-      .set('limit', '25').set('page', '0');/** .set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay'); */
-    this.http.get('/api/movies/asc', {params}).subscribe(data => {
-      /** Read the result field from the JSON response. */
-      if (isObject(data)) {
-        const movieData = ((<MovieData> data));
-        this.createList(movieData);
-      }
+      dialogRef.afterClosed().subscribe(result => {
+        this.dialogResult = result;
+      });
     });
   }
 
-  createList(movieData){
+  ngOnInit(): void {
+    this.getMovieList();
+    this.dataSource = new ExampleMovieSource(this, this.paginator);
+  }
+
+  createList(movieData) {
     /** Fill up the database with 100 movies. */
-    for (let i = 0; i < 25 ; i++) { this.addMovie(i, movieData);}
+    for (let i = 0; i < 25 ; i++) {
+      this.addMovie(i, movieData);
+    }
   }
 
   /** Adds a new movie to the database. */
@@ -61,31 +69,19 @@ export class MovieListComponent implements OnInit {
 
   /** Builds and returns a new movie. */
   private createNewMovie(i, movieList) {
-    const readMore = movieList[i].readMore;
-    const poster = movieList[i].poster;
-    const plot = movieList[i].plot;
-    const actors = movieList[i].actors;
-    const director= movieList[i].director;
-    const genre= movieList[i].genre;
-    const runtime = movieList[i].runtime;
-    const year = movieList[i].year;
-    const title =  movieList[i].title;
-    const _id = movieList[i]._id;
     return {
-      _id: _id,
-      readMore: readMore,
-      poster: poster,
-      plot: plot,
-      actors: actors,
-      director: director,
-      genre: genre,
-      runtime: runtime,
-      year: year,
-      title: title
+      _id: movieList[i]._id,
+      readMore: movieList[i].readMore,
+      poster: movieList[i].poster,
+      plot: movieList[i].plot,
+      actors: movieList[i].actors,
+      director: movieList[i].director,
+      genre: movieList[i].genre,
+      runtime: movieList[i].runtime,
+      year: movieList[i].year,
+      title: movieList[i].title
     };
   }
-
-  dataChange: BehaviorSubject<MovieData[]> = new BehaviorSubject<MovieData[]>([]);
 
   get data(): MovieData[] {
     return this.dataChange.value;

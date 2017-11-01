@@ -9,9 +9,9 @@ import {CdkTableModule} from '@angular/cdk/table';
 import { MovieListComponent } from './movie-list/movie-list.component';
 import { HeaderComponent } from './header/header.component';
 import { ProfileComponent } from './profile/profile.component';
-import { RouterModule, Routes } from '@angular/router';
-import { MovieDetailsComponent } from './movie-details/movie-details.component';
+import { MovieListService } from './movie-list/movie-list.service';
 
+import { MovieDetailsComponent, RouterModule, Routes } from './import-module';
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: '**', component: MovieListComponent }
@@ -50,7 +50,7 @@ const appRoutes: Routes = [
     MovieDetailsComponent,
   ],
 
-  providers: [],
+  providers: [MovieListService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
