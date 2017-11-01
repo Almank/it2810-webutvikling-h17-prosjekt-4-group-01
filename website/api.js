@@ -103,20 +103,35 @@ router.get('/movies', function(req, res) {
     const page = parseInt(req.query.page * 25);
     const limit = parseInt(req.query.limit);
     let year = splitYear(req.query.year);
+    let actors = req.query.actors;
     if (year === undefined || req.query.year === ''){
       year = [0,9999]
     }
     let genre = splitElements(req.query.genre);
     if (req.query.genre === '' || req.query.genre === undefined){
-        genre = categories
+      genre = categories
     }
-    db.collection('movies').find({genre: {$in: genre}, year: {$gte: year[0], $lte: year[1]}}).sort().limit(limit).skip(page).toArray(function(err, docs) {
+
+    if (actors === undefined || actors === ''){
+      db.collection('movies').find({genre: {$in: genre}, year: {$gte: year[0], $lte: year[1]}}).sort().limit(limit).skip(page).toArray(function(err, docs) {
         if (err) {
-            handleError(res, err.message, "Failed to get movies.");
+          handleError(res, err.message, "Failed to get movies with no actors.");
         } else {
-            res.status(200).json(docs);
+          res.status(200).json(docs);
         }
-    });
+      });
+    }
+    else {
+      actors = splitElements(actors);
+      db.collection('movies').find({genre: {$in: genre}, year: {$gte: year[0], $lte: year[1]}, actors: {$in: actors}
+      }).sort().limit(limit).skip(page).toArray(function (err, docs) {
+        if (err) {
+          handleError(res, err.message, "Failed to get movies.");
+        } else {
+          res.status(200).json(docs);
+        }
+      });
+    }
 });
 
 // Get movies title ascending
