@@ -35,10 +35,10 @@ export class MovieListComponent implements OnInit {
     this.dataSource = new ExampleMovieSource(this, this.paginator);
   }
 
-  generateList(){
+  generateList() {
     const params = new HttpParams()
-      .set('limit', '25').set('page', '1');
-    this.http.get('/api/movies/asc', {params}).subscribe(data => {
+      .set('limit', '25').set('page', '0').set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay');
+    this.http.get('/api/movies', {params}).subscribe(data => {
       /** Read the result field from the JSON response. */
       if (isObject(data)) {
         const movieData = ((<MovieData> data));
@@ -49,7 +49,7 @@ export class MovieListComponent implements OnInit {
 
   createList(movieData){
     /** Fill up the database with 100 movies. */
-    for (let i = 0; i < 100 ; i++) { this.addMovie(i, movieData);}
+    for (let i = 0; i < 25 ; i++) { this.addMovie(i, movieData);}
   }
 
   /** Adds a new movie to the database. */
