@@ -96,6 +96,20 @@ router.post('/login', function(req, res){
     });
 });
 
+function getSortVariable(str, bool) {
+    let num = 1;
+    if (bool === 'true') {
+        num = -1;
+    }
+    if (str === 'year'){
+      return {'year': num}
+    } else if (str === 'genre'){
+      return {'genre': num}
+    } else {
+      return {'title': num}
+    }
+}
+
 // Get movies
 router.get('/movies/list', function(req, res) {
     const page = parseInt(req.query.page * 25);
@@ -105,6 +119,7 @@ router.get('/movies/list', function(req, res) {
     const genre = splitElements(req.query.genre);
     const actors = splitElements(req.query.actors);
     const director = splitElements(req.query.director);
+    const sort = getSortVariable(req.query.sort, req.query.desc);
 
     db.collection('movies').find(
       // Filter correct values
@@ -119,7 +134,7 @@ router.get('/movies/list', function(req, res) {
         runtime: 0
       })
       // Sort and limit matches
-      .sort().limit(limit).skip(page).toArray(function(err, docs) {
+      .sort(sort).limit(limit).skip(page).toArray(function(err, docs) {
 
       if (err) {
         handleError(res, err.message, "Failed to get movies with no actors.");
