@@ -5,7 +5,12 @@ const db = server.db;
 
 const model = require('./models');
 const movie = model.Movie;
+
 const user = model.User;
+const jwt = require('jsonwebtoken');
+const config = {'secret': 'supersecretkey'};
+
+const bcrypt = require('bcryptjs');
 
 // GET api listing.
 router.get('/', (req, res) => {
@@ -30,7 +35,10 @@ router.post('/register', function(req, res){
                 if (err) {
                     handleError(res, err);
                 } else {
-                    res.status(200).json(docs);
+                    let token = jwt.sign({ id: user._id }, config.secret, {
+                      expiresIn: 86400
+                    });
+                    res.status(200).send({ auth: true, token: token });
                 }
             }
         );
@@ -39,17 +47,33 @@ router.post('/register', function(req, res){
     }
 });
 
+//Authenticate user
+function authenticate(username, password, fn) {
+  db.collection('users').findOne({'username': username}, function (err, user) {
+    if(user !== null) {
+      if (password === user.password) {
+        return fn(null, user);
+      } else {
+        return fn('invalid password');
+      }
+    } else {
+      return fn(new Error('user does not exist in database'));
+    }
+  });
+}
+
 // Login
 router.post('/login', function(req, res){
-    db.collection('users').find({
-        'username' : req.body.username,
-        'password' : req.body.password,
-    }).toArray(function(err, docs) {
-        if (err) {
-            handleError(res, err.message, "Failed to login.");
-        } else {
-            res.status(200).json(docs);
-        }
+    authenticate(req.body.username, req.body.password, function (err, user) {
+      if (err){
+        res.status(401).send({ auth: false, token: null });
+      } else {
+
+        let token = jwt.sign({ id: user._id }, config.secret, {
+          expiresIn: 86400
+        });
+        res.status(200).send({ auth: true, token: token});
+      }
     });
 });
 
