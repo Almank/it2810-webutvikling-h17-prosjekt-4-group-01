@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { isObject } from 'util';
 
 @Component({
@@ -8,21 +8,28 @@ import { isObject } from 'util';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit {
+  private headers = new HttpHeaders({'Content-Type': 'application/json'});
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
   }
   onRegister(form) {
-    const params = new HttpParams().set('username', form.value.username).set('password', form.value.password);
-    this.http.post('/api/register', {params}).subscribe(data => {
+    const params = JSON.stringify({
+      username: form.value.username,
+      password: form.value.password,
+    });
+    this.http.post('/api/register', params, {headers: this.headers}).subscribe(data => {
       if (isObject(data)) {
         console.log(data);
       }
     });
   }
   onLogin(form) {
-    const params = new HttpParams().set('username', form.value.username).set('password', form.value.password);
-    this.http.post('/api/login', {params}).subscribe(data => {
+    const params = JSON.stringify({
+      username: form.value.username,
+      password: form.value.password,
+    });
+    this.http.post('/api/login', params, {headers: this.headers}).subscribe(data => {
       if (isObject(data)) {
         console.log(data);
       }
