@@ -26,6 +26,7 @@ export class MovieListComponent implements OnInit {
     this.movieListService.getMovieList().then(movies => this.createList(movies));
   }
 
+  /** Sets the Movie data displyed on in the Pop-up. */
   openDialog(data) {
     this.movieListService.getMovieModal(data).then( movies => {
       data = {

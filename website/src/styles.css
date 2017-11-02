@@ -5,11 +5,38 @@
   src: url(assets/fonts/GeosansLight.ttf);
 }
 
+@font-face {
+  font-family: Webly Sleek;
+  src: url(assets/fonts/weblysleekuil.ttf);
+}
+
+@font-face {
+  font-family: Webly Sleek Kursiv;
+  src: url(assets/fonts/weblysleekuili.ttf);
+}
+
 html, body {
   margin: 0;
   height: 100%;
 }
 
+/* Search form */
 .mat-form-field-infix {
   text-align: center;
+  font-family: Webly Sleek !important;
+
+}
+
+/* Movie Table */
+.mat-select-value-text span, .mat-select-value, .mat-option,.mat-option-text, .mat-paginator-range-label .mat-paginator-page-size-label,
+.mat-paginator, .mat-paginator-page-size .mat-select-trigger  {
+  font-family: GeosansLight !important;
+}
+
+.mat-hint {
+  font-family: Webly Sleek Kursiv !important;
+}
+
+.mat-input-element mat-form-field-autofill-control{
+  font-family: Webly Sleek;
 }
