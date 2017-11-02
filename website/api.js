@@ -2,10 +2,28 @@ const express = require('express');
 const router = express.Router();
 const server = require('./server');
 const db = server.db;
-
 const model = require('./models');
-const movie = model.Movie;
 const user = model.User;
+
+function splitElements(str) {
+  if (str === '' || str === undefined){
+      return {$exists:true};
+  } else {
+      return {$in: str.split(",").map((item) => {
+        return item.trim()})
+    }
+  }
+}
+
+function splitYear(str) {
+  if (str === undefined || str === '') {
+    return [0, 9999];
+  } else {
+    return str.split("-").map((item) => {
+      return parseInt(item.trim());
+    });
+  }
+}
 
 // GET api listing.
 router.get('/', (req, res) => {
@@ -53,89 +71,58 @@ router.post('/login', function(req, res){
     });
 });
 
-// Add movie to database
-router.post('/movies', function (req, res) {
-    let new_movie = new movie({
-        title: req.body.title,
-        year: req.body.year,
-        runtime: req.body.runtime,
-        genre: req.body.genre,
-        director: req.body.director,
-        actors: req.body.actors,
-        plot: req.body.plot,
-        poster: req.body.poster,
-        readMore: req.body.readMore,
-    });
-    db.collection('movies').save(new_movie,
-        function(err, docs) {
-            if (err) {
-                handleError(res, err);
-            } else {
-                res.status(200).json(docs);
-            }
-        }
-    );
-});
-
 // Get movies
-router.get('/movies', function(req, res) {
-    const page = req.query.page * 25;
+router.get('/movies/list', function(req, res) {
+    const page = parseInt(req.query.page * 25);
     const limit = parseInt(req.query.limit);
-    db.collection('movies').find({}).sort().limit(limit).skip(page).toArray(function(err, docs) {
-        if (err) {
-            handleError(res, err.message, "Failed to get movies.");
-        } else {
-            res.status(200).json(docs);
-        }
+
+    const year = splitYear(req.query.year);
+    const genre = splitElements(req.query.genre);
+    const actors = splitElements(req.query.actors);
+    const director = splitElements(req.query.director);
+
+    db.collection('movies').find(
+      // Filter correct values
+      { genre: genre,
+        year: { $gte: year[0], $lte: year[1] },
+        actors: actors,
+        director: director },
+      // Remove properties from query
+      { poster: 0,
+        readMore: 0,
+        plot: 0,
+        runtime: 0
+      })
+      // Sort and limit matches
+      .sort().limit(limit).skip(page).toArray(function(err, docs) {
+
+      if (err) {
+        handleError(res, err.message, "Failed to get movies with no actors.");
+      } else {
+        res.status(200).json(docs);
+      }
     });
 });
 
-// Get movies title ascending
-router.get('/movies/asc', function(req, res) {
-  const page = req.query.page * 25;
-  const limit = parseInt(req.query.limit);
-  db.collection('movies').find({}).sort({'title': 1}).limit(limit).skip(page).toArray(function(err, docs) {
-    if (err) {
-      handleError(res, err.message, "Failed to get movies.");
-    } else {
-      res.status(200).json(docs);
-    }
-  });
-});
+router.get('/movies/modal', function(req, res) {
 
-// Get movies title descending
-router.get('/movies/desc', function(req, res) {
-  const page = req.query.page * 25;
-  const limit = parseInt(req.query.limit);
-  db.collection('movies').find({}).sort({'title': -1}).limit(limit).skip(page).toArray(function(err, docs) {
-    if (err) {
-      handleError(res, err.message, "Failed to get movies.");
-    } else {
-      res.status(200).json(docs);
-    }
-  });
-});
+  db.collection('movies').find(
+    // Filter correct values
+    { title: req.query.title },
+    // Remove properties from query
+    {
+      title: 0,
+      readMore: 0,
+      genre: 0,
+      year: 0,
+      actors: 0,
+      director: 0,
+    })
+  // Sort and limit matches
+    .sort().toArray(function(err, docs) {
 
-// Get movies asc year
-router.get('/movies/year/asc', function(req, res) {
-  const page = req.query.page * 25;
-  const limit = parseInt(req.query.limit);
-  db.collection('movies').find({}).sort({'year': 1}).limit(limit).skip(page).toArray(function(err, docs) {
     if (err) {
-      handleError(res, err.message, "Failed to get movies.");
-    } else {
-      res.status(200).json(docs);
-    }
-  });
-});
-
-// Get movies asc year
-router.get('/movies/year/desc', function(req, res) {
-  const page = req.query.page * 25;
-  const limit = parseInt(req.query.limit);
-  db.collection('movies').find({}).sort({'year': -1}).limit(limit).skip(page).toArray(function(err, docs) {
-    if (err) {
-      handleError(res, err.message, "Failed to get movies.");
+      handleError(res, err.message, "Failed to get movies with no actors.");
     } else {
       res.status(200).json(docs);
     }
