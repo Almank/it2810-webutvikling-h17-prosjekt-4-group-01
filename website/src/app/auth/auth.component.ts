@@ -10,7 +10,11 @@ import { Router } from '@angular/router';
 })
 export class AuthComponent implements OnInit {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    if (localStorage.getItem('token') !== null) {
+      this.router.navigate(['/profile']);
+    }
+  }
 
   ngOnInit() {
   }
@@ -40,7 +44,5 @@ export class AuthComponent implements OnInit {
         }
       }
     });
-
-    // TODO if login == successfull -> localstorage save
   }
 }

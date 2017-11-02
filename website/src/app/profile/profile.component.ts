@@ -18,5 +18,9 @@ export class ProfileComponent implements OnInit {
   }
   ngOnInit() {
   }
+  onLogout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/']);
+  }
 
 }

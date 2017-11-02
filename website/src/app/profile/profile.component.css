@@ -37,3 +37,8 @@
   background-color: #009f02;
   color: white;
 }
+
+.logout-button{
+  background-color: red;
+  color: white;
+}
