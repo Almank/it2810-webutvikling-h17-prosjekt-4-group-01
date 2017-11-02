@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isObject } from 'util';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -9,7 +10,7 @@ import { isObject } from 'util';
 })
 export class AuthComponent implements OnInit {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
   }
@@ -21,6 +22,7 @@ export class AuthComponent implements OnInit {
     this.http.post('/api/register', params, {headers: this.headers}).subscribe(data => {
       if (isObject(data)) {
         console.log(data);
+        this.router.navigate(['/profile']);
       }
     });
   }
@@ -31,7 +33,11 @@ export class AuthComponent implements OnInit {
     });
     this.http.post('/api/login', params, {headers: this.headers}).subscribe(data => {
       if (isObject(data)) {
-        console.log(data);
+        if (data['auth']) {
+          localStorage.setItem('token', data['token']);
+          console.log('token saved to LS and user is logged in');
+          this.router.navigate(['/profile']);
+        }
       }
     });
 

@@ -16,7 +16,6 @@ export class ProfileComponent implements OnInit {
       this.router.navigate(['/login']);
     }
   }
-
   ngOnInit() {
   }
 
