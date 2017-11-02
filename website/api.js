@@ -26,9 +26,10 @@ function handleError(res, reason, message, code) {
 // Register user
 router.post('/register', function(req, res){
     if (req.body.username !== '' && req.body.password !== ''){
+        let hashedPassword = bcrypt.hashSync(req.body.password, 8);
         let new_user = new user({
             username: req.body.username,
-            password: req.body.password,
+            password: hashedPassword,
         });
         db.collection('users').save(new_user,
             function(err, docs) {
@@ -51,7 +52,7 @@ router.post('/register', function(req, res){
 function authenticate(username, password, fn) {
   db.collection('users').findOne({'username': username}, function (err, user) {
     if(user !== null) {
-      if (password === user.password) {
+      if (bcrypt.compareSync(password, user.password)) {
         return fn(null, user);
       } else {
         return fn('invalid password');
