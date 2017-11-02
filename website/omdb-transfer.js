@@ -352,6 +352,14 @@ list_of_movies = [
     "Big+Jake",
 ];
 
+function splitElements(str){
+  if (str !== undefined){
+    return str.split(",").map((item) => {
+      return item.trim();
+    })
+  }
+}
+
 let progress = 0;
 // Access omdb api with movie as query, extract wanted data and save to database.
 for(let movie in list_of_movies){
@@ -366,13 +374,16 @@ for(let movie in list_of_movies){
             // The whole response has been received. save the result to db.
             res.on('end', () => {
                 omdbData = JSON.parse(omdbData);
+                let genre = splitElements(omdbData.Genre);
+                let director = splitElements(omdbData.Director);
+                let actors = splitElements(omdbData.Actors);
                 let new_movie = new movie_model({
                     title: omdbData.Title,
                     year:  omdbData.Year,
                     runtime: omdbData.Runtime,
-                    genre: omdbData.Genre,
-                    director: omdbData.Director,
-                    actors: omdbData.Actors,
+                    genre: genre,
+                    director: director,
+                    actors: actors,
                     plot: omdbData.Plot,
                     poster: omdbData.Poster,
                     readMore: omdbData.Website,

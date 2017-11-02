@@ -6,7 +6,7 @@ import {MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatPagi
 MatSidenavModule, MatTableModule, MatToolbarModule, MatTooltipModule, MatCardModule, MatTabsModule,
 MatFormFieldModule,
 } from '@angular/material';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import {CdkTableModule} from '@angular/cdk/table';
 import { MovieListComponent } from './movie-list/movie-list.component';
@@ -14,7 +14,9 @@ import { HeaderComponent } from './header/header.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
+import { MovieListService } from './movie-list/movie-list.service';
 
+import { MovieDetailsComponent } from './import-module';
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},
@@ -28,6 +30,7 @@ const appRoutes: Routes = [
     HeaderComponent,
     ProfileComponent,
     AuthComponent,
+    MovieDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,6 +48,7 @@ const appRoutes: Routes = [
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatCardModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(
@@ -52,7 +56,11 @@ const appRoutes: Routes = [
     ),
   ],
 
-  providers: [],
+  entryComponents: [
+    MovieDetailsComponent,
+  ],
+
+  providers: [MovieListService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
