@@ -1,5 +1,6 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+/* Imports fonts used in the webpage */
 @font-face {
   font-family: GeosansLight;
   src: url(assets/fonts/GeosansLight.ttf);
@@ -20,11 +21,71 @@ html, body {
   height: 100%;
 }
 
+/* Optimized for Mobile - portrait */
+@media only screen and (max-width : 768px) {
+
+  /* Header */
+  .playIcon {
+    font-size: 22px !important;
+  }
+
+  .profileIcon {
+    font-size: 20px !important;
+    margin-top: 4px !important;
+  }
+
+  .pageTitle {
+    font-size: 30px !important;
+  }
+
+  /* Table */
+  .mat-header-cell{
+    font-size: 14px !important;
+  }
+
+  .mat-cell{
+    font-size: 12px !important;
+  }
+
+  .example-container {
+    min-width: 400px !important;
+    width: 100% !important;
+  }
+
+  /* Search form */
+  .mat-form-field-infix {
+    font-size: 14px !important;
+  }
+
+  /* Paginator in the table */
+  .mat-paginator, .mat-paginator-page-size .mat-select-trigger {
+
+    font-family: GeosansLight;
+    font-size: 16px;
+  }
+
+  .mat-select-value-text span {
+    font-family: GeosansLight;
+  }
+
+  .mat-select-value{
+    font-family: GeosansLight;
+  }
+
+  .mat-option {
+    font-family: GeosansLight !important;
+  }
+
+  .mat-option-text{
+    font-family: GeosansLight !important;
+  }
+
+}
+
 /* Search form */
 .mat-form-field-infix {
   text-align: center;
   font-family: Webly Sleek !important;
-
 }
 
 /* Movie Table */

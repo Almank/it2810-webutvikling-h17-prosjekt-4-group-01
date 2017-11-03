@@ -22,25 +22,6 @@
   padding-bottom: 20px;
 }
 
-/* Search form */
-.example-form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
-  display: block;
-  margin: auto;
-  padding-top: 25px;
-  padding-bottom: 18px;
-}
-
-.example-full-width {
-  width: 100%;
-}
-
-.mat-hint {
-  padding-left: 25px;
-}
 
 .mat-header-cell{
   font-weight: 900;
@@ -63,7 +44,7 @@
 }
 
 .mat-row:after{
-  transition-delay: 0.75s;
+  transition-delay: 0.175s;
 }
 
 .mat-row:hover {
@@ -73,7 +54,6 @@
   border-top-color: #8ca2d2;
   border-top-width: 1px;
   border-top-style: solid;
-  font-weight: bold;
   cursor: pointer;
 }
 
@@ -81,6 +61,7 @@
   font-family: GeosansLight;
 }
 
+/* Paginator in the table */
 .mat-paginator, .mat-paginator-page-size .mat-select-trigger {
 
   font-family: GeosansLight;
@@ -89,17 +70,36 @@
 
 .mat-select-value-text span {
   font-family: GeosansLight;
-
 }
 
 .mat-select-value{
   font-family: GeosansLight;
-
 }
 
 .mat-option {
   font-family: GeosansLight !important;
 }
+
 .mat-option-text{
   font-family: GeosansLight !important;
+}
+
+/* Search form */
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  display: block;
+  margin: auto;
+  padding-top: 25px;
+  padding-bottom: 18px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.mat-hint {
+  padding-left: 25px;
 }
