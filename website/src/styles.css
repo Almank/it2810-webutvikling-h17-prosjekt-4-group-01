@@ -88,6 +88,32 @@ html, body {
     font-family: GeosansLight !important;
     font-size: 9px !important;
   }
+
+  /* Movie Popup */
+  #popUpBox{
+    font-family: GeosansLight;
+    width: auto !important;
+  }
+
+  .mat-dialog-title{
+    font-family: GeosansLight;
+    font-size: 15px !important;
+  }
+
+  .posterImage {
+    width: 100px !important;
+    height: 180px !important;
+  }
+
+  .infoType{
+    font-weight: 900;
+    font-style: italic;
+    font-size: 10px !important;
+  }
+
+  #imageWrap{
+    text-align: center;
+  }
 }
 
 /* Search form */
