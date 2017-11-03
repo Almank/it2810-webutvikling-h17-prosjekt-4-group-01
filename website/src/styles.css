@@ -54,32 +54,40 @@ html, body {
 
   /* Search form */
   .mat-form-field-infix {
-    font-size: 14px !important;
+    font-size: 12px !important;
+  }
+
+  .mat-hint{
+    font-size: 8px;
+    padding-left: 115px !important;
   }
 
   /* Paginator in the table */
   .mat-paginator, .mat-paginator-page-size .mat-select-trigger {
 
     font-family: GeosansLight;
-    font-size: 16px;
+    font-size: 9px !important;
   }
 
   .mat-select-value-text span {
     font-family: GeosansLight;
+    font-size: 9px !important;
   }
 
   .mat-select-value{
     font-family: GeosansLight;
+    font-size: 9px !important;
   }
 
   .mat-option {
     font-family: GeosansLight !important;
+    font-size: 9px !important;
   }
 
   .mat-option-text{
     font-family: GeosansLight !important;
+    font-size: 9px !important;
   }
-
 }
 
 /* Search form */
