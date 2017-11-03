@@ -21,6 +21,9 @@ html, body {
   height: 100%;
 }
 
+/* All components have a own stylesheet. However, some lines had to be written in the main CSS to override Material UI
+ as well as implementing design for Mobile Devices*/
+
 /* Optimized for Mobile - portrait */
 @media only screen and (max-width : 768px) {
 
@@ -62,7 +65,7 @@ html, body {
     padding-left: 115px !important;
   }
 
-  /* Paginator in the table */
+  /* Paginator inside the table */
   .mat-paginator, .mat-paginator-page-size .mat-select-trigger {
 
     font-family: GeosansLight;
@@ -102,12 +105,16 @@ html, body {
 
   .posterImage {
     width: 100px !important;
-    height: 180px !important;
+    height: 140px !important;
   }
 
   .infoType{
     font-weight: 900;
     font-style: italic;
+    font-size: 10px !important;
+  }
+
+  .infoDetails{
     font-size: 10px !important;
   }
 
