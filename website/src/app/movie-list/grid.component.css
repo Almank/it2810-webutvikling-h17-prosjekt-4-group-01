@@ -1,0 +1,44 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Search form */
+.example-form {
+  min-width: 300px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  display: block;
+  margin: auto;
+  padding-top: 25px;
+  padding-bottom: 18px;
+}
+.example-full-width {
+  width: 100%;
+}
+.mat-hint {
+  padding-left: 25px;
+}
+img{
+    height: 100%;
+    width: auto;
+}
+
+mat-grid-tile {
+  background: lightblue;
+  margin: 10px;
+}
+mat-grid-tile:hover mat-grid-tile-footer{
+    background-color: #3f94b5;
+}
+mat-grid-list {
+    margin-top: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+mat-grid-tile-footer {
+    font-family: Webly Sleek Kursiv;
+    font-weight: bold;
+}

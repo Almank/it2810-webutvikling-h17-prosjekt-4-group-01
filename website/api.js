@@ -158,7 +158,7 @@ router.get('/movies/list', function(req, res) {
         actors: actors,
         director: director },
       // Remove properties from query
-      { poster: 0,
+      {
         readMore: 0,
         plot: 0,
         runtime: 0

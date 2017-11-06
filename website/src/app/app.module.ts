@@ -4,13 +4,14 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
 import {MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule,
 MatSidenavModule, MatTableModule, MatToolbarModule, MatTooltipModule, MatCardModule, MatTabsModule,
-MatFormFieldModule, MatSnackBarModule
+MatFormFieldModule, MatSnackBarModule, MatGridListModule
 } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import {CdkTableModule} from '@angular/cdk/table';
 import { MovieListComponent } from './movie-list/movie-list.component';
 import { HeaderComponent } from './header/header.component';
+import { GridComponent } from './movie-list/grid.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
@@ -20,7 +21,8 @@ import { MovieDetailsComponent } from './import-module';
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},
-  { path: '**', component: MovieListComponent }
+  { path: 'list', component: MovieListComponent },
+  { path: 'grid',  component: GridComponent }
 ];
 
 @NgModule({
@@ -31,6 +33,7 @@ const appRoutes: Routes = [
     ProfileComponent,
     AuthComponent,
     MovieDetailsComponent,
+    GridComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,6 +45,7 @@ const appRoutes: Routes = [
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatGridListModule,
     MatPaginatorModule,
     MatSidenavModule,
     MatSnackBarModule,
