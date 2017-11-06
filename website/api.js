@@ -64,7 +64,7 @@ router.post('/register', function(req, res){
             }
           );
         } else {
-          handleError(res, "One of the fields are empty.");
+          res.status(409).send({message: "One of the fields are empty."});
         }
       } else {
         res.status(409).send({message: 'User already exist in the database'});
