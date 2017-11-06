@@ -32,8 +32,8 @@
 
   <mat-paginator #paginator
                  [length]="322"
-                 [pageIndex]="myNewPageIndex"
-                 [pageSize]="10"
+                 [pageIndex]="pageNum"
+                 [pageSize]="movieNum"
                  [pageSizeOptions]="[10, 25, 50]"
                   (page)= changeValues($event)
     event.pageIndex="0">

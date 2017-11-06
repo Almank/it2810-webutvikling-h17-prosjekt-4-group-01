@@ -21,15 +21,18 @@ export class MovieListComponent implements OnInit {
   movieNum: number;
   pageNum: number;
   searchWord: string;
-  dataChange: BehaviorSubject<MovieData[]>;
-  myNewPageIndex: number;
+  dataChange: BehaviorSubject<MovieData[]> = this.dataChange = new BehaviorSubject<MovieData[]>([]);;
+  //visitedIndex: [number];
+
+  have: number;
+  need: number;
 
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService) {
     this.movieNum = 10;
     this.pageNum = 0;
     this.searchWord = '';
-    this.myNewPageIndex = 0;
+    //this.visitedIndex = [0];
   }
 
   ngOnInit(): void {
@@ -37,8 +40,6 @@ export class MovieListComponent implements OnInit {
   }
   /** Hvorfor heter begge funksjonene get movielist????? */
   getMovieList(): void {
-    console.log(this.searchWord);
-    this.dataChange = new BehaviorSubject<MovieData[]>([]);
     this.movieListService.getMovieList2(this.movieNum, this.pageNum, this.searchWord).then(movies => this.createList(movies))
   }
 
@@ -120,14 +121,34 @@ export class MovieListComponent implements OnInit {
     return ("searched"); */
   }
   changeValues(event){
-    console.log(event);
+
+    this.have = this.data.length;
+
+   // let lastMovieNum = this.movieNum;
+   // let lastMovieNum2 = lastMovieNum;
+   // let lastPageIndex = this.pageNum;
+   // let lastPageIndex2 = lastPageIndex;
     this.pageNum = event.pageIndex;
     this.movieNum = event.pageSize;
+    this.need = (this.pageNum+1) * this.movieNum;
+    console.log(this.have, this.need);
+    if (this.have != this.need) {
+      this.getMovieList();
+     // this.visitedIndex.push(event.pageIndex);
+      //console.log(this.visitedIndex);
 
-    console.log(event.pageSize);
-    this.getMovieList();
+    }
 
   }
+/**
+  checkList() {
+    for (let i = 0; i < this.visitedIndex.length; i++) {
+      if (this.pageNum == this.visitedIndex[i]) {
+        return false;
+      }
+    }
+    return true;
+  } */
 
 }
 
