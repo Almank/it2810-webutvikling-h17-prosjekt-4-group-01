@@ -17,3 +17,12 @@
 .login-password, .login-username{
   display: flex;
 }
+
+/* alert styling */
+snack-bar-container.alert-negative{
+  background-color: darkred;
+}
+
+snack-bar-container.alert-positive{
+  background-color: darkgreen;
+}
