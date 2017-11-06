@@ -79,10 +79,10 @@ function authenticate(username, password, fn) {
       if (bcrypt.compareSync(password, user.password)) {
         return fn(null, user);
       } else {
-        return fn(new Error('invalid password'));
+        return fn(new Error('Invalid password'));
       }
     } else {
-      return fn(new Error('user does not exist in database'));
+      return fn(new Error('User does not exist in database'));
     }
   });
 }

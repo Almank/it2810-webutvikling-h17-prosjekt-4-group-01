@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isObject } from 'util';
 import { Router } from '@angular/router';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-auth',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class AuthComponent implements OnInit {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, public snackBar: MatSnackBar) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null) {
       this.router.navigate(['/login']);
@@ -32,7 +33,7 @@ export class AuthComponent implements OnInit {
         this.router.navigate(['/profile']);
       }
     }, err => {
-      console.log(err.error.message);
+      this.onUserError(err.error.message, 'dismiss');
     });
   }
   onLogin(form) {
@@ -53,7 +54,12 @@ export class AuthComponent implements OnInit {
         }
       }
     }, err => {
-      console.log(err.error.message);
+      this.onUserError(err.error.message, 'dismiss');
+    });
+  }
+  onUserError(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
     });
   }
 }
