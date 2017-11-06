@@ -11,15 +11,17 @@ import { MovieListComponent } from './movie-list.component';
 })
 
 export class GridComponent implements OnInit {
+    constructor(){
 
-  movies: MovieList[] = [
-      {title: 'Mr. Nice' },
-      {title: 'Narco' },
-      {title: 'Narco' },
-      {title: 'Narco' },
-      {title: 'Narco' },
-      {title: 'Narco' },
-      {title: 'Narco' },
+    }
+    movies: MovieList[] = [
+        {title: 'Mr. Nice' },
+        {title: 'Narco' },
+        {title: 'Narco' },
+        {title: 'Narco' },
+        {title: 'Narco' },
+        {title: 'Narco' },
+        {title: 'Narco' },
     ];
     ngOnInit() {
 

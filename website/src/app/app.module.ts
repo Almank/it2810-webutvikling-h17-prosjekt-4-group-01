@@ -4,7 +4,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
 import {MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule,
 MatSidenavModule, MatTableModule, MatToolbarModule, MatTooltipModule, MatCardModule, MatTabsModule,
-MatFormFieldModule, MatGridListModule,
+MatFormFieldModule, MatSnackBarModule, MatGridListModule
 } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
@@ -48,6 +48,7 @@ const appRoutes: Routes = [
     MatGridListModule,
     MatPaginatorModule,
     MatSidenavModule,
+    MatSnackBarModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,

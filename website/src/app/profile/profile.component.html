@@ -5,7 +5,7 @@
       <mat-tab label="Profile">
         <mat-card-header class="mat-card-header">
           <mat-card-title>
-            <strong>Username</strong>
+            <strong>{{user}}</strong>
           </mat-card-title>
           <img src="https://source.unsplash.com/random/200x200">
         </mat-card-header>
@@ -14,13 +14,13 @@
 
         <mat-card-content class="mat-card-content">
           <p>Change Account Information</p>
-          <form class="password-form">
+          <form class="password-form" #newPasswordForm="ngForm" (ngSubmit)="onNewPassword(newPasswordForm)">
             <mat-form-field>
-              <input matInput value="Username">
+              <input matInput placeholder="Old Password" type="password" name="oldPassword" ngModel/>
             </mat-form-field>
             <br>
             <mat-form-field>
-              <input matInput placeholder="New Password" type="password"/>
+              <input matInput placeholder="New Password" type="password" name="newPassword" ngModel/>
             </mat-form-field>
             <br>
             <button class="save-button" mat-button>Click me!</button>

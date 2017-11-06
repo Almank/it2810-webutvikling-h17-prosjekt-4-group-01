@@ -27,6 +27,10 @@ flex: 1 1 auto;
 }
 
 .pageTitle {
-  font-family: GeosansLight;
+  font-family: Webly Sleek;
   font-size: 40px;
+}
+
+.login-button{
+  display: inline-flex;
 }

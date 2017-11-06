@@ -4,7 +4,7 @@ const server = require('./server');
 const db = server.db;
 const model = require('./models');
 
-const user = model.User;
+const userModel = model.User;
 const jwt = require('jsonwebtoken');
 const config = {'secret': 'supersecretkey'};
 
@@ -43,27 +43,33 @@ function handleError(res, reason, message, code) {
 
 // Register user
 router.post('/register', function(req, res){
-    if (req.body.username !== '' && req.body.password !== ''){
-        let hashedPassword = bcrypt.hashSync(req.body.password, 8);
-        let new_user = new user({
+    db.collection('users').findOne({'username': req.body.username}, function (err, user) {
+      if (!user){
+        if (req.body.username !== '' && req.body.password !== ''){
+          let hashedPassword = bcrypt.hashSync(req.body.password, 8);
+          let new_user = new userModel({
             username: req.body.username,
             password: hashedPassword,
-        });
-        db.collection('users').save(new_user,
+          });
+          db.collection('users').save(new_user,
             function(err, docs) {
-                if (err) {
-                    handleError(res, err);
-                } else {
-                    let token = jwt.sign({ id: user._id }, config.secret, {
-                      expiresIn: 86400
-                    });
-                    res.status(200).send({ auth: true, token: token });
-                }
+              if (err) {
+                handleError(res, err);
+              } else {
+                let token = jwt.sign({ id: userModel._id }, config.secret, {
+                  expiresIn: 86400
+                });
+                res.status(200).send({ auth: true, token: token });
+              }
             }
-        );
-    } else {
-        handleError(res, "Invalid fieldinput.");
-    }
+          );
+        } else {
+          res.status(409).send({message: "One of the fields are empty."});
+        }
+      } else {
+        res.status(409).send({message: 'User already exist in the database'});
+      }
+    });
 });
 
 //Authenticate user
@@ -73,10 +79,10 @@ function authenticate(username, password, fn) {
       if (bcrypt.compareSync(password, user.password)) {
         return fn(null, user);
       } else {
-        return fn('invalid password');
+        return fn(new Error('Invalid password'));
       }
     } else {
-      return fn(new Error('user does not exist in database'));
+      return fn(new Error('User does not exist in database'));
     }
   });
 }
@@ -85,15 +91,37 @@ function authenticate(username, password, fn) {
 router.post('/login', function(req, res){
     authenticate(req.body.username, req.body.password, function (err, user) {
       if (err){
-        res.status(401).send({ auth: false, token: null });
+        res.status(401).send({ auth: false, token: null, message: err.message});
       } else {
-
         let token = jwt.sign({ id: user._id }, config.secret, {
           expiresIn: 86400
         });
         res.status(200).send({ auth: true, token: token});
       }
     });
+});
+
+//Change password
+router.post('/new_password', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if(user !== null) {
+      if (bcrypt.compareSync(req.body.oldPassword, user.password)) {
+        user.password = bcrypt.hashSync(req.body.newPassword, 8);
+        db.collection('users').save(user,
+          function(err, docs) {
+            if (err) {
+              handleError(res, err);
+            }else {
+              res.status(200).json(docs);
+            }
+          }
+        );
+      } else {
+        res.status(401).send({message: 'Wrong password!'});
+      }
+    }
+  });
 });
 
 function getSortVariable(str, bool) {

@@ -42,3 +42,12 @@
   background-color: red;
   color: white;
 }
+
+/* alert styling */
+snack-bar-container.alert-negative{
+  background-color: darkred;
+}
+
+snack-bar-container.alert-positive{
+  background-color: darkgreen;
+}
