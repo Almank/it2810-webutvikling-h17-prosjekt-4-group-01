@@ -96,6 +96,27 @@ router.post('/login', function(req, res){
     });
 });
 
+//Change password
+router.post('/new_password', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if(user !== null) {
+      if (bcrypt.compareSync(req.body.oldPassword, user.password)) {
+        user.password = bcrypt.hashSync(req.body.newPassword, 8);
+        db.collection('users').save(user,
+          function(err, docs) {
+            if (err) {
+              handleError(res, err);
+            }else {
+              res.status(200).json(docs);
+            }
+          }
+        );
+      }
+    }
+  });
+});
+
 function getSortVariable(str, bool) {
     let num = 1;
     if (bool === 'true') {

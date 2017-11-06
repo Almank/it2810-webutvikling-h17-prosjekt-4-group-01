@@ -15,6 +15,7 @@ const MovieSchema = new Schema({
 
 //Todo: User, history
 const UserSchema = new Schema({
+    _id: {type: String},
     username: { type: String, required: true},
     password: { type: String, required: true},
     searchHistory: { type: Array, default: []},
