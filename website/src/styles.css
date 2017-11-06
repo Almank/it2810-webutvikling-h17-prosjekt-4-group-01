@@ -142,3 +142,9 @@ html, body {
 .mat-input-element mat-form-field-autofill-control{
   font-family: Webly Sleek;
 }
+
+/* User Button */
+.mat-button, .mat-icon-button, .mat-raised-button {
+  font-family: GeosansLight !important;
+}
+
