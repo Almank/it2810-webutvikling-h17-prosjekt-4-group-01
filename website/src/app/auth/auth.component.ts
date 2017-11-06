@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class AuthComponent implements OnInit {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
   constructor(private http: HttpClient, private router: Router) {
-    if (localStorage.getItem('token') !== null) {
+    if (JSON.parse(localStorage.getItem('auth')) === true) {
       this.router.navigate(['/profile']);
     }
   }
@@ -39,6 +39,7 @@ export class AuthComponent implements OnInit {
       if (isObject(data)) {
         if (data['auth']) {
           localStorage.setItem('token', data['token']);
+          localStorage.setItem('auth', data['auth']);
           console.log('token saved to LS and user is logged in');
           this.router.navigate(['/profile']);
         }

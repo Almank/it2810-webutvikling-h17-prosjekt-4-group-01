@@ -12,14 +12,14 @@ export class ProfileComponent implements OnInit {
 
   // TODO get username from api
   constructor(private router: Router) {
-    if (localStorage.getItem('token') === null) {
+    if (JSON.parse(localStorage.getItem('auth')) === false) {
       this.router.navigate(['/login']);
     }
   }
   ngOnInit() {
   }
   onLogout() {
-    localStorage.removeItem('token');
+    localStorage.setItem('auth', 'false');
     this.router.navigate(['/']);
   }
 
