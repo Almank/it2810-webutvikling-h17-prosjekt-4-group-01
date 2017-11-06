@@ -21,6 +21,10 @@
 .mat-hint {
   padding-left: 25px;
 }
+img{
+    height: 100%;
+    width: auto;
+}
 
 mat-grid-tile {
   background: lightblue;
