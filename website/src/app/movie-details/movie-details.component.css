@@ -1,10 +1,7 @@
+/* Movie Popup */
 #popUpBox{
   font-family: GeosansLight;
   width: 450px;
-}
-
-#popUpBox hr{
-  color: red;
 }
 
 .mat-dialog-title{

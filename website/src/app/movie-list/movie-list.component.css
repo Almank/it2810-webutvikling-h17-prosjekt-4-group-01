@@ -1,12 +1,11 @@
-/* Structure: Table */
+/* Movie Table */
 .example-container {
   display: flex;
   flex-direction: column;
   min-width: 300px;
-  width: 45%;
+  width: 65%;
   margin: auto;
   text-align: center;
-
 }
 
 .example-header {
@@ -23,7 +22,69 @@
   padding-bottom: 20px;
 }
 
-/* Structure: Search form */
+
+.mat-header-cell{
+  font-weight: 900;
+  font-size: 21px;
+}
+
+.mat-cell{
+  font-size: 18px;
+}
+
+.mat-row{
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: rgba(0,0,0,.12);
+  transition-delay: 0.075s;
+}
+
+.mat-row:before{
+  transition-delay: 0.075s;
+}
+
+.mat-row:after{
+  transition-delay: 0.175s;
+}
+
+.mat-row:hover {
+  border-bottom-color: #8ca2d2;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-top-color: #8ca2d2;
+  border-top-width: 1px;
+  border-top-style: solid;
+  cursor: pointer;
+}
+
+.mat-header-row, .mat-row {
+  font-family: GeosansLight;
+}
+
+/* Paginator inside the table */
+.mat-paginator, .mat-paginator-page-size .mat-select-trigger {
+
+  font-family: GeosansLight;
+  font-size: 16px;
+}
+
+.mat-select-value-text span {
+  font-family: GeosansLight;
+}
+
+.mat-select-value{
+  font-family: GeosansLight;
+}
+
+.mat-option {
+  font-family: GeosansLight !important;
+}
+
+.mat-option-text{
+  font-family: GeosansLight !important;
+}
+
+/* Search form */
 .example-form {
   min-width: 150px;
   max-width: 500px;
@@ -41,31 +102,4 @@
 
 .mat-hint {
   padding-left: 25px;
-}
-
-.mat-header-cell{
-  font-weight: 900;
-  font-size: 21px;
-}
-
-.mat-cell{
-  font-size: 18px;
-}
-
-.mat-row {
-  transition: all 0.185s ease;
-}
-
-.mat-row:hover {
-  border-bottom-color: #8ca2d2;
-  border-bottom-width: 1px;
-  border-top-color: #8ca2d2;
-  border-top-style: solid;
-  border-top-width: 1px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.mat-header-row, .mat-row {
-  font-family: GeosansLight;
 }

@@ -27,6 +27,7 @@ export class MovieListComponent implements OnInit {
     this.movieListService.getMovieList().then(movies => this.createList(movies));
   }
 
+  /** Sets the Movie data displyed on in the Pop-up. */
   openDialog(data) {
     this.movieListService.getMovieModal(data).then( movies => {
       data = {
@@ -138,22 +139,6 @@ export class ExampleMovieSource extends DataSource<any> {
     });
   }
   disconnect() {}
-}
-
-
-
-
-export class Pixel{
-  pixel: Pixel[] = [];
-  x: number;
-  y: number;
-  constructor(public x: number, public y: number){
-    this.x = x;
-    this.y = y;
-    console.log(x,y, pixel);
-
-  }
-
 
 }
 

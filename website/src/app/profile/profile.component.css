@@ -1,0 +1,44 @@
+.profile-container{
+  display: flex;
+  justify-content: center;
+}
+
+.profile-card{
+  width: 70%;
+  top: 50px;
+}
+
+.mat-card-header{
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 20px 10px 20px;
+}
+
+.mat-card-header img{
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+}
+
+.mat-card-header mat-card-title{
+  margin: 0 -8px;
+  font-size: 20px;
+}
+
+.mat-card-content{
+  margin: 10px 20px 10px 20px;
+}
+
+.card-hr{
+  border-width: 0.5px;
+}
+
+.save-button{
+  background-color: #009f02;
+  color: white;
+}
+
+.logout-button{
+  background-color: red;
+  color: white;
+}

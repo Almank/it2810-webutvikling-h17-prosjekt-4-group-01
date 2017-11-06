@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { isObject } from 'util';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -6,10 +9,40 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  private headers = new HttpHeaders({'Content-Type': 'application/json'});
+  username: String;
+  token: String;
 
-  constructor() { }
-
+  // TODO get username from api
+  constructor(private router: Router, private http: HttpClient) {
+    const session = JSON.parse(localStorage.getItem('session'));
+    if (session === null || session.auth === false) {
+      this.router.navigate(['/login']);
+    } else {
+      this.username = session.username;
+      this.token = session.token;
+    }
+  }
   ngOnInit() {
+  }
+  onLogout() {
+    localStorage.removeItem('session');
+    this.router.navigate(['/']);
+  }
+  get user() {
+    return this.username;
+  }
+  onNewPassword(form) {
+    const params = JSON.stringify({
+      token: this.token,
+      oldPassword: form.value.oldPassword,
+      newPassword: form.value.newPassword
+    });
+    this.http.post('/api/new_password', params, {headers: this.headers}).subscribe(data => {
+      if (isObject(data)) {
+        console.log('password successfully changed');
+      }
+    });
   }
 
 }

@@ -3,7 +3,12 @@ const router = express.Router();
 const server = require('./server');
 const db = server.db;
 const model = require('./models');
+
 const user = model.User;
+const jwt = require('jsonwebtoken');
+const config = {'secret': 'supersecretkey'};
+
+const bcrypt = require('bcryptjs');
 
 function splitElements(str) {
   if (str === '' || str === undefined){
@@ -39,16 +44,20 @@ function handleError(res, reason, message, code) {
 // Register user
 router.post('/register', function(req, res){
     if (req.body.username !== '' && req.body.password !== ''){
+        let hashedPassword = bcrypt.hashSync(req.body.password, 8);
         let new_user = new user({
             username: req.body.username,
-            password: req.body.password,
+            password: hashedPassword,
         });
         db.collection('users').save(new_user,
             function(err, docs) {
                 if (err) {
                     handleError(res, err);
                 } else {
-                    res.status(200).json(docs);
+                    let token = jwt.sign({ id: user._id }, config.secret, {
+                      expiresIn: 86400
+                    });
+                    res.status(200).send({ auth: true, token: token });
                 }
             }
         );
@@ -57,19 +66,70 @@ router.post('/register', function(req, res){
     }
 });
 
+//Authenticate user
+function authenticate(username, password, fn) {
+  db.collection('users').findOne({'username': username}, function (err, user) {
+    if(user !== null) {
+      if (bcrypt.compareSync(password, user.password)) {
+        return fn(null, user);
+      } else {
+        return fn('invalid password');
+      }
+    } else {
+      return fn(new Error('user does not exist in database'));
+    }
+  });
+}
+
 // Login
 router.post('/login', function(req, res){
-    db.collection('users').find({
-        'username' : req.body.username,
-        'password' : req.body.password,
-    }).toArray(function(err, docs) {
-        if (err) {
-            handleError(res, err.message, "Failed to login.");
-        } else {
-            res.status(200).json(docs);
-        }
+    authenticate(req.body.username, req.body.password, function (err, user) {
+      if (err){
+        res.status(401).send({ auth: false, token: null });
+      } else {
+
+        let token = jwt.sign({ id: user._id }, config.secret, {
+          expiresIn: 86400
+        });
+        res.status(200).send({ auth: true, token: token});
+      }
     });
 });
+
+//Change password
+router.post('/new_password', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if(user !== null) {
+      if (bcrypt.compareSync(req.body.oldPassword, user.password)) {
+        user.password = bcrypt.hashSync(req.body.newPassword, 8);
+        db.collection('users').save(user,
+          function(err, docs) {
+            if (err) {
+              handleError(res, err);
+            }else {
+              res.status(200).json(docs);
+            }
+          }
+        );
+      }
+    }
+  });
+});
+
+function getSortVariable(str, bool) {
+    let num = 1;
+    if (bool === 'true') {
+        num = -1;
+    }
+    if (str === 'year'){
+      return {'year': num}
+    } else if (str === 'genre'){
+      return {'genre': num}
+    } else {
+      return {'title': num}
+    }
+}
 
 // Get movies
 router.get('/movies/list', function(req, res) {
@@ -80,6 +140,7 @@ router.get('/movies/list', function(req, res) {
     const genre = splitElements(req.query.genre);
     const actors = splitElements(req.query.actors);
     const director = splitElements(req.query.director);
+    const sort = getSortVariable(req.query.sort, req.query.desc);
 
     db.collection('movies').find(
       // Filter correct values
@@ -94,7 +155,7 @@ router.get('/movies/list', function(req, res) {
         runtime: 0
       })
       // Sort and limit matches
-      .sort().limit(limit).skip(page).toArray(function(err, docs) {
+      .sort(sort).limit(limit).skip(page).toArray(function(err, docs) {
 
       if (err) {
         handleError(res, err.message, "Failed to get movies with no actors.");
