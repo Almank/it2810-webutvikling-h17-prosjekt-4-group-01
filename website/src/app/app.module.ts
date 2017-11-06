@@ -22,7 +22,8 @@ const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},
   { path: 'list', component: MovieListComponent },
-  { path: 'grid',  component: GridComponent }
+  { path: 'grid',  component: GridComponent },
+  { path: '**', component: MovieListComponent }
 ];
 
 @NgModule({
