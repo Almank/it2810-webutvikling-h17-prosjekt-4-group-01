@@ -20,6 +20,7 @@ export class MovieListComponent implements OnInit {
   dialogResult = '';
   movieList: MovieList[];
 
+
   constructor(public dialog: MatDialog, private movieListService: MovieListService) {}
 
   getMovieList(): void {
@@ -47,6 +48,7 @@ export class MovieListComponent implements OnInit {
       });
     });
   }
+
 
   ngOnInit(): void {
     this.getMovieList();
@@ -85,6 +87,16 @@ export class MovieListComponent implements OnInit {
 
   get data(): MovieData[] {
     return this.dataChange.value;
+  }
+
+  searchDatabase(value){
+
+    if (value.length >= 1){
+      console.log(this.data);
+      console.log(this.data.length);
+      console.log(value);
+
+    }
   }
 }
 
@@ -127,3 +139,24 @@ export class ExampleMovieSource extends DataSource<any> {
   }
   disconnect() {}
 }
+
+
+
+
+export class Pixel{
+  pixel: Pixel[] = [];
+  x: number;
+  y: number;
+  constructor(public x: number, public y: number){
+    this.x = x;
+    this.y = y;
+    console.log(x,y, pixel);
+
+  }
+
+
+}
+
+
+
+

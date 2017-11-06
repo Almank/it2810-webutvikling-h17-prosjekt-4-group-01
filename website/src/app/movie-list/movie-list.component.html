@@ -1,7 +1,8 @@
 <div class="searchWrap">
   <form class="example-form">
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Search for Top Movies">
+      <input #box matInput placeholder="Search for Top Movies">
+      <p> {{searchDatabase(box.value)}}</p>
       <mat-hint><strong></strong>Type in Title, Year or Genre and hit enter to save the search if you are logged in </mat-hint>
     </mat-form-field>
   </form>

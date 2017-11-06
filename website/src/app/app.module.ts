@@ -12,6 +12,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { MovieListService } from './movie-list/movie-list.service';
 
 import { MovieDetailsComponent, RouterModule, Routes } from './import-module';
+import { SearchBarComponent } from './search-bar/search-bar.component';
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: '**', component: MovieListComponent }
@@ -24,6 +25,7 @@ const appRoutes: Routes = [
     HeaderComponent,
     ProfileComponent,
     MovieDetailsComponent,
+    SearchBarComponent,
   ],
   imports: [
     BrowserModule,
