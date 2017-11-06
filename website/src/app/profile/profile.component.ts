@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isObject } from 'util';
 import { Router } from '@angular/router';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +15,7 @@ export class ProfileComponent implements OnInit {
   token: String;
 
   // TODO get username from api
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null || session.auth === false) {
       this.router.navigate(['/login']);
@@ -40,8 +41,13 @@ export class ProfileComponent implements OnInit {
     });
     this.http.post('/api/new_password', params, {headers: this.headers}).subscribe(data => {
       if (isObject(data)) {
-        console.log('password successfully changed');
+        this.onUserAlert('Password successfully changed', 'dismiss');
       }
+    });
+  }
+  onUserAlert(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
     });
   }
 
