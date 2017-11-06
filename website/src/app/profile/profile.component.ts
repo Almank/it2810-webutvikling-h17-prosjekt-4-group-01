@@ -20,9 +20,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
   }
   onLogout() {
-    const session = JSON.parse(localStorage.getItem('session'));
-    session.auth = false;
-    localStorage.setItem('session', JSON.stringify(session));
+    localStorage.removeItem('session');
     this.router.navigate(['/']);
   }
 

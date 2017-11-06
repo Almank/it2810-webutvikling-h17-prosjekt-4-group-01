@@ -30,3 +30,7 @@ flex: 1 1 auto;
   font-family: GeosansLight;
   font-size: 40px;
 }
+
+.login-button{
+  display: inline-flex;
+}
