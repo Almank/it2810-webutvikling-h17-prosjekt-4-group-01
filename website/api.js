@@ -140,8 +140,16 @@ function getSortVariable(str, bool) {
 
 // Get movies
 router.get('/movies/list', function(req, res) {
-    const page = parseInt(req.query.page * 25);
-    const limit = parseInt(req.query.limit);
+    console.log(req.query);
+    let page = parseInt(req.query.page * req.query.limit);
+    let limit = parseInt(req.query.limit);
+    const have = req.query.have;
+    const need = req.query.need;
+
+    if (have !== undefined && need !== undefined){
+      page = parseInt(have);
+      limit = parseInt(need);
+    }
 
     const title = splitElements(req.query.title);
     const year = splitYear(req.query.year);
