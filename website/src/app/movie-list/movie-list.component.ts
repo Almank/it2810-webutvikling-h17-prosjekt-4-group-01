@@ -14,16 +14,22 @@ import { MovieListService } from './movie-list.service';
 export class MovieListComponent implements OnInit {
   displayedColumns = ['title', 'year', 'genre', ];
   dataSource: ExampleMovieSource | null;
-  dataChange: BehaviorSubject<MovieData[]> = new BehaviorSubject<MovieData[]>([]);
+  dataChange: BehaviorSubject<MovieList[]>;
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   dialogResult = '';
   movieList: MovieList[];
+  startYear: any;
+  endYear: any;
 
-  constructor(public dialog: MatDialog, private movieListService: MovieListService) {}
+  constructor(public dialog: MatDialog, private movieListService: MovieListService) {
+    this.startYear = 0;
+    this.endYear = 2017;
+    this.dataChange = new BehaviorSubject<MovieList[]>([]);
+  }
 
   getMovieList(): void {
-    this.movieListService.getMovieList().then(movies => this.createList(movies));
+    this.movieListService.getMovieList(this).then(movies => this.createList(movies));
   }
 
   /** Sets the Movie data displyed on in the Pop-up. */
@@ -84,22 +90,20 @@ export class MovieListComponent implements OnInit {
     };
   }
 
-  get data(): MovieData[] {
+  get data(): MovieList[] {
     return this.dataChange.value;
   }
-}
 
-export interface MovieData {
-  _id?: number;
-  readMore?: string;
-  poster?: string;
-  plot?: string;
-  actors?: string;
-  director?: string;
-  genre?: string;
-  runtime?: string;
-  year?: number;
-  title?: string;
+  setYear(event, type) {
+    if (type === 'start') {
+      this.startYear = event;
+    } else {
+      this.endYear = event;
+    }
+    this.dataChange = new BehaviorSubject<MovieList[]>([]);
+    this.getMovieList();
+  }
+
 }
 
 /**
@@ -114,7 +118,7 @@ export class ExampleMovieSource extends DataSource<any> {
     super();
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<MovieData[]> {
+  connect(): Observable<MovieList[]> {
     const displayDataChanges = [
       this._movieComponent.dataChange,
       this._paginator.page,

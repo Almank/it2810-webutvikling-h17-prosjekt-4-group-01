@@ -140,7 +140,7 @@ function getSortVariable(str, bool) {
 
 // Get movies
 router.get('/movies/list', function(req, res) {
-    const page = parseInt(req.query.page * 25);
+    const page = parseInt(req.query.page * req.query.limit);
     const limit = parseInt(req.query.limit);
 
     const title = splitElements(req.query.title);
@@ -149,6 +149,7 @@ router.get('/movies/list', function(req, res) {
     const actors = splitElements(req.query.actors);
     const director = splitElements(req.query.director);
     const sort = getSortVariable(req.query.sort, req.query.desc);
+    console.log(year[1]);
 
     db.collection('movies').find(
       // Filter correct values

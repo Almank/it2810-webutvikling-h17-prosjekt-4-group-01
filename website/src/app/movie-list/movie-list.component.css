@@ -103,3 +103,11 @@
 .mat-hint {
   padding-left: 25px;
 }
+
+.inputYear {
+  width: 80px;
+}
+
+.inputYearTextField {
+  text-align: center;
+}

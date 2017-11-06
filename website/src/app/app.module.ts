@@ -56,7 +56,6 @@ const appRoutes: Routes = [
       appRoutes,
     ),
   ],
-
   entryComponents: [
     MovieDetailsComponent,
   ],

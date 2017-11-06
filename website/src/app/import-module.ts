@@ -16,7 +16,7 @@ export { HeaderComponent } from './header/header.component';
 export { CdkTableModule } from '@angular/cdk/table';
 export { AppComponent } from './app.component';
 export { FormsModule } from '@angular/forms';
-export { MatButtonModule, MatDialogModule, MatCardModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSidenavModule, MatTableModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+export { MatButtonModule, MatDialogModule, MatCardModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSidenavModule, MatTableModule, MatToolbarModule, MatTooltipModule, MatFormFieldModule } from '@angular/material';
 export { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export { BrowserModule } from '@angular/platform-browser';
 export { MovieList } from './movie-list/movie-list';

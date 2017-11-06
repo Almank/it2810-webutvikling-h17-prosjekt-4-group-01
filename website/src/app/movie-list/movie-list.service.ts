@@ -5,10 +5,9 @@ import 'rxjs/add/operator/toPromise';
 export class MovieListService {
   constructor(private http: HttpClient) {}
 
-  getMovieList(): Promise<MovieList[]> {
-    const params = new HttpParams().set('limit', '25').set('page', '0').set('title', '13 Hours');
-      //.set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay');
-
+  getMovieList(component): Promise<MovieList[]> {
+    console.log(component.startYear + '-' + component.endYear);
+    const params = new HttpParams().set('limit', '25').set('page', '0').set('year', component.startYear + '-' + component.endYear);
     return this.http.get('/api/movies/list', { params })
 
       .toPromise()
