@@ -33,8 +33,8 @@
 
   <mat-paginator #paginator
                  [length]="this.data.length"
-                 [pageIndex]="0"
-                 [pageSize]="10"
+                 [pageIndex]="pageNum"
+                 [pageSize]="pageNum"
                  [pageSizeOptions]="[10, 25, 50]">
   </mat-paginator>
 </div>

@@ -14,17 +14,30 @@ import { MovieListService } from './movie-list.service';
 export class MovieListComponent implements OnInit {
   displayedColumns = ['title', 'year', 'genre', ];
   dataSource: ExampleMovieSource | null;
-  dataChange: BehaviorSubject<MovieData[]> = new BehaviorSubject<MovieData[]>([]);
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   dialogResult = '';
   movieList: MovieList[];
+  movieNum: number;
+  pageNum: number;
+  searchWord: string;
+  dataChange: BehaviorSubject<MovieData[]>;
 
 
-  constructor(public dialog: MatDialog, private movieListService: MovieListService) {}
+  constructor(public dialog: MatDialog, private movieListService: MovieListService) {
+    this.movieNum = 25;
+    this.pageNum = 0;
+    this.searchWord = '13 Hours';
+  }
 
+  ngOnInit(): void {
+    this.getMovieList();
+  }
+  /** Hvorfor heter begge funksjonene get movielist????? */
   getMovieList(): void {
-    this.movieListService.getMovieList().then(movies => this.createList(movies));
+    console.log(this.searchWord);
+    this.dataChange = new BehaviorSubject<MovieData[]>([]);
+    this.movieListService.getMovieList2(this.movieNum, this.pageNum, this.searchWord).then(movies => this.createList(movies));
   }
 
   /** Sets the Movie data displyed on in the Pop-up. */
@@ -51,23 +64,21 @@ export class MovieListComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
-    this.getMovieList();
-    this.dataSource = new ExampleMovieSource(this, this.paginator);
-  }
-
   createList(movieData) {
+    var copiedData = [];
+    this.dataSource = new ExampleMovieSource(this, this.paginator);
     /** Fill up the database with 25 movies. */
-    for (let i = 0; i < 25 ; i++) {
-      this.addMovie(i, movieData);
+    for (let i = 0; i < movieData.length ; i++) {
+      this.addMovie(i, movieData, copiedData);
     }
   }
 
   /** Adds a new movie to the database. */
-  addMovie(i, movieList) {
-    const copiedData = this.data.slice();
+  addMovie(i, movieList, copiedData) {
+    copiedData = this.data.slice();
     copiedData.push(this.createNewMovie(i, movieList));
     this.dataChange.next(copiedData);
+
   }
 
   /** Builds and returns a new movie. */
@@ -96,8 +107,27 @@ export class MovieListComponent implements OnInit {
       console.log(this.data);
       console.log(this.data.length);
       console.log(value);
-
+      this.matchFunction(value);
     }
+  }
+  matchFunction(str){
+    var searchArray = [];
+    var matchSize = 0;
+    for (let i = 0; i < this.data.length ; i++){
+      if (this.data[i].title.toLowerCase().match(str.toLowerCase())){
+        searchArray.push(this.data[i]);
+        matchSize += 1;
+        console.log(this.data[i].title);
+      }
+    }
+    console.log(searchArray);
+    console.log("MATCH SIZE = ", matchSize);
+    this.movieNum = matchSize;
+    this.searchWord = str;
+
+
+   /* this.searchWord = str;
+    return ("searched"); */
   }
 }
 
@@ -132,7 +162,7 @@ export class ExampleMovieSource extends DataSource<any> {
       this._paginator.page,
     ];
     return Observable.merge(...displayDataChanges).map(() => {
-      const data = this._movieComponent.data.slice();
+      var data = this._movieComponent.data.slice();
   /** Grab the page's slice of data. */
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
       return data.splice(startIndex, this._paginator.pageSize);
