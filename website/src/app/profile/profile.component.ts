@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
   http: HttpClient;
+  username: String;
 
   // TODO get username from api
   constructor(private router: Router) {
@@ -16,12 +17,16 @@ export class ProfileComponent implements OnInit {
     if (session === null || session.auth === false) {
       this.router.navigate(['/login']);
     }
+    this.username = session.username;
   }
   ngOnInit() {
   }
   onLogout() {
     localStorage.removeItem('session');
     this.router.navigate(['/']);
+  }
+  get user() {
+    return this.username;
   }
 
 }
