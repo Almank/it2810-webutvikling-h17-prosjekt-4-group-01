@@ -143,8 +143,12 @@ html, body {
   font-family: Webly Sleek;
 }
 
-/* User Button */
+/* Buttons */
 .mat-button, .mat-icon-button, .mat-raised-button {
   font-family: GeosansLight !important;
 }
 
+/* Grid/List View Card */
+.mat-card>.mat-card-actions:last-child {
+  text-align: center;
+}
