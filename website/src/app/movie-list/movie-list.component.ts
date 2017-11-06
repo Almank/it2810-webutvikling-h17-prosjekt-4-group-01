@@ -22,12 +22,14 @@ export class MovieListComponent implements OnInit {
   pageNum: number;
   searchWord: string;
   dataChange: BehaviorSubject<MovieData[]>;
+  myNewPageIndex: number;
 
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService) {
-    this.movieNum = 25;
+    this.movieNum = 10;
     this.pageNum = 0;
-    this.searchWord = '13 Hours';
+    this.searchWord = '';
+    this.myNewPageIndex = 0;
   }
 
   ngOnInit(): void {
@@ -37,7 +39,7 @@ export class MovieListComponent implements OnInit {
   getMovieList(): void {
     console.log(this.searchWord);
     this.dataChange = new BehaviorSubject<MovieData[]>([]);
-    this.movieListService.getMovieList2(this.movieNum, this.pageNum, this.searchWord).then(movies => this.createList(movies));
+    this.movieListService.getMovieList2(this.movieNum, this.pageNum, this.searchWord).then(movies => this.createList(movies))
   }
 
   /** Sets the Movie data displyed on in the Pop-up. */
@@ -78,6 +80,7 @@ export class MovieListComponent implements OnInit {
     copiedData = this.data.slice();
     copiedData.push(this.createNewMovie(i, movieList));
     this.dataChange.next(copiedData);
+    console.log(this.data);
 
   }
 
@@ -102,33 +105,30 @@ export class MovieListComponent implements OnInit {
   }
 
   searchDatabase(value){
-
-    if (value.length >= 1){
-      console.log(this.data);
-      console.log(this.data.length);
-      console.log(value);
-      this.matchFunction(value);
-    }
-  }
-  matchFunction(str){
-    var searchArray = [];
-    var matchSize = 0;
-    for (let i = 0; i < this.data.length ; i++){
+    /**for (let i = 0; i < this.data.length ; i++){
       if (this.data[i].title.toLowerCase().match(str.toLowerCase())){
         searchArray.push(this.data[i]);
         matchSize += 1;
         console.log(this.data[i].title);
       }
-    }
-    console.log(searchArray);
-    console.log("MATCH SIZE = ", matchSize);
-    this.movieNum = matchSize;
-    this.searchWord = str;
+    } */
+    this.searchWord = value;
+    this.getMovieList();
 
 
    /* this.searchWord = str;
     return ("searched"); */
   }
+  changeValues(event){
+    console.log(event);
+    this.pageNum = event.pageIndex;
+    this.movieNum = event.pageSize;
+
+    console.log(event.pageSize);
+    this.getMovieList();
+
+  }
+
 }
 
 export interface MovieData {
