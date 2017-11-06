@@ -43,27 +43,33 @@ function handleError(res, reason, message, code) {
 
 // Register user
 router.post('/register', function(req, res){
-    if (req.body.username !== '' && req.body.password !== ''){
-        let hashedPassword = bcrypt.hashSync(req.body.password, 8);
-        let new_user = new user({
+    db.collection('users').findOne({'username': req.body.username}, function (err, user) {
+      if (!user){
+        if (req.body.username !== '' && req.body.password !== ''){
+          let hashedPassword = bcrypt.hashSync(req.body.password, 8);
+          let new_user = new user({
             username: req.body.username,
             password: hashedPassword,
-        });
-        db.collection('users').save(new_user,
+          });
+          db.collection('users').save(new_user,
             function(err, docs) {
-                if (err) {
-                    handleError(res, err);
-                } else {
-                    let token = jwt.sign({ id: user._id }, config.secret, {
-                      expiresIn: 86400
-                    });
-                    res.status(200).send({ auth: true, token: token });
-                }
+              if (err) {
+                handleError(res, err);
+              } else {
+                let token = jwt.sign({ id: user._id }, config.secret, {
+                  expiresIn: 86400
+                });
+                res.status(200).send({ auth: true, token: token });
+              }
             }
-        );
-    } else {
-        handleError(res, "Invalid fieldinput.");
-    }
+          );
+        } else {
+          handleError(res, "One of the fields are empty.");
+        }
+      } else {
+        res.status(409).send({message: 'User already exist in the database'});
+      }
+    });
 });
 
 //Authenticate user
@@ -73,7 +79,7 @@ function authenticate(username, password, fn) {
       if (bcrypt.compareSync(password, user.password)) {
         return fn(null, user);
       } else {
-        return fn('invalid password');
+        return fn(new Error('invalid password'));
       }
     } else {
       return fn(new Error('user does not exist in database'));
@@ -85,9 +91,8 @@ function authenticate(username, password, fn) {
 router.post('/login', function(req, res){
     authenticate(req.body.username, req.body.password, function (err, user) {
       if (err){
-        res.status(401).send({ auth: false, token: null });
+        res.status(401).send({ auth: false, token: null, message: err.message});
       } else {
-
         let token = jwt.sign({ id: user._id }, config.secret, {
           expiresIn: 86400
         });

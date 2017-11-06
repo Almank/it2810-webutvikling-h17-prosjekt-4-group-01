@@ -31,6 +31,8 @@ export class AuthComponent implements OnInit {
         console.log(data);
         this.router.navigate(['/profile']);
       }
+    }, err => {
+      console.log(err.error.message);
     });
   }
   onLogin(form) {
@@ -50,6 +52,8 @@ export class AuthComponent implements OnInit {
           this.router.navigate(['/profile']);
         }
       }
+    }, err => {
+      console.log(err.error.message);
     });
   }
 }
