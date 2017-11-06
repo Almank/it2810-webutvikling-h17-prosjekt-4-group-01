@@ -21,8 +21,8 @@ export class MovieListComponent implements OnInit {
   movieNum: number;
   pageNum: number;
   searchWord: string;
-  dataChange: BehaviorSubject<MovieData[]> = this.dataChange = new BehaviorSubject<MovieData[]>([]);;
-  //visitedIndex: [number];
+  dataChange: BehaviorSubject<MovieData[]>;
+  pageLength: number;
 
   have: number;
   need: number;
@@ -32,7 +32,10 @@ export class MovieListComponent implements OnInit {
     this.movieNum = 10;
     this.pageNum = 0;
     this.searchWord = '';
-    //this.visitedIndex = [0];
+    this.have = 0;
+    this.need = 10;
+    this.dataChange = new BehaviorSubject<MovieData[]>([]);
+    this.pageLength = 322
   }
 
   ngOnInit(): void {
@@ -40,7 +43,7 @@ export class MovieListComponent implements OnInit {
   }
   /** Hvorfor heter begge funksjonene get movielist????? */
   getMovieList(): void {
-    this.movieListService.getMovieList2(this.movieNum, this.pageNum, this.searchWord).then(movies => this.createList(movies))
+    this.movieListService.getMovieList2(this.movieNum, this.pageNum, this.searchWord, this.have, this.need).then(movies => this.createList(movies))
   }
 
   /** Sets the Movie data displyed on in the Pop-up. */
@@ -106,16 +109,33 @@ export class MovieListComponent implements OnInit {
   }
 
   searchDatabase(value){
-    /**for (let i = 0; i < this.data.length ; i++){
-      if (this.data[i].title.toLowerCase().match(str.toLowerCase())){
-        searchArray.push(this.data[i]);
-        matchSize += 1;
-        console.log(this.data[i].title);
+    let matchSize = 0;
+    for (let i = 0; i < this.data.length ; i++){
+      for (let k = 0; k < this.data[i].director.length; k++){
+        this.data[i].director[k].toLowerCase().match(value.toLowerCase())
       }
-    } */
-    this.searchWord = value;
-    this.getMovieList();
+      if (this.data[i].title.toLowerCase().match(value.toLowerCase())
+        || this.data[i].director[0].toLowerCase().match(value.toLowerCase())
+        ||this.data[i].actors[0].toLowerCase().match(value.toLowerCase())){
 
+        matchSize += 1;
+        console.log(this.data[i].title,"   # of matches: ", matchSize);
+        console.log(this.data[i].actors,"   # of matches: ", matchSize);
+        console.log(this.data[i].director,"   # of matches: ", matchSize);
+      }
+    }
+
+    if (matchSize == 0) {
+      this.searchWord = value;
+      this.dataChange = new BehaviorSubject<MovieData[]>([]);
+      this.getMovieList();
+    }
+   /* else {
+      this.have = matchSize;
+      this.need = matchSize;
+      this.dataChange = new BehaviorSubject<MovieData[]>([]);
+      this.pageLength = matchSize;
+    } */
 
    /* this.searchWord = str;
     return ("searched"); */
@@ -123,20 +143,13 @@ export class MovieListComponent implements OnInit {
   changeValues(event){
 
     this.have = this.data.length;
-
-   // let lastMovieNum = this.movieNum;
-   // let lastMovieNum2 = lastMovieNum;
-   // let lastPageIndex = this.pageNum;
-   // let lastPageIndex2 = lastPageIndex;
     this.pageNum = event.pageIndex;
     this.movieNum = event.pageSize;
-    this.need = (this.pageNum+1) * this.movieNum;
+    this.need =((this.pageNum+1) * this.movieNum) -(this.have);
     console.log(this.have, this.need);
-    if (this.have != this.need) {
+    if (0< this.need) {
       this.getMovieList();
-     // this.visitedIndex.push(event.pageIndex);
-      //console.log(this.visitedIndex);
-
+      console.log(this.have, this.need);
     }
 
   }

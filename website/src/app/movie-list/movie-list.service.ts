@@ -6,10 +6,10 @@ export class MovieListService {
 
   constructor(private http: HttpClient) {}
 
-  getMovieList2(movieNum, pageNum, searchWord): Promise<MovieList[]> {
+  getMovieList2(movieNum, pageNum, searchWord, have, need): Promise<MovieList[]> {
     const params = new HttpParams()
     /** .set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay'); */
-      .set('limit', movieNum).set('page', pageNum)
+      .set('have', have) .set('need', need)
       .set('title', searchWord);
     return this.http.get('/api/movies/list', { params })
 
