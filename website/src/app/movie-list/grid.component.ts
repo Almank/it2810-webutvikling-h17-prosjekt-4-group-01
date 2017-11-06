@@ -1,8 +1,6 @@
 
-import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
-          Observable, HttpClient, MovieDetailsComponent, MatGridListModule } from '../import-module';
+import {  MovieList, Component, OnInit, MatDialog, MovieDetailsComponent} from '../import-module';
 import { MovieListService } from './movie-list.service';
-import { MovieListComponent } from './movie-list.component';
 
 @Component({
   selector: 'grid',
