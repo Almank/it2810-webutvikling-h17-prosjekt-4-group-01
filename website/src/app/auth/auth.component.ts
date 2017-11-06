@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isObject } from 'util';
 import { Router } from '@angular/router';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css']
+  styleUrls: ['./auth.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class AuthComponent implements OnInit {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, public snackBar: MatSnackBar) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null) {
       this.router.navigate(['/login']);
@@ -31,6 +33,8 @@ export class AuthComponent implements OnInit {
         console.log(data);
         this.router.navigate(['/profile']);
       }
+    }, err => {
+      this.onUserError(err.error.message, 'dismiss', false);
     });
   }
   onLogin(form) {
@@ -50,6 +54,18 @@ export class AuthComponent implements OnInit {
           this.router.navigate(['/profile']);
         }
       }
+    }, err => {
+      this.onUserError(err.error.message, 'dismiss', false);
+    });
+  }
+  onUserError(message: string, action: string, positive: boolean) {
+    let extra = 'alert-negative';
+    if (positive) {
+      extra = 'alert-positive';
+    }
+    this.snackBar.open(message, action, {
+      extraClasses: [extra],
+      duration: 2000
     });
   }
 }
