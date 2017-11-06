@@ -143,6 +143,7 @@ router.get('/movies/list', function(req, res) {
     const page = parseInt(req.query.page * 25);
     const limit = parseInt(req.query.limit);
 
+    const title = splitElements(req.query.title);
     const year = splitYear(req.query.year);
     const genre = splitElements(req.query.genre);
     const actors = splitElements(req.query.actors);
@@ -151,7 +152,8 @@ router.get('/movies/list', function(req, res) {
 
     db.collection('movies').find(
       // Filter correct values
-      { genre: genre,
+      { title: title,
+        genre: genre,
         year: { $gte: year[0], $lte: year[1] },
         actors: actors,
         director: director },
