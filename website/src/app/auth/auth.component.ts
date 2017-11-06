@@ -33,7 +33,7 @@ export class AuthComponent implements OnInit {
         this.router.navigate(['/profile']);
       }
     }, err => {
-      this.onUserError(err.error.message, 'dismiss');
+      this.onUserError(err.error.message, 'dismiss', false);
     });
   }
   onLogin(form) {
@@ -54,12 +54,17 @@ export class AuthComponent implements OnInit {
         }
       }
     }, err => {
-      this.onUserError(err.error.message, 'dismiss');
+      this.onUserError(err.error.message, 'dismiss', false);
     });
   }
-  onUserError(message: string, action: string) {
+  onUserError(message: string, action: string, positive: boolean) {
+    let extra = 'alert-negative';
+    if (positive) {
+      extra = 'alert-positive';
+    }
     this.snackBar.open(message, action, {
-      duration: 2000,
+      extraClasses: [extra],
+      duration: 2000
     });
   }
 }

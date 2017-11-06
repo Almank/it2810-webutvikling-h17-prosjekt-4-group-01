@@ -4,7 +4,7 @@ const server = require('./server');
 const db = server.db;
 const model = require('./models');
 
-const user = model.User;
+const userModel = model.User;
 const jwt = require('jsonwebtoken');
 const config = {'secret': 'supersecretkey'};
 
@@ -47,7 +47,7 @@ router.post('/register', function(req, res){
       if (!user){
         if (req.body.username !== '' && req.body.password !== ''){
           let hashedPassword = bcrypt.hashSync(req.body.password, 8);
-          let new_user = new user({
+          let new_user = new userModel({
             username: req.body.username,
             password: hashedPassword,
           });
@@ -56,7 +56,7 @@ router.post('/register', function(req, res){
               if (err) {
                 handleError(res, err);
               } else {
-                let token = jwt.sign({ id: user._id }, config.secret, {
+                let token = jwt.sign({ id: userModel._id }, config.secret, {
                   expiresIn: 86400
                 });
                 res.status(200).send({ auth: true, token: token });
@@ -117,6 +117,8 @@ router.post('/new_password', function (req, res) {
             }
           }
         );
+      } else {
+        res.status(401).send({message: 'Wrong password!'});
       }
     }
   });
