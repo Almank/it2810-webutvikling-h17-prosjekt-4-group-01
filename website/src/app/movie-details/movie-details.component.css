@@ -1,0 +1,23 @@
+/* Movie Popup */
+#popUpBox{
+  font-family: GeosansLight;
+  width: 450px;
+}
+
+.mat-dialog-title{
+  font-family: GeosansLight;
+}
+
+.posterImage {
+  width: 200px;
+  height: 280px;
+}
+
+.infoType{
+  font-weight: 900;
+  font-style: italic;
+}
+
+#imageWrap{
+  text-align: center;
+}

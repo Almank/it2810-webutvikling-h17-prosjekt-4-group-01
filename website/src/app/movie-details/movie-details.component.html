@@ -1,0 +1,17 @@
+<div id="popUpBox">
+  <h2 mat-dialog-title>{{data.title}} ({{data.year}})</h2>
+  <hr>
+  <mat-dialog-content>
+    <p id="imageWrap"><img src="{{data.poster}}" class="posterImage"/></p>
+    <p><span class="infoType">Genre:</span> <span class="infoDetails">{{data.genre}}</span></p>
+    <p><span class="infoType">Director:</span> <span class="infoDetails">{{data.director}}</span></p>
+    <p><span class="infoType">Runtime:</span> <span class="infoDetails">{{data.runtime}}</span></p>
+    <p><span class="infoType">Actors:</span> <span class="infoDetails">{{data.actors}}</span></p>
+    <p><span class="infoType">Plot:</span> <span class="infoDetails">{{data.plot}}</span></p>
+  </mat-dialog-content>
+  <hr>
+  <mat-dialog-actions>
+    <button mat-raised-button (click)="onCloseConfirm()"><mat-icon class="playIcon">stars</mat-icon></button>
+    <button mat-raised-button (click)="onCloseCancel()"><mat-icon class="playIcon">cancel</mat-icon></button>
+  </mat-dialog-actions>
+</div>

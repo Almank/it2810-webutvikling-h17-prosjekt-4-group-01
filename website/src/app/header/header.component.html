@@ -1,0 +1,10 @@
+<mat-toolbar color="primary">
+  <span class="pageTitle" routerLink="/"><mat-icon class="playIcon">play_circle_filled</mat-icon> TopMoviesList</span>
+  <span class="example-spacer"></span>
+  <span matTooltip="Profile">
+      <button class="login-button" mat-button routerLink="/profile">
+        {{user}}
+        <mat-icon class="profileIcon">account_circle</mat-icon>
+      </button>
+  </span>
+</mat-toolbar>
