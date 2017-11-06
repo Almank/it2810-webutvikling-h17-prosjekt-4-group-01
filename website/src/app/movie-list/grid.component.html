@@ -1,0 +1,13 @@
+<div class="content">
+    <div class="searchWrap">
+      <form class="example-form">
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Search for Top Movies">
+          <mat-hint><strong></strong>Type in Title, Year or Genre and hit enter to save the search if you are logged in </mat-hint>
+        </mat-form-field>
+      </form>
+    </div>
+    <mat-grid-list  cols="4" rowHeight="1:1.5" gutterSize="12px">
+      <mat-grid-tile *ngFor="let movie of movies"><img src="{{movie.poster}}" alt=""><mat-grid-tile-footer>{{movie.title}}</mat-grid-tile-footer></mat-grid-tile>
+    </mat-grid-list>
+</div>

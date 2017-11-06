@@ -1,0 +1,10 @@
+nav{
+    align-self: center;
+}
+button{
+    margin: 10px;
+    background-color: #3f94b5;
+}
+mat-icon {
+    color: white;
+}
