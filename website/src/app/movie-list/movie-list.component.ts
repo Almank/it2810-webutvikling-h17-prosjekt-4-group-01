@@ -20,7 +20,9 @@ export class MovieListComponent implements OnInit {
   movieList: MovieList[];
   movieNum: number;
   pageNum: number;
-  searchWord: string;
+  searchTitle: string;
+  searchActor: string;
+  searchDirector: string;
   dataChange: BehaviorSubject<MovieData[]>;
   pageLength: number;
 
@@ -31,7 +33,9 @@ export class MovieListComponent implements OnInit {
   constructor(public dialog: MatDialog, private movieListService: MovieListService) {
     this.movieNum = 10;
     this.pageNum = 0;
-    this.searchWord = '';
+    this.searchTitle = '';
+    this.searchDirector = '';
+    this.searchActor = '';
     this.have = 0;
     this.need = 10;
     this.dataChange = new BehaviorSubject<MovieData[]>([]);
@@ -43,7 +47,7 @@ export class MovieListComponent implements OnInit {
   }
   /** Hvorfor heter begge funksjonene get movielist????? */
   getMovieList(): void {
-    this.movieListService.getMovieList2(this.movieNum, this.pageNum, this.searchWord, this.have, this.need).then(movies => this.createList(movies))
+    this.movieListService.getMovieList2(this).then(movies => this.createList(movies))
   }
 
   /** Sets the Movie data displyed on in the Pop-up. */
@@ -71,21 +75,33 @@ export class MovieListComponent implements OnInit {
 
 
   createList(movieData) {
-    var copiedData = [];
     this.dataSource = new ExampleMovieSource(this, this.paginator);
     /** Fill up the database with 25 movies. */
     for (let i = 0; i < movieData.length ; i++) {
-      this.addMovie(i, movieData, copiedData);
+      this.addMovie(i, movieData);
     }
   }
 
   /** Adds a new movie to the database. */
-  addMovie(i, movieList, copiedData) {
-    copiedData = this.data.slice();
-    copiedData.push(this.createNewMovie(i, movieList));
+  addMovie(i, movieList) {
+    const copiedData = this.data.slice();
+    console.log(copiedData);
+    if (this.checkDuplicate(copiedData, i, movieList)) {
+      copiedData.push(this.createNewMovie(i, movieList));
+    }
     this.dataChange.next(copiedData);
     console.log(this.data);
 
+  }
+
+  checkDuplicate(copiedData, i, movieList){
+    for (let k=0; k<copiedData.length; k++){
+      if (movieList[i]._id == copiedData[k]._id){
+        console.log(movieList[i].title, "is already in the list");
+        return false;
+      }
+    }
+    return true;
   }
 
   /** Builds and returns a new movie. */
@@ -110,24 +126,34 @@ export class MovieListComponent implements OnInit {
 
   searchDatabase(value){
     let matchSize = 0;
-    for (let i = 0; i < this.data.length ; i++){
-      for (let k = 0; k < this.data[i].director.length; k++){
-        this.data[i].director[k].toLowerCase().match(value.toLowerCase())
-      }
-      if (this.data[i].title.toLowerCase().match(value.toLowerCase())
-        || this.data[i].director[0].toLowerCase().match(value.toLowerCase())
-        ||this.data[i].actors[0].toLowerCase().match(value.toLowerCase())){
-
-        matchSize += 1;
-        console.log(this.data[i].title,"   # of matches: ", matchSize);
-        console.log(this.data[i].actors,"   # of matches: ", matchSize);
-        console.log(this.data[i].director,"   # of matches: ", matchSize);
+    if (value != "") {
+      for (let i = 0; i < this.data.length; i++) {
+        for (let k = 0; k < this.data[i].director.length; k++) {
+          if (this.data[i].director[k].toLowerCase().match(value.toLowerCase())) {
+            console.log(this.data[i].director, "   # of matches: ", matchSize);
+            matchSize += 1;
+          }
+        }
+        for (let j = 0; j < this.data[i].actors.length; j++) {
+          if (this.data[i].actors[j].toLowerCase().match(value.toLowerCase())) {
+            console.log(this.data[i].actors, "   # of matches: ", matchSize);
+            matchSize += 1;
+          }
+        }
+        if (this.data[i].title.toLowerCase().match(value.toLowerCase())) {
+          matchSize += 1;
+          console.log(this.data[i].title, "   # of matches: ", matchSize);
+        }
       }
     }
 
     if (matchSize == 0) {
-      this.searchWord = value;
       this.dataChange = new BehaviorSubject<MovieData[]>([]);
+      this.searchTitle = value;
+      this.getMovieList();
+      this.searchDirector = value;
+      this.getMovieList();
+      this.searchActor = value;
       this.getMovieList();
     }
    /* else {

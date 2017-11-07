@@ -6,11 +6,11 @@ export class MovieListService {
 
   constructor(private http: HttpClient) {}
 
-  getMovieList2(movieNum, pageNum, searchWord, have, need): Promise<MovieList[]> {
+  getMovieList2(component): Promise<MovieList[]> {
     const params = new HttpParams()
     /** .set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay'); */
-      .set('have', have) .set('need', need)
-      .set('title', searchWord);
+      .set('have', component.have) .set('need', component.need)
+      .set('title', component.searchTitle).set('director', component.searchDirector).set('actors', component.searchActor);
     return this.http.get('/api/movies/list', { params })
 
       .toPromise()
