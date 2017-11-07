@@ -6,7 +6,8 @@ export class MovieListService {
 
   constructor(private http: HttpClient) {}
 
-  getMovieList2(comp): Promise<MovieList[]> {
+  getMovieList(comp): Promise<MovieList[]> {
+    console.log(comp.selectedGenre);
     const params = new HttpParams()
     /** .set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay'); */
       .set('have', comp.have) .set('need', comp.need)

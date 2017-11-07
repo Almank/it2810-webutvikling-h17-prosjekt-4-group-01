@@ -14,64 +14,52 @@ import { MovieListService } from './movie-list.service';
 export class MovieListComponent implements OnInit {
   displayedColumns = ['title', 'year', 'genre', ];
   dataSource: ExampleMovieSource | null;
-  dataChange: BehaviorSubject<MovieList[]>;
+  dataChange: BehaviorSubject<MovieList[]> = new BehaviorSubject<MovieList[]>([]);
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   dialogResult = '';
   movieList: MovieList[];
-  startYear: any;
-  endYear: any;
-  movieNum: any;
-  pageNum: any;
-  searchWord: any;
-  have: any;
-  need: any;
-  pageLength: any;
-  genres: any;
-  selectedGenre: any;
+  startYear: any = 0;
+  endYear: any = new Date().getFullYear();
+  movieNum: any = 10;
+  pageNum: any = 0;
+  searchWord: any = '';
+  have: any = 0;
+  need: any = 10;
+  pageLength: any = 322;
+  genres: any = [{  viewValue: 'All'},
+    {viewValue: 'Action'},
+    {viewValue: 'Adventure'},
+    {viewValue: 'Animation'},
+    {viewValue: 'Biography'},
+    {viewValue: 'Comedy'},
+    {viewValue: 'Crime'},
+    {viewValue: 'Documentary'},
+    {viewValue: 'Drama'},
+    {viewValue: 'Family'},
+    {viewValue: 'Fantasy'},
+    {viewValue: 'Film-Noir'},
+    {viewValue: 'Horror'},
+    {viewValue: 'History'},
+    {viewValue: 'Music'},
+    {viewValue: 'Musical'},
+    {viewValue: 'Mystery'},
+    {viewValue: 'Romance'},
+    {viewValue: 'Sci-Fi'},
+    {viewValue: 'Sport'},
+    {viewValue: 'Thriller'},
+    {viewValue: 'War'},
+    {viewValue: 'Western'}];
+  selectedGenre: any = [];
 
-  constructor(public dialog: MatDialog, private movieListService: MovieListService) {
-    this.movieNum = 10;
-    this.pageNum = 0;
-    this.searchWord = '';
-    this.have = 0;
-    this.need = 10;
-    this.dataChange = new BehaviorSubject<MovieList[]>([]);
-    this.pageLength = 322;
-    this.startYear = 0;
-    this.endYear = new Date().getFullYear();
-    this.selectedGenre = [];
-    this.genres = [{  viewValue: 'All'},
-                    {viewValue: 'Action'},
-                    {viewValue: 'Adventure'},
-                    {viewValue: 'Animation'},
-                    {viewValue: 'Biography'},
-                    {viewValue: 'Comedy'},
-                    {viewValue: 'Crime'},
-                    {viewValue: 'Documentary'},
-                    {viewValue: 'Drama'},
-                    {viewValue: 'Family'},
-                    {viewValue: 'Fantasy'},
-                    {viewValue: 'Film-Noir'},
-                    {viewValue: 'Horror'},
-                    {viewValue: 'History'},
-                    {viewValue: 'Music'},
-                    {viewValue: 'Musical'},
-                    {viewValue: 'Mystery'},
-                    {viewValue: 'Romance'},
-                    {viewValue: 'Sci-Fi'},
-                    {viewValue: 'Sport'},
-                    {viewValue: 'Thriller'},
-                    {viewValue: 'War'},
-                    {viewValue: 'Western'}];
-  }
+  constructor(public dialog: MatDialog, private movieListService: MovieListService) {}
 
   ngOnInit(): void {
     this.getMovieList();
   }
   /** Hvorfor heter begge funksjonene get movielist????? */
   getMovieList(): void {
-    this.movieListService.getMovieList2(this).then(movies => this.createList(movies));
+    this.movieListService.getMovieList(this).then(movies => this.createList(movies));
   }
 
   /** Sets the Movie data displyed on in the Pop-up. */
@@ -96,7 +84,6 @@ export class MovieListComponent implements OnInit {
       });
     });
   }
-
 
   createList(movieData) {
     this.dataSource = new ExampleMovieSource(this, this.paginator);
@@ -186,7 +173,7 @@ export class MovieListComponent implements OnInit {
   setGenre(event) {
     this.selectedGenre = '';
     if (event.value[0] !== undefined) {
-      for (const genre of event.viewValue) {
+      for (const genre of event.value) {
         this.selectedGenre += genre;
         this.selectedGenre += ',';
       }
@@ -195,7 +182,6 @@ export class MovieListComponent implements OnInit {
     this.dataChange = new BehaviorSubject<MovieList[]>([]);
     this.getMovieList();
   }
-
 
 /**
   checkList() {
@@ -237,7 +223,3 @@ export class ExampleMovieSource extends DataSource<any> {
   disconnect() {}
 
 }
-
-
-
-
