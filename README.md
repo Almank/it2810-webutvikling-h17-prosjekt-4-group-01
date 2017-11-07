@@ -57,7 +57,7 @@ connecting us to the front-end requesting and pushing data.
 
 On the angular client side, we want to create a main page with a visually appealing data
 model, in addition to a search and filterable list of content, and a "my page"
-containg all of your latest search history and other statistics. 
+containing all of your latest search history, favorites and other statistics. 
     
 ### Project Structure <a name="ProjectStructure"></a>
 
@@ -65,8 +65,15 @@ containg all of your latest search history and other statistics.
 It also contains our Readme and .gitignore.
 - `/website` - Contains our src folder and all supporting configurations etc.
     - `e2e` - Contains our end-to-end tests.
-    - `src` - the home of our source code. (and some typescript configs)
-        - `app` - the angular components building our page  
+    - `src` - Home of our source code. (and some typescript configs)
+        - `app` - Angular components building our page  
+            - `auth` - Authentication component, containing all login/register functionality
+            - `header` - Header/navbar component
+            - `movie-view` - Main view component
+                - `movie-modal` - Modal component
+                - `movie-list` - List component
+                - `movie-grid` - Grid component
+            - `Profile` - Profile component
         - `assets` - all of our assets
         - `environments` - development and production environment variables for
         building the distribution.
@@ -97,8 +104,8 @@ The User_model also has extra security on the backend side, hashing all password
 dependency _bcrypt_, such that all passwords are stored as
 encrypted strings.
 
-All user indentities are also protected using JasonWebTokens such that communication towards
-the api's critical user data is secure in case of data requests from unkown clients.
+All user identities are also protected using JasonWebTokens such that communication towards
+the api's critical user data is secure in case of data requests from unknown clients.
 
 User_model:  
 ```
@@ -125,17 +132,3 @@ Movie_model:
   readMore: {type: String, default: "undefined"},
 }
 ```
-
-<!-- 
-Gruppene legger ut dokumentasjon/beskrivelse/skisse av det systemet de planlegger 
-å implementere innen 8/11 på GitHub repositoriet for prosjekt 4.  
-Beskriv applikasjonen, data, database, moduler og komponenter dere vurderer å bruke 
-- og den overordnede arkitetkuren til systemet. 
-Dere kan også beskrive elementer dere ikke helt vet hvordan skal løses. 
-     
-Vi har ikke noe formelt krav til omfanget av dette, 
-men det skal være nok til å vise at dere har lest oppgaveteksten, 
-har tenkt igjennom hvordan dere vil løse oppgaven og/eller identifisert utfordringer 
-som dere må jobbe med. 
-1 side med tekst og tegninger bør holde for de fleste.
--->    
