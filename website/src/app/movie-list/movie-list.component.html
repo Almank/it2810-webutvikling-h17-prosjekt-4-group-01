@@ -1,7 +1,7 @@
 <div class="searchWrap">
   <form class="example-form">
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Search for Top Movies">
+      <input #box (keyup.enter)="searchDatabase(box.value)" matInput placeholder="Search for Top Movies">
       <mat-hint><strong></strong>Type in Title, Year or Genre and hit enter to save the search if you are logged in </mat-hint>
     </mat-form-field>
   </form>
@@ -17,6 +17,13 @@
         <input type="tel" class="inputYearTextField" matInput #endYear maxlength=4 (keyup)="setYear(startYear.value, 'end')" placeholder="To" pattern="/^\d{4}$/" value="2017">
         <mat-hint align="end">{{endYear.value.length}} / 4</mat-hint>
       </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="Genre" multiple (change)=setGenre($event)>
+        <mat-option *ngFor="let genre of genres" [value]="genre.value" >
+          {{ genre.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </form>
 </div>
 <div class="example-container mat-elevation-z8">
@@ -44,9 +51,12 @@
   </mat-table>
 
   <mat-paginator #paginator
-                 [length]="this.data.length"
-                 [pageIndex]="0"
-                 [pageSize]="10"
-                 [pageSizeOptions]="[10, 25, 50]">
+                 [length]="pageLength"
+                 [pageIndex]="pageNum"
+                 [pageSize]="movieNum"
+                 [pageSizeOptions]="[10, 25, 50]"
+                  (page)= changeValues($event)
+    event.pageIndex="0">
   </mat-paginator>
-</div>
+
+  </div>

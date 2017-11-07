@@ -3,17 +3,22 @@ import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class MovieListService {
+
   constructor(private http: HttpClient) {}
 
-  getMovieList(component): Promise<MovieList[]> {
-    console.log(component.startYear + '-' + component.endYear);
-    const params = new HttpParams().set('limit', '25').set('page', '0').set('year', component.startYear + '-' + component.endYear);
+  getMovieList2(comp): Promise<MovieList[]> {
+    const params = new HttpParams()
+    /** .set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay'); */
+      .set('have', comp.have) .set('need', comp.need)
+      .set('title', comp.searchWord)
+      .set('year', comp.startYear + '-' + comp.endYear)
+      .set('genre', comp.selectedGenre);
     return this.http.get('/api/movies/list', { params })
 
       .toPromise()
       .then(data => {
         if (isObject(data)) {
-        return  (<MovieList[]> data);
+          return  (<MovieList[]> data);
         }})
       .catch(this.handleError);
   }
@@ -33,4 +38,5 @@ export class MovieListService {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
   }
+
 }

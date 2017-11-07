@@ -1,5 +1,5 @@
 import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
-          Observable, HttpClient, MovieDetailsComponent } from '../import-module';
+          Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../import-module';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -21,15 +21,57 @@ export class MovieListComponent implements OnInit {
   movieList: MovieList[];
   startYear: any;
   endYear: any;
+  movieNum: any;
+  pageNum: any;
+  searchWord: any;
+  have: any;
+  need: any;
+  pageLength: any;
+  genres: any;
+  selectedGenre: any;
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService) {
-    this.startYear = 0;
-    this.endYear = 2017;
+    this.movieNum = 10;
+    this.pageNum = 0;
+    this.searchWord = '';
+    this.have = 0;
+    this.need = 10;
     this.dataChange = new BehaviorSubject<MovieList[]>([]);
+    this.pageLength = 322;
+    this.startYear = 0;
+    this.endYear = new Date().getFullYear();
+    this.selectedGenre = [];
+    this.genres = [{  viewValue: 'All'},
+                    {viewValue: 'Action'},
+                    {viewValue: 'Adventure'},
+                    {viewValue: 'Animation'},
+                    {viewValue: 'Biography'},
+                    {viewValue: 'Comedy'},
+                    {viewValue: 'Crime'},
+                    {viewValue: 'Documentary'},
+                    {viewValue: 'Drama'},
+                    {viewValue: 'Family'},
+                    {viewValue: 'Fantasy'},
+                    {viewValue: 'Film-Noir'},
+                    {viewValue: 'Horror'},
+                    {viewValue: 'History'},
+                    {viewValue: 'Music'},
+                    {viewValue: 'Musical'},
+                    {viewValue: 'Mystery'},
+                    {viewValue: 'Romance'},
+                    {viewValue: 'Sci-Fi'},
+                    {viewValue: 'Sport'},
+                    {viewValue: 'Thriller'},
+                    {viewValue: 'War'},
+                    {viewValue: 'Western'}];
   }
 
+  ngOnInit(): void {
+    this.getMovieList();
+  }
+  /** Hvorfor heter begge funksjonene get movielist????? */
   getMovieList(): void {
-    this.movieListService.getMovieList(this).then(movies => this.createList(movies));
+    this.movieListService.getMovieList2(this).then(movies => this.createList(movies));
   }
 
   /** Sets the Movie data displyed on in the Pop-up. */
@@ -55,14 +97,11 @@ export class MovieListComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.getMovieList();
-    this.dataSource = new ExampleMovieSource(this, this.paginator);
-  }
 
   createList(movieData) {
-    /** Fill up the database with 100 movies. */
-    for (let i = 0; i < 25 ; i++) {
+    this.dataSource = new ExampleMovieSource(this, this.paginator);
+    /** Fill up the database with 25 movies. */
+    for (let i = 0; i < movieData.length ; i++) {
       this.addMovie(i, movieData);
     }
   }
@@ -94,6 +133,46 @@ export class MovieListComponent implements OnInit {
     return this.dataChange.value;
   }
 
+  searchDatabase(value){
+    let matchSize = 0;
+    for (let i = 0; i < this.data.length ; i++){
+      for (let k = 0; k < this.data[i].director.length; k++){
+        this.data[i].director[k].toLowerCase().match(value.toLowerCase());
+      }
+      if (this.data[i].title.toLowerCase().match(value.toLowerCase())
+        || this.data[i].director[0].toLowerCase().match(value.toLowerCase())
+        || this.data[i].actors[0].toLowerCase().match(value.toLowerCase())){
+
+        matchSize += 1;
+      }
+    }
+
+    if (matchSize === 0) {
+      this.searchWord = value;
+      this.dataChange = new BehaviorSubject<MovieList[]>([]);
+      this.getMovieList();
+    }
+   /* else {
+      this.have = matchSize;
+      this.need = matchSize;
+      this.dataChange = new BehaviorSubject<MovieData[]>([]);
+      this.pageLength = matchSize;
+    } */
+
+   /* this.searchWord = str;
+    return ("searched"); */
+  }
+  changeValues(event){
+
+    this.have = this.data.length;
+    this.pageNum = event.pageIndex;
+    this.movieNum = event.pageSize;
+    this.need = ((this.pageNum + 1) * this.movieNum) - (this.have);
+    if (0 < this.need) {
+      this.getMovieList();
+    }
+  }
+
   setYear(event, type) {
     if (type === 'start') {
       this.startYear = event;
@@ -103,6 +182,31 @@ export class MovieListComponent implements OnInit {
     this.dataChange = new BehaviorSubject<MovieList[]>([]);
     this.getMovieList();
   }
+
+  setGenre(event) {
+    this.selectedGenre = '';
+    if (event.value[0] !== undefined) {
+      for (const genre of event.viewValue) {
+        this.selectedGenre += genre;
+        this.selectedGenre += ',';
+      }
+    } else { this.selectedGenre = '';
+    }
+    this.dataChange = new BehaviorSubject<MovieList[]>([]);
+    this.getMovieList();
+  }
+
+
+/**
+  checkList() {
+    for (let i = 0; i < this.visitedIndex.length; i++) {
+      if (this.pageNum == this.visitedIndex[i]) {
+        return false;
+      }
+    }
+    return true;
+  } */
+
 
 }
 
@@ -131,4 +235,9 @@ export class ExampleMovieSource extends DataSource<any> {
     });
   }
   disconnect() {}
+
 }
+
+
+
+
