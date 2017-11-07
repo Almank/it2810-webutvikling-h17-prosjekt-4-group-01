@@ -149,8 +149,7 @@ export class MovieListComponent implements OnInit {
    /* this.searchWord = str;
     return ("searched"); */
   }
-  changeValues(event){
-
+  changeValues(event) {
     this.have = this.data.length;
     this.pageNum = event.pageIndex;
     this.movieNum = event.pageSize;
@@ -165,6 +164,12 @@ export class MovieListComponent implements OnInit {
       this.startYear = event;
     } else {
       this.endYear = event;
+    }
+    if (this.startYear === '') {
+      this.startYear = 0;
+    }
+    if (this.endYear === '') {
+      this.endYear = new Date().getFullYear();
     }
     this.dataChange = new BehaviorSubject<MovieList[]>([]);
     this.getMovieList();
