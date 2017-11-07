@@ -72,7 +72,21 @@ It also contains our Readme and .gitignore.
         building the distribution.
         
 ### Dependencies <a name="Dependencies"></a>
+The projects dependencies include all the standard @angular libraries, but also those installed through
+the @angular-cli. The following dependencies are installed based on our needs not already covered by the standard cli.
 
+```
+{
+    "@angular/material": "^2.0.0-beta.12",
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.1.0",
+    "mongoose": "^4.12.4",
+    "nodemon": "^1.12.1",
+}
+```
 
 ### Data Structure <a name="DataStructure"></a>
 As mentioned earlier, our data consists of two types of models created through mongoose schemas.
