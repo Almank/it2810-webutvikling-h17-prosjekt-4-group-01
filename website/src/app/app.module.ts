@@ -16,6 +16,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
 import { MovieListService } from './movie-list/movie-list.service';
+import { Favorite } from './profile/profile.favorite.service';
 
 import { MovieDetailsComponent } from './import-module';
 const appRoutes: Routes = [
@@ -66,7 +67,7 @@ const appRoutes: Routes = [
     MovieDetailsComponent,
   ],
 
-  providers: [MovieListService],
+  providers: [MovieListService, Favorite],
   bootstrap: [AppComponent]
 })
 export class AppModule {

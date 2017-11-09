@@ -30,6 +30,7 @@ export class MovieListComponent implements OnInit {
   openDialog(data) {
     this.movieListService.getMovieModal(data).then( movies => {
       data = {
+        '_id': data._id,
         'title': data.title,
         'poster': movies[0].poster,
         'plot': movies[0].plot,

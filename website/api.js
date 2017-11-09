@@ -124,6 +124,42 @@ router.post('/new_password', function (req, res) {
   });
 });
 
+//Get Favorites
+router.post('/favorites', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if(user !== null) {
+      res.status(200).json(user.favorites);
+    }
+  });
+});
+
+//Modify Favorites
+router.post('/favorites/modify', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if(user !== null) {
+      if (req.body.newFavorite) {
+        user.favorites.push(req.body.movie_id);
+      } else {
+        let index = user.favorites.indexOf(req.body.movie_id);
+        if (index > -1) {
+          user.favorites.splice(index, 1);
+        }
+      }
+      db.collection('users').save(user,
+        function(err, docs) {
+          if (err) {
+            handleError(res, err);
+          }else {
+            res.status(200).json(docs);
+          }
+        }
+      );
+    }
+  });
+});
+
 function getSortVariable(str, bool) {
     let num = 1;
     if (bool === 'true') {
