@@ -47,3 +47,7 @@ mat-grid-tile-footer {
     font-family: Webly Sleek Kursiv;
     font-weight: bold;
 }
+#viewBtnWrap{
+    margin-left: 18%;
+    margin-bottom: 10px;
+}
