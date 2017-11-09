@@ -14,18 +14,18 @@
 </div>
 <div class="example-form">
   <form>
-      <mat-form-field class="inputYear">
-        <input type="tel" class="inputYearTextField" matInput #startYear (keyup)="setYear(startYear.value, 'start')" maxlength=4 placeholder="From" pattern="/^\d{4}$/">
-        <mat-hint align="end">{{startYear.value.length}} / 4</mat-hint>
-      </mat-form-field>
+    <mat-form-field class="inputYear">
+      <input type="tel" class="inputYearTextField" matInput #startYear (keyup)="setYear(startYear.value, 'start')" maxlength=4 placeholder="From" pattern="/^\d{4}$/">
+      <mat-hint align="end">{{startYear.value.length}} / 4</mat-hint>
+    </mat-form-field>
 
-      <mat-form-field class="inputYear">
-        <input type="tel" class="inputYearTextField" matInput #endYear maxlength=4 (keyup)="setYear(endYear.value, 'end')" placeholder="To" pattern="/^\d{4}$/">
-        <mat-hint align="end">{{endYear.value.length}} / 4</mat-hint>
-      </mat-form-field>
+    <mat-form-field class="inputYear">
+      <input type="tel" class="inputYearTextField" matInput #endYear maxlength=4 (keyup)="setYear(endYear.value, 'end')" placeholder="To" pattern="/^\d{4}$/">
+      <mat-hint align="end">{{endYear.value.length}} / 4</mat-hint>
+    </mat-form-field>
     <mat-form-field>
       <mat-select placeholder="Genre" multiple (change)=setGenre($event)>
-        <mat-option *ngFor="let genre of genres" [value]="genre.viewValue" >
+        <mat-option *ngFor="let genre of genres" [value]="genre.viewValue">
           {{ genre.viewValue }}
         </mat-option>
       </mat-select>
