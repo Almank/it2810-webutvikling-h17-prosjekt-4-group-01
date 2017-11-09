@@ -152,3 +152,7 @@ html, body {
 .mat-card>.mat-card-actions:last-child {
   text-align: center;
 }
+
+.favorite_clicked{
+  background-color: yellow !important;
+}
