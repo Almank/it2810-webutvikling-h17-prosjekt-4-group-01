@@ -134,6 +134,20 @@ router.post('/favorites', function (req, res) {
   });
 });
 
+//Check If Favorite Exists
+router.post('/favorites/exists', function (req, res) {
+  let exists = false;
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if(user !== null) {
+      if (user.favorites.indexOf(req.body.movie_id) >= 0){
+        exists = true;
+      }
+      res.status(200).json(exists);
+    }
+  });
+});
+
 //Modify Favorites
 router.post('/favorites/modify', function (req, res) {
   let verifiedToken = jwt.verify(req.body.token, config.secret);
