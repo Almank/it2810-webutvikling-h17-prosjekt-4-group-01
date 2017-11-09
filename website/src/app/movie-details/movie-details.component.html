@@ -11,13 +11,16 @@
   </mat-dialog-content>
   <hr>
   <mat-dialog-actions>
-    <div *ngIf="data.favorited; then favorited else unfavorited"></div>
-    <ng-template #favorited>
-      <button class="favorite_clicked" mat-raised-button (click)="toggleFavorite(data._id)"><mat-icon class="playIcon">stars</mat-icon></button>
-    </ng-template>
-    <ng-template #unfavorited>
-      <button mat-raised-button (click)="toggleFavorite(data._id)"><mat-icon class="playIcon">stars</mat-icon></button>
-    </ng-template>
+    <div *ngIf="data.auth">
+      <div *ngIf="data.favorited; then favorited else unfavorited"></div>
+      <ng-template #favorited>
+        <button class="favorite_clicked" mat-raised-button (click)="toggleFavorite(data._id)"><mat-icon class="playIcon">stars</mat-icon></button>
+      </ng-template>
+      <ng-template #unfavorited>
+        <button mat-raised-button (click)="toggleFavorite(data._id)"><mat-icon class="playIcon">stars</mat-icon></button>
+      </ng-template>
+    </div>
+
     <button mat-raised-button (click)="onCloseCancel()"><mat-icon class="playIcon">cancel</mat-icon></button>
   </mat-dialog-actions>
 </div>

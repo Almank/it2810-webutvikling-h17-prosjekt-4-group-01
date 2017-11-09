@@ -70,6 +70,7 @@ export class MovieListComponent implements OnInit {
         'genre': data.genre,
         'year': data.year,
         'favorited': exists,
+        'auth': this.auth,
       };
       const dialogRef = this.dialog.open(MovieDetailsComponent, {
         data,
