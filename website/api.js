@@ -200,6 +200,16 @@ router.get('/movies/list', function(req, res) {
     });
 });
 
+router.get('/movies/amount', function(req, res) {
+  db.collection('movies').find({},{readMore: 0, plot: 0, runtime: 0, title: 0, poster: 0, actors: 0, director: 0, year: 0}).toArray(function(err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get movies with no actors.");
+    } else {
+      res.status(200).json(docs.length);
+    }
+  });
+});
+
 router.get('/movies/modal', function(req, res) {
 
   db.collection('movies').find(

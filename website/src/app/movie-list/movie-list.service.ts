@@ -26,6 +26,10 @@ export class MovieListService {
       .catch(this.handleError);
   }
 
+  getAmountOfMovies() {
+    return this.http.get('/api/movies/amount').map(val => val);
+  }
+
   getMovieModal(listData): Promise<MovieList[]> {
     const params = new HttpParams().set('title', listData.title);
     return this.http.get('/api/movies/modal', { params })

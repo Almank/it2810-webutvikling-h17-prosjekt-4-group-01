@@ -26,7 +26,7 @@ export class MovieListComponent implements OnInit {
   searchWord: any = '';
   have: any = 0;
   need: any = 10;
-  pageLength: any = 322;
+  pageLength: any = this.movieListService.getAmountOfMovies().subscribe(length => this.pageLength = length);
   genres: any = [{  viewValue: 'All'},
     {viewValue: 'Action'},
     {viewValue: 'Adventure'},
