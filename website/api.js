@@ -141,7 +141,6 @@ function getSortVariable(str, bool) {
 // Get movies
 router.get('/movies/list', function(req, res) {
 
-    console.log(req.query);
     let page = parseInt(req.query.page * req.query.limit);
     let limit = parseInt(req.query.limit);
     const have = req.query.have;
@@ -151,10 +150,9 @@ router.get('/movies/list', function(req, res) {
       page = parseInt(have);
       limit = parseInt(need);
     }
-
+    const genre = splitElements(req.query.genre);
     const title = splitElements(req.query.title);
     const year = splitYear(req.query.year);
-    const genre = splitElements(req.query.genre);
     const actors = splitElements(req.query.actors);
     const director = splitElements(req.query.director);
     const sort = getSortVariable(req.query.sort, req.query.desc);
@@ -167,7 +165,7 @@ router.get('/movies/list', function(req, res) {
         actors: actors,
         director: director },
       // Remove properties from query
-      { poster: 0,
+      {
         readMore: 0,
         plot: 0,
         runtime: 0

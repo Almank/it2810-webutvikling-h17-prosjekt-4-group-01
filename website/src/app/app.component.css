@@ -1,0 +1,14 @@
+nav{
+    align-self: center;
+}
+button{
+    margin: 10px;
+    background-color: #3f94b5;
+}
+mat-icon {
+    color: white;
+}
+
+.mat-card-actions, .mat-card-content, .mat-card-subtitle, .mat-card-title {
+  text-align: center;
+}

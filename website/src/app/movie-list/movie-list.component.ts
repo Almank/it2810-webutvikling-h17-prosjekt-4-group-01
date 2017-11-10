@@ -1,5 +1,5 @@
 import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
-          Observable, HttpClient, MovieDetailsComponent } from '../import-module';
+          Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../import-module';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -22,18 +22,43 @@ export class MovieListComponent implements OnInit {
   searchActor: string;
   searchDirector: string;
   searchResults: number;
-  dataChange: BehaviorSubject<MovieData[]>;
+  dataChange: BehaviorSubject<MovieList[]>;
   pageLength: number;
   validRefresh: boolean;
-
   have: number;
   need: number;
+  startYear: any = 0;
+  endYear: any = new Date().getFullYear();
+  genres: any = [{  viewValue: 'All'},
+    {viewValue: 'Action'},
+    {viewValue: 'Adventure'},
+    {viewValue: 'Animation'},
+    {viewValue: 'Biography'},
+    {viewValue: 'Comedy'},
+    {viewValue: 'Crime'},
+    {viewValue: 'Documentary'},
+    {viewValue: 'Drama'},
+    {viewValue: 'Family'},
+    {viewValue: 'Fantasy'},
+    {viewValue: 'Film-Noir'},
+    {viewValue: 'Horror'},
+    {viewValue: 'History'},
+    {viewValue: 'Music'},
+    {viewValue: 'Musical'},
+    {viewValue: 'Mystery'},
+    {viewValue: 'Romance'},
+    {viewValue: 'Sci-Fi'},
+    {viewValue: 'Sport'},
+    {viewValue: 'Thriller'},
+    {viewValue: 'War'},
+    {viewValue: 'Western'}];
+  selectedGenre: any = [];
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService) {
     this.have = 0;
     this.need = 10;
-    this.dataChange = new BehaviorSubject<MovieData[]>([]);
-    this.pageLength = 322
+    this.dataChange = new BehaviorSubject<MovieList[]>([]);
+    this.pageLength = 322;
     this.validRefresh = false;
     this.searchTitle = '';
     this.searchDirector = '';
@@ -46,9 +71,9 @@ export class MovieListComponent implements OnInit {
   }
   /** Hvorfor heter begge funksjonene get movielist????? */
   getMovieList(): void {
-    this.movieListService.getMovieList2(this).then(movies => this.createList(movies))
-  }
 
+    this.movieListService.getMovieList(this).then(movies => this.createList(movies));
+  }
   /** Sets the Movie data displyed on in the Pop-up. */
   openDialog(data) {
     this.movieListService.getMovieModal(data).then( movies => {
@@ -72,7 +97,6 @@ export class MovieListComponent implements OnInit {
     });
   }
 
-
   createList(movieData) {
     this.dataSource = new ExampleMovieSource(this, this.paginator);
     /** Fill up the database with 25 movies. */
@@ -93,7 +117,8 @@ export class MovieListComponent implements OnInit {
       copiedData.push(this.createNewMovie(i, movieList));
     }
     this.dataChange.next(copiedData);
-
+    copiedData.push(this.createNewMovie(i, movieList));
+    this.dataChange.next(copiedData);
   }
 
   checkDuplicate(copiedData, i, movieList){
@@ -122,14 +147,14 @@ export class MovieListComponent implements OnInit {
     };
   }
 
-  get data(): MovieData[] {
+  get data(): MovieList[] {
     return this.dataChange.value;
   }
 
   searchDatabase(value) {
     if (value === "" && this.validRefresh === true) {
       this.validRefresh = false;
-      this.dataChange = new BehaviorSubject<MovieData[]>([]);
+      this.dataChange = new BehaviorSubject<MovieList[]>([]);
       console.log(this.have, this.need);
       this.paginator.pageIndex = 0;
       this.paginator.length = 322;
@@ -144,8 +169,7 @@ export class MovieListComponent implements OnInit {
       this.have = 0;
       this.need = this.paginator.pageSize;
       this.paginator.pageIndex = 0;
-      this.dataChange = new BehaviorSubject<MovieData[]>([]);
-
+      this.dataChange = new BehaviorSubject<MovieList[]>([]);
       this.searchTitle = value;
       this.getMovieList();
 
@@ -158,40 +182,47 @@ export class MovieListComponent implements OnInit {
       this.getMovieList();
 
       this.searchActor = '';
-      }
+    }
 
     else{
       console.log("Searchfield is empty");
       }
     }
 
-  changeValues(event){
+  changeValues(event) {
 
     this.have = this.data.length;
     this.paginator.pageIndex = event.pageIndex;
     this.paginator.pageSize = event.pageSize;
-    this.need =((this.paginator.pageIndex+1) * this.paginator.pageSize) -(this.have);
-    console.log(this.have, this.need);
-    if (0< this.need) {
+    this.need = ((this.paginator.pageIndex + 1) * this.paginator.pageSize) - (this.have);
+    if (0 < this.need) {
       this.getMovieList();
-      console.log(this.have, this.need);
     }
-
   }
 
-}
 
-export interface MovieData {
-  _id?: number;
-  readMore?: string;
-  poster?: string;
-  plot?: string;
-  actors?: string;
-  director?: string;
-  genre?: string;
-  runtime?: string;
-  year?: number;
-  title?: string;
+  setYear(event, type) {
+    if (type === 'start') {
+      this.startYear = event;
+    } else {
+      this.endYear = event;
+    }
+    this.dataChange = new BehaviorSubject<MovieList[]>([]);
+    this.getMovieList();
+  }
+
+  setGenre(event) {
+    this.selectedGenre = '';
+    if (event.value[0] !== undefined) {
+      for (const genre of event.value) {
+        this.selectedGenre += genre;
+        this.selectedGenre += ',';
+      }
+    } else { this.selectedGenre = '';
+    }
+    this.dataChange = new BehaviorSubject<MovieList[]>([]);
+    this.getMovieList();
+  }
 }
 
 /**
@@ -206,13 +237,13 @@ export class ExampleMovieSource extends DataSource<any> {
     super();
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<MovieData[]> {
+  connect(): Observable<MovieList[]> {
     const displayDataChanges = [
       this._movieComponent.dataChange,
       this._paginator.page,
     ];
     return Observable.merge(...displayDataChanges).map(() => {
-      var data = this._movieComponent.data.slice();
+      const data = this._movieComponent.data.slice();
   /** Grab the page's slice of data. */
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
       return data.splice(startIndex, this._paginator.pageSize);
@@ -221,7 +252,3 @@ export class ExampleMovieSource extends DataSource<any> {
   disconnect() {}
 
 }
-
-
-
-

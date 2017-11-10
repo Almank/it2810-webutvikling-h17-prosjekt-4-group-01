@@ -142,3 +142,13 @@ html, body {
 .mat-input-element mat-form-field-autofill-control{
   font-family: Webly Sleek;
 }
+
+/* Buttons */
+.mat-button, .mat-icon-button, .mat-raised-button {
+  font-family: GeosansLight !important;
+}
+
+/* Grid/List View Card */
+.mat-card>.mat-card-actions:last-child {
+  text-align: center;
+}
