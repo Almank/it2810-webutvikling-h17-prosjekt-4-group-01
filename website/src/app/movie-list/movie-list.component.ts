@@ -22,6 +22,7 @@ export class MovieListComponent implements OnInit {
   searchActor: string;
   searchDirector: string;
   searchResults: number;
+  searchWord: string;
   dataChange: BehaviorSubject<MovieList[]>;
   pageLength: number;
   validRefresh: boolean;
@@ -63,6 +64,7 @@ export class MovieListComponent implements OnInit {
     this.searchTitle = '';
     this.searchDirector = '';
     this.searchActor = '';
+    this.searchWord ='';
 
   }
 
@@ -104,7 +106,6 @@ export class MovieListComponent implements OnInit {
       this.addMovie(i, movieData);
     }
     if (this.validRefresh === true) {
-      console.log(movieData.length);
       this.searchResults += movieData.length;
       this.paginator.length = this.searchResults;
     }
@@ -116,8 +117,6 @@ export class MovieListComponent implements OnInit {
     if (this.checkDuplicate(copiedData, i, movieList)) {
       copiedData.push(this.createNewMovie(i, movieList));
     }
-    this.dataChange.next(copiedData);
-    copiedData.push(this.createNewMovie(i, movieList));
     this.dataChange.next(copiedData);
   }
 
@@ -153,22 +152,26 @@ export class MovieListComponent implements OnInit {
 
   searchDatabase(value) {
     if (value === "" && this.validRefresh === true) {
+      this.searchWord = '';
       this.validRefresh = false;
       this.dataChange = new BehaviorSubject<MovieList[]>([]);
       console.log(this.have, this.need);
       this.paginator.pageIndex = 0;
       this.paginator.length = 322;
-      this.have = 0
-      this.need =((this.paginator.pageIndex+1) * this.paginator.pageSize)
       this.changeValues(this.paginator);
+      this.getMovieList();
+
     }
 
     else if (value !== "") {
+      console.log("SEARCH FUNCTION");
+      console.log(value);
       this.searchResults = 0;
       this.validRefresh = true;
       this.have = 0;
       this.need = this.paginator.pageSize;
       this.paginator.pageIndex = 0;
+
       this.dataChange = new BehaviorSubject<MovieList[]>([]);
       this.searchTitle = value;
       this.getMovieList();
@@ -182,20 +185,21 @@ export class MovieListComponent implements OnInit {
       this.getMovieList();
 
       this.searchActor = '';
+      this.searchWord = value;
     }
 
     else{
       console.log("Searchfield is empty");
+      this.searchWord = '';
       }
     }
 
   changeValues(event) {
-
     this.have = this.data.length;
     this.paginator.pageIndex = event.pageIndex;
     this.paginator.pageSize = event.pageSize;
     this.need = ((this.paginator.pageIndex + 1) * this.paginator.pageSize) - (this.have);
-    if (0 < this.need) {
+    if (0 < this.need && this.searchWord === '') {
       this.getMovieList();
     }
   }
@@ -207,8 +211,9 @@ export class MovieListComponent implements OnInit {
     } else {
       this.endYear = event;
     }
-    this.dataChange = new BehaviorSubject<MovieList[]>([]);
-    this.getMovieList();
+    this.validRefresh = true;
+    this.searchDatabase(this.searchWord);
+
   }
 
   setGenre(event) {
@@ -220,8 +225,11 @@ export class MovieListComponent implements OnInit {
       }
     } else { this.selectedGenre = '';
     }
-    this.dataChange = new BehaviorSubject<MovieList[]>([]);
-    this.getMovieList();
+    this.validRefresh = true;
+    this.searchDatabase(this.searchWord);
+
+
+
   }
 }
 

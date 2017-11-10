@@ -8,15 +8,14 @@ export class MovieListService {
 
 
   getMovieList(comp): Promise<MovieList[]> {
-    console.log(comp.selectedGenre);
     const params = new HttpParams()
     /** .set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay'); */
       .set('have', comp.have) .set('need', comp.need)
+      .set('year', comp.startYear + '-' + comp.endYear)
+      .set('genre', comp.selectedGenre)
       .set('title', comp.searchTitle)
       .set('director', comp.searchDirector)
-      .set('actors', comp.searchActor)
-      .set('year', comp.startYear + '-' + comp.endYear)
-      .set('genre', comp.selectedGenre);
+      .set('actors', comp.searchActor);
     return this.http.get('/api/movies/list', { params })
 
       .toPromise()
