@@ -6,6 +6,7 @@ export class MovieListService {
 
   constructor(private http: HttpClient) {}
 
+
   getMovieList(comp): Promise<MovieList[]> {
     if (comp.selectedGenre === undefined || comp.selectedGenre === '') {
       comp.selectedGenre = comp.selectedGenre.slice(0, -1);
@@ -13,7 +14,9 @@ export class MovieListService {
     const params = new HttpParams()
     /** .set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay'); */
       .set('have', comp.have) .set('need', comp.need)
-      .set('title', comp.searchWord)
+      .set('title', comp.searchTitle)
+      .set('director', comp.searchDirector)
+      .set('actors', comp.searchActor)
       .set('year', comp.startYear + '-' + comp.endYear)
       .set('genre', comp.selectedGenre);
     return this.http.get('/api/movies/list', { params })

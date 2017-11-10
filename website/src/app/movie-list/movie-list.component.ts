@@ -14,11 +14,16 @@ import { MovieListService } from './movie-list.service';
 export class MovieListComponent implements OnInit {
   displayedColumns = ['title', 'year', 'genre', ];
   dataSource: ExampleMovieSource | null;
-  dataChange: BehaviorSubject<MovieList[]> = new BehaviorSubject<MovieList[]>([]);
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   dialogResult = '';
   movieList: MovieList[];
+  searchTitle: string;
+  searchActor: string;
+  searchDirector: string;
+  searchResults: number;
+  dataChange: BehaviorSubject<MovieList[]>;
+  validRefresh: boolean;
   startYear: any = 0;
   endYear: any = new Date().getFullYear();
   movieNum: any = 10;
@@ -27,7 +32,7 @@ export class MovieListComponent implements OnInit {
   have: any = 0;
   need: any = 10;
   pageLength: any = this.movieListService.getAmountOfMovies().subscribe(length => this.pageLength = length);
-  genres: any = [
+  genres: any = [{  viewValue: 'All'},
     {viewValue: 'Action'},
     {viewValue: 'Adventure'},
     {viewValue: 'Animation'},
@@ -52,16 +57,26 @@ export class MovieListComponent implements OnInit {
     {viewValue: 'Western'}];
   selectedGenre: any = [];
 
-  constructor(public dialog: MatDialog, private movieListService: MovieListService) {}
+  constructor(public dialog: MatDialog, private movieListService: MovieListService) {
+    this.have = 0;
+    this.need = 10;
+    this.dataChange = new BehaviorSubject<MovieList[]>([]);
+    this.pageLength = 322;
+    this.validRefresh = false;
+    this.searchTitle = '';
+    this.searchDirector = '';
+    this.searchActor = '';
+
+  }
 
   ngOnInit(): void {
     this.getMovieList();
   }
   /** Hvorfor heter begge funksjonene get movielist????? */
   getMovieList(): void {
+
     this.movieListService.getMovieList(this).then(movies => this.createList(movies));
   }
-
   /** Sets the Movie data displyed on in the Pop-up. */
   openDialog(data) {
     this.movieListService.getMovieModal(data).then( movies => {
@@ -91,13 +106,32 @@ export class MovieListComponent implements OnInit {
     for (let i = 0; i < movieData.length ; i++) {
       this.addMovie(i, movieData);
     }
+    if (this.validRefresh === true) {
+      console.log(movieData.length);
+      this.searchResults += movieData.length;
+      this.paginator.length = this.searchResults;
+    }
   }
 
   /** Adds a new movie to the database. */
   addMovie(i, movieList) {
     const copiedData = this.data.slice();
+    if (this.checkDuplicate(copiedData, i, movieList)) {
+      copiedData.push(this.createNewMovie(i, movieList));
+    }
+    this.dataChange.next(copiedData);
     copiedData.push(this.createNewMovie(i, movieList));
     this.dataChange.next(copiedData);
+  }
+
+  checkDuplicate(copiedData, i, movieList){
+    for (let k=0; k<copiedData.length; k++){
+      if (movieList[i]._id == copiedData[k]._id){
+        console.log(movieList[i].title, "is already in the list");
+        return false;
+      }
+    }
+    return true;
   }
 
   /** Builds and returns a new movie. */
@@ -120,44 +154,50 @@ export class MovieListComponent implements OnInit {
     return this.dataChange.value;
   }
 
-  searchDatabase(value){
-    let matchSize = 0;
-    for (let i = 0; i < this.data.length ; i++){
-      for (let k = 0; k < this.data[i].director.length; k++){
-        this.data[i].director[k].toLowerCase().match(value.toLowerCase());
-      }
-      if (this.data[i].title.toLowerCase().match(value.toLowerCase())
-        || this.data[i].director[0].toLowerCase().match(value.toLowerCase())
-        || this.data[i].actors[0].toLowerCase().match(value.toLowerCase())){
-
-        matchSize += 1;
-      }
-    }
-
-    if (matchSize === 0) {
-      this.searchWord = value;
+  searchDatabase(value) {
+    if (value === "" && this.validRefresh === true) {
+      this.validRefresh = false;
       this.dataChange = new BehaviorSubject<MovieList[]>([]);
-      this.getMovieList();
+      console.log(this.have, this.need);
+      this.paginator.pageIndex = 0;
+      this.paginator.length = 322;
+      this.have = 0
+      this.need =((this.paginator.pageIndex+1) * this.paginator.pageSize)
+      this.changeValues(this.paginator);
     }
-   /* else {
-      this.have = matchSize;
-      this.need = matchSize;
-      this.dataChange = new BehaviorSubject<MovieData[]>([]);
-      this.pageLength = matchSize;
-    } */
 
-   /* this.searchWord = str;
-    return ("searched"); */
+    else if (value !== "") {
+      this.searchResults = 0;
+      this.validRefresh = true;
+      this.have = 0;
+      this.need = this.paginator.pageSize;
+      this.paginator.pageIndex = 0;
+      this.dataChange = new BehaviorSubject<MovieList[]>([]);
+      this.searchTitle = value;
+      this.getMovieList();
+
+      this.searchTitle = '';
+      this.searchDirector = value;
+      this.getMovieList();
+
+      this.searchDirector = '';
+      this.searchActor = value;
+      this.getMovieList();
+
+      this.searchActor = '';
+    }
   }
+
   changeValues(event) {
     this.have = this.data.length;
-    this.pageNum = event.pageIndex;
-    this.movieNum = event.pageSize;
-    this.need = ((this.pageNum + 1) * this.movieNum) - (this.have);
+    this.paginator.pageIndex = event.pageIndex;
+    this.paginator.pageSize = event.pageSize;
+    this.need = ((this.paginator.pageIndex + 1) * this.paginator.pageSize) - (this.have);
     if (0 < this.need) {
       this.getMovieList();
     }
   }
+
 
   setYear(event, type) {
     if (type === 'start') {
@@ -187,18 +227,6 @@ export class MovieListComponent implements OnInit {
     this.dataChange = new BehaviorSubject<MovieList[]>([]);
     this.getMovieList();
   }
-
-/**
-  checkList() {
-    for (let i = 0; i < this.visitedIndex.length; i++) {
-      if (this.pageNum == this.visitedIndex[i]) {
-        return false;
-      }
-    }
-    return true;
-  } */
-
-
 }
 
 /**

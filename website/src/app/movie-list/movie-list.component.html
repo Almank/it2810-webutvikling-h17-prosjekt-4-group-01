@@ -58,11 +58,9 @@
 
   <mat-paginator #paginator
                  [length]="pageLength"
-                 [pageIndex]="pageNum"
-                 [pageSize]="movieNum"
+                 [pageSize]="10"
                  [pageSizeOptions]="[10, 25, 50]"
-                  (page)= changeValues($event)
-    event.pageIndex="0">
+                  (page)= changeValues($event)>
   </mat-paginator>
 
   </div>
