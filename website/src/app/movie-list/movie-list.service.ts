@@ -8,6 +8,12 @@ export class MovieListService {
 
 
   getMovieList(comp): Promise<MovieList[]> {
+<<<<<<< HEAD
+=======
+    if (comp.selectedGenre === undefined || comp.selectedGenre === '') {
+      comp.selectedGenre = comp.selectedGenre.slice(0, -1);
+    }
+>>>>>>> 5707a8d1cf4b29299babaf5e84193a6d361a3530
     const params = new HttpParams()
     /** .set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay'); */
       .set('have', comp.have) .set('need', comp.need)
@@ -24,6 +30,10 @@ export class MovieListService {
           return  (<MovieList[]> data);
         }})
       .catch(this.handleError);
+  }
+
+  getAmountOfMovies() {
+    return this.http.get('/api/movies/amount').map(val => val);
   }
 
   getMovieModal(listData): Promise<MovieList[]> {

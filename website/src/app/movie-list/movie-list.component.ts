@@ -24,12 +24,12 @@ export class MovieListComponent implements OnInit {
   searchResults: number;
   searchWord: string;
   dataChange: BehaviorSubject<MovieList[]>;
-  pageLength: number;
   validRefresh: boolean;
-  have: number;
-  need: number;
   startYear: any = 0;
   endYear: any = new Date().getFullYear();
+  have: any = 0;
+  need: any = 10;
+  pageLength: any = this.movieListService.getAmountOfMovies().subscribe(length => this.pageLength = length);
   genres: any = [{  viewValue: 'All'},
     {viewValue: 'Action'},
     {viewValue: 'Adventure'},
@@ -192,7 +192,9 @@ export class MovieListComponent implements OnInit {
       console.log("Searchfield is empty");
       this.searchWord = '';
       }
-    }
+
+  }
+
 
   changeValues(event) {
     this.have = this.data.length;
@@ -211,9 +213,14 @@ export class MovieListComponent implements OnInit {
     } else {
       this.endYear = event;
     }
+    if (this.startYear === '') {
+      this.startYear = 0;
+    }
+    if (this.endYear === '') {
+      this.endYear = new Date().getFullYear();
+    }
     this.validRefresh = true;
     this.searchDatabase(this.searchWord);
-
   }
 
   setGenre(event) {

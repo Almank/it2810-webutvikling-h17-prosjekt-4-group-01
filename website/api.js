@@ -138,6 +138,21 @@ function getSortVariable(str, bool) {
     }
 }
 
+function getGenres(genres) {
+  genres = genres.trim();
+  if (genres.length > 0) {
+    genres = genres.split(",").map((item) => {
+      return item.trim()
+    });
+  }
+
+  let genreElem = [];
+  for (let genre of genres) {
+    genreElem.push({genre: {$regex: ".*"+genre+".*"}});
+  }
+  return genreElem;
+}
+//[{genre: {$regex : ".*Action.*"}}]
 // Get movies
 router.get('/movies/list', function(req, res) {
 
@@ -150,20 +165,24 @@ router.get('/movies/list', function(req, res) {
       page = parseInt(have);
       limit = parseInt(need);
     }
-    const genre = splitElements(req.query.genre);
+    const genre = getGenres(req.query.genre);
     const title = splitElements(req.query.title);
     const year = splitYear(req.query.year);
     const actors = splitElements(req.query.actors);
     const director = splitElements(req.query.director);
     const sort = getSortVariable(req.query.sort, req.query.desc);
 
-    db.collection('movies').find(
-      // Filter correct values
-      { title: title,
-        genre: genre,
+    let filter = { title: title,
         year: { $gte: year[0], $lte: year[1] },
         actors: actors,
-        director: director },
+        director: director };
+    if (genre.length > 0) {
+      filter['$and'] = genre;
+    }
+
+    db.collection('movies').find(
+      // Filter correct values
+      filter,
       // Remove properties from query
       {
         readMore: 0,
@@ -179,6 +198,16 @@ router.get('/movies/list', function(req, res) {
         res.status(200).json(docs);
       }
     });
+});
+
+router.get('/movies/amount', function(req, res) {
+  db.collection('movies').find({},{readMore: 0, plot: 0, runtime: 0, title: 0, poster: 0, actors: 0, director: 0, year: 0}).toArray(function(err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get amount of movies.");
+    } else {
+      res.status(200).json(docs.length);
+    }
+  });
 });
 
 router.get('/movies/modal', function(req, res) {
