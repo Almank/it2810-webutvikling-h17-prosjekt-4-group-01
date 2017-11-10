@@ -18,28 +18,28 @@ export class MovieListComponent implements OnInit {
   paginator: MatPaginator;
   dialogResult = '';
   movieList: MovieList[];
-  movieNum: number;
-  pageNum: number;
   searchTitle: string;
   searchActor: string;
   searchDirector: string;
+  searchResults: number;
   dataChange: BehaviorSubject<MovieData[]>;
   pageLength: number;
+  validRefresh: boolean;
 
   have: number;
   need: number;
 
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService) {
-    this.movieNum = 10;
-    this.pageNum = 0;
-    this.searchTitle = '';
-    this.searchDirector = '';
-    this.searchActor = '';
     this.have = 0;
     this.need = 10;
     this.dataChange = new BehaviorSubject<MovieData[]>([]);
     this.pageLength = 322
+    this.validRefresh = false;
+    this.searchTitle = '';
+    this.searchDirector = '';
+    this.searchActor = '';
+
   }
 
   ngOnInit(): void {
@@ -80,17 +80,20 @@ export class MovieListComponent implements OnInit {
     for (let i = 0; i < movieData.length ; i++) {
       this.addMovie(i, movieData);
     }
+    if (this.validRefresh === true) {
+      console.log(movieData.length);
+      this.searchResults += movieData.length;
+      this.paginator.length = this.searchResults;
+    }
   }
 
   /** Adds a new movie to the database. */
   addMovie(i, movieList) {
     const copiedData = this.data.slice();
-    console.log(copiedData);
     if (this.checkDuplicate(copiedData, i, movieList)) {
       copiedData.push(this.createNewMovie(i, movieList));
     }
     this.dataChange.next(copiedData);
-    console.log(this.data);
 
   }
 
@@ -124,54 +127,55 @@ export class MovieListComponent implements OnInit {
     return this.dataChange.value;
   }
 
-  searchDatabase(value){
-    let matchSize = 0;
-    if (value != "") {
-      for (let i = 0; i < this.data.length; i++) {
-        for (let k = 0; k < this.data[i].director.length; k++) {
-          if (this.data[i].director[k].toLowerCase().match(value.toLowerCase())) {
-            console.log(this.data[i].director, "   # of matches: ", matchSize);
-            matchSize += 1;
-          }
-        }
-        for (let j = 0; j < this.data[i].actors.length; j++) {
-          if (this.data[i].actors[j].toLowerCase().match(value.toLowerCase())) {
-            console.log(this.data[i].actors, "   # of matches: ", matchSize);
-            matchSize += 1;
-          }
-        }
-        if (this.data[i].title.toLowerCase().match(value.toLowerCase())) {
-          matchSize += 1;
-          console.log(this.data[i].title, "   # of matches: ", matchSize);
-        }
-      }
+  searchDatabase(value) {
+    if (value === "" && this.validRefresh === true) {
+      this.validRefresh = false;
+      this.dataChange = new BehaviorSubject<MovieData[]>([]);
+      console.log(this.have, this.need);
+      this.paginator.pageIndex = 0;
+      this.paginator.length = 322;
+      this.have = 0
+      this.need =((this.paginator.pageIndex+1) * this.paginator.pageSize)
+      this.changeValues(this.paginator);
+
     }
 
-    if (matchSize == 0) {
+    else if (value !== "") {
+      this.searchResults = 0;
+      this.validRefresh = true;
+      this.have = 0;
+      this.need = this.paginator.pageSize;
+      this.paginator.pageIndex = 0;
       this.dataChange = new BehaviorSubject<MovieData[]>([]);
+
       this.searchTitle = value;
       this.getMovieList();
+
+      this.searchTitle = '';
       this.searchDirector = value;
       this.getMovieList();
+
+      this.searchDirector = '';
       this.searchActor = value;
       this.getMovieList();
-    }
-   /* else {
-      this.have = matchSize;
-      this.need = matchSize;
-      this.dataChange = new BehaviorSubject<MovieData[]>([]);
-      this.pageLength = matchSize;
-    } */
 
-   /* this.searchWord = str;
-    return ("searched"); */
-  }
+      this.searchActor = '';
+
+
+      }
+    else{
+      console.log("Searchfield is empty");
+      }
+
+    }
+
+
   changeValues(event){
 
     this.have = this.data.length;
-    this.pageNum = event.pageIndex;
-    this.movieNum = event.pageSize;
-    this.need =((this.pageNum+1) * this.movieNum) -(this.have);
+    this.paginator.pageIndex = event.pageIndex;
+    this.paginator.pageSize = event.pageSize;
+    this.need =((this.paginator.pageIndex+1) * this.paginator.pageSize) -(this.have);
     console.log(this.have, this.need);
     if (0< this.need) {
       this.getMovieList();
@@ -179,15 +183,7 @@ export class MovieListComponent implements OnInit {
     }
 
   }
-/**
-  checkList() {
-    for (let i = 0; i < this.visitedIndex.length; i++) {
-      if (this.pageNum == this.visitedIndex[i]) {
-        return false;
-      }
-    }
-    return true;
-  } */
+
 
 }
 
