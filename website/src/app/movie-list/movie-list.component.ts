@@ -29,7 +29,6 @@ export class MovieListComponent implements OnInit {
   have: number;
   need: number;
 
-
   constructor(public dialog: MatDialog, private movieListService: MovieListService) {
     this.have = 0;
     this.need = 10;
@@ -137,7 +136,6 @@ export class MovieListComponent implements OnInit {
       this.have = 0
       this.need =((this.paginator.pageIndex+1) * this.paginator.pageSize)
       this.changeValues(this.paginator);
-
     }
 
     else if (value !== "") {
@@ -160,15 +158,12 @@ export class MovieListComponent implements OnInit {
       this.getMovieList();
 
       this.searchActor = '';
-
-
       }
+
     else{
       console.log("Searchfield is empty");
       }
-
     }
-
 
   changeValues(event){
 
@@ -183,7 +178,6 @@ export class MovieListComponent implements OnInit {
     }
 
   }
-
 
 }
 
