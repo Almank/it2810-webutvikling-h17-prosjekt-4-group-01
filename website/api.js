@@ -10,16 +10,24 @@ const config = {'secret': 'supersecretkey'};
 
 const bcrypt = require('bcryptjs');
 
+// Uppercase first letter in each word and return regex to be searchable.
 function splitElements(str) {
-  if (str === '' || str === undefined){
-      return {$exists:true};
-  } else {
-      return {$in: str.split(",").map((item) => {
-        return item.trim()})
-    }
+  if (str === undefined || str === '') {
+    return { $exists: true }
   }
+  str = str.split(' ');
+  let newArr = [''];
+  for (let i = 0; i < str.length; i++) {
+    // Add space between words.
+    if (str.length > 1 && i > 0) {
+      newArr[0] += ' '
+    }
+    newArr[0] += str[i].charAt(0).toUpperCase() + str[i].substr(1);
+  }
+  return { "$regex": newArr[0] }
 }
 
+// Get start and end year to filter.
 function splitYear(str) {
   if (str === undefined || str === '') {
     return [0, 9999];
@@ -189,6 +197,9 @@ function getSortVariable(str, bool) {
 }
 
 function getGenres(genres) {
+  if (genres === undefined || genres === '') {
+    return ''
+  }
   genres = genres.trim();
   if (genres.length > 0) {
     genres = genres.split(",").map((item) => {
@@ -198,11 +209,11 @@ function getGenres(genres) {
 
   let genreElem = [];
   for (let genre of genres) {
-    genreElem.push({genre: {$regex: ".*"+genre+".*"}});
+    genreElem.push({genre: {$regex: ".*" + genre + ".*"}});
   }
   return genreElem;
 }
-//[{genre: {$regex : ".*Action.*"}}]
+
 // Get movies
 router.get('/movies/list', function(req, res) {
 
