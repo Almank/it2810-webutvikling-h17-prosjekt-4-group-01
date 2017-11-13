@@ -1,5 +1,7 @@
 import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
-          Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../import-module';
+  Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../import-module';
+
+import { HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -12,6 +14,7 @@ import { MovieListService } from './movie-list.service';
 })
 
 export class MovieListComponent implements OnInit {
+  private headers = new HttpHeaders({'Content-Type': 'application/json'});
   displayedColumns = ['title', 'year', 'genre', ];
   dataSource: ExampleMovieSource | null;
   @ViewChild(MatPaginator)
@@ -30,7 +33,7 @@ export class MovieListComponent implements OnInit {
   have: any = 0;
   need: any = 10;
   pageLength: any = this.movieListService.getAmountOfMovies().subscribe(length => this.pageLength = length);
-  genres: any = [{  viewValue: 'All'},
+  genres: any = [
     {viewValue: 'Action'},
     {viewValue: 'Adventure'},
     {viewValue: 'Animation'},
@@ -54,18 +57,23 @@ export class MovieListComponent implements OnInit {
     {viewValue: 'War'},
     {viewValue: 'Western'}];
   selectedGenre: any = [];
+  auth: boolean;
+  token: string;
 
-  constructor(public dialog: MatDialog, private movieListService: MovieListService) {
+  constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
     this.have = 0;
     this.need = 10;
     this.dataChange = new BehaviorSubject<MovieList[]>([]);
-    this.pageLength = 322;
     this.validRefresh = false;
     this.searchTitle = '';
     this.searchDirector = '';
     this.searchActor = '';
-    this.searchWord ='';
-
+    this.searchWord = '';
+    const session = JSON.parse(localStorage.getItem('session'));
+    if (!(session === null || session.auth === false)) {
+      this.auth = session.auth;
+      this.token = session.token;
+    }
   }
 
   ngOnInit(): void {
@@ -78,8 +86,29 @@ export class MovieListComponent implements OnInit {
   }
   /** Sets the Movie data displyed on in the Pop-up. */
   openDialog(data) {
+    // If user is logged in, check if movie is favorited
+    if (this.auth) {
+      const params = JSON.stringify({
+        token: this.token,
+        movie_id: data._id,
+      });
+      this.http.post('/api/favorites/exists', params, {headers: this.headers}).subscribe(favorites => {
+        if (favorites) {
+          this.generateModal(data, true);
+        } else {
+          this.generateModal(data, false);
+        }
+      });
+    } else {
+      this.generateModal(data, false);
+    }
+  }
+
+  generateModal(data, exists) {
+    // Generate modal data
     this.movieListService.getMovieModal(data).then( movies => {
       data = {
+        '_id': data._id,
         'title': data.title,
         'poster': movies[0].poster,
         'plot': movies[0].plot,
@@ -88,10 +117,12 @@ export class MovieListComponent implements OnInit {
         'director': data.director,
         'genre': data.genre,
         'year': data.year,
+        'favorited': exists,
+        'auth': this.auth,
       };
-    const dialogRef = this.dialog.open(MovieDetailsComponent, {
-      data,
-    });
+      const dialogRef = this.dialog.open(MovieDetailsComponent, {
+        data,
+      });
 
       dialogRef.afterClosed().subscribe(result => {
         this.dialogResult = result;
@@ -107,7 +138,8 @@ export class MovieListComponent implements OnInit {
     }
     if (this.validRefresh === true) {
       this.searchResults += movieData.length;
-      this.paginator.length = this.searchResults;
+      this.movieListService.getAmountOfMovies().subscribe(length => this.pageLength = length);
+      this.paginator.length = this.pageLength;
     }
   }
 
@@ -186,9 +218,7 @@ export class MovieListComponent implements OnInit {
 
       this.searchActor = '';
       this.searchWord = value;
-    }
-
-    else{
+    } else {
       console.log("Searchfield is empty");
       this.searchWord = '';
       }

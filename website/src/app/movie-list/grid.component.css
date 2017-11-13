@@ -23,7 +23,7 @@
 }
 img{
     height: 100%;
-    width: auto;
+    width: 100%;
 }
 
 mat-grid-tile {
@@ -46,4 +46,8 @@ mat-grid-list {
 mat-grid-tile-footer {
     font-family: Webly Sleek Kursiv;
     font-weight: bold;
+}
+#viewBtnWrap{
+    margin-left: 18%;
+    margin-bottom: 10px;
 }

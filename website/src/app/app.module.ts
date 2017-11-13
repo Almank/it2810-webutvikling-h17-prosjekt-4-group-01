@@ -14,6 +14,7 @@ import { GridComponent } from './movie-list/grid.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthComponent } from './auth/auth.component';
 import { MovieListService } from './movie-list/movie-list.service';
+import { Favorite } from './profile/profile.favorite.service';
 
 
 import { MovieDetailsComponent, RouterModule, Routes } from './import-module';
@@ -67,7 +68,7 @@ const appRoutes: Routes = [
     MovieDetailsComponent,
   ],
 
-  providers: [MovieListService],
+  providers: [MovieListService, Favorite],
   bootstrap: [AppComponent]
 })
 export class AppModule {

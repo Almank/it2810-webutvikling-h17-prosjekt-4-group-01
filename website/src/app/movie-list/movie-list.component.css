@@ -111,3 +111,8 @@
 .inputYearTextField {
   text-align: center;
 }
+
+#viewBtnWrap{
+    margin-left: 18%;
+    margin-bottom: 10px;
+}
