@@ -59,7 +59,6 @@ export class MovieListComponent implements OnInit {
     this.have = 0;
     this.need = 10;
     this.dataChange = new BehaviorSubject<MovieList[]>([]);
-    this.pageLength = 322;
     this.validRefresh = false;
     this.searchTitle = '';
     this.searchDirector = '';
@@ -186,9 +185,7 @@ export class MovieListComponent implements OnInit {
 
       this.searchActor = '';
       this.searchWord = value;
-    }
-
-    else{
+    } else {
       console.log("Searchfield is empty");
       this.searchWord = '';
       }
