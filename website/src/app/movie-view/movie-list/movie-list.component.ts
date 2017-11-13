@@ -16,7 +16,7 @@ import { MovieListService } from '../movie-view.service';
 export class MovieListComponent implements OnInit {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
   displayedColumns = ['title', 'year', 'genre', ];
-  dataSource: ExampleMovieSource | null;
+  dataSource: MovieSource | null;
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   dialogResult = '';
@@ -136,7 +136,7 @@ export class MovieListComponent implements OnInit {
   }
 
   createList(movieData) {
-    this.dataSource = new ExampleMovieSource(this, this.paginator);
+    this.dataSource = new MovieSource(this, this.paginator);
     /** Fill up the database with 25 movies. */
     for (let i = 0; i < movieData.length ; i++) {
         this.addMovie(i, movieData);
@@ -209,6 +209,7 @@ export class MovieListComponent implements OnInit {
   searchFor(value) {
     this.searchTitle = value;
     this.getMovieList();
+
     this.searchTitle = '';
     this.searchDirector = value;
     this.getMovieList();
@@ -220,7 +221,6 @@ export class MovieListComponent implements OnInit {
     this.searchActor = '';
     this.searchWord = value;
   }
-
 
   changeValues(event) {
     this.have = this.data.length;
@@ -259,9 +259,6 @@ export class MovieListComponent implements OnInit {
     }
     this.validRefresh = true;
     this.searchDatabase(this.searchWord);
-
-
-
   }
 }
 
@@ -272,7 +269,7 @@ export class MovieListComponent implements OnInit {
  * the underlying data. Instead, it only needs to take the data and send the table exactly what
  * should be rendered.
  **/
-export class ExampleMovieSource extends DataSource<any> {
+export class MovieSource extends DataSource<any> {
   constructor(private _movieComponent: MovieListComponent, private _paginator: MatPaginator) {
     super();
   }
