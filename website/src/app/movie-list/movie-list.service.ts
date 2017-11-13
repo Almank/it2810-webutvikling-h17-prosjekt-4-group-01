@@ -8,7 +8,7 @@ export class MovieListService {
 
 
   getMovieList(comp): Promise<MovieList[]> {
-    if (comp.selectedGenre === undefined || comp.selectedGenre === '') {
+    if (!(comp.selectedGenre === undefined || comp.selectedGenre === '')) {
       comp.selectedGenre = comp.selectedGenre.slice(0, -1);
     }
     const params = new HttpParams()

@@ -262,7 +262,23 @@ router.get('/movies/list', function(req, res) {
 });
 
 router.get('/movies/amount', function(req, res) {
-  db.collection('movies').find({},{readMore: 0, plot: 0, runtime: 0, title: 0, poster: 0, actors: 0, director: 0, year: 0}).toArray(function(err, docs) {
+
+  const genre = getGenres(req.query.genre);
+  const title = splitElements(req.query.title);
+  const year = splitYear(req.query.year);
+  const actors = splitElements(req.query.actors);
+  const director = splitElements(req.query.director);
+
+  let filter = { title: title,
+    year: { $gte: year[0], $lte: year[1] },
+    actors: actors,
+    director: director };
+  if (genre.length > 0) {
+    filter['$and'] = genre;
+  }
+  db.collection('movies').find(
+    filter,
+    {readMore: 0, plot: 0, runtime: 0, title: 0, poster: 0, actors: 0, director: 0, year: 0}).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get amount of movies.");
     } else {

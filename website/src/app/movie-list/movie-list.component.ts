@@ -33,7 +33,7 @@ export class MovieListComponent implements OnInit {
   have: any = 0;
   need: any = 10;
   pageLength: any = this.movieListService.getAmountOfMovies().subscribe(length => this.pageLength = length);
-  genres: any = [{  viewValue: 'All'},
+  genres: any = [
     {viewValue: 'Action'},
     {viewValue: 'Adventure'},
     {viewValue: 'Animation'},
@@ -138,7 +138,8 @@ export class MovieListComponent implements OnInit {
     }
     if (this.validRefresh === true) {
       this.searchResults += movieData.length;
-      this.paginator.length = this.searchResults;
+      this.movieListService.getAmountOfMovies().subscribe(length => this.pageLength = length);
+      this.paginator.length = this.pageLength;
     }
   }
 
