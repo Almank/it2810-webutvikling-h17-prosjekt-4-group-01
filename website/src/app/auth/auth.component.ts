@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { isObject } from 'util';
-import { Router } from '@angular/router';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {isObject} from 'util';
+import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 
 @Component({
@@ -12,17 +12,19 @@ import {MatSnackBar} from '@angular/material';
 })
 export class AuthComponent implements OnInit {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
+
   constructor(private http: HttpClient, private router: Router, public snackBar: MatSnackBar) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null) {
       this.router.navigate(['/login']);
-    } else if ( session.auth === true ) {
+    } else if (session.auth === true) {
       this.router.navigate(['/profile']);
     }
   }
 
   ngOnInit() {
   }
+
   onRegister(form) {
     const params = JSON.stringify({
       username: form.value.username,
@@ -37,6 +39,7 @@ export class AuthComponent implements OnInit {
       this.onUserError(err.error.message, 'dismiss', false);
     });
   }
+
   onLogin(form) {
     const params = JSON.stringify({
       username: form.value.username,
@@ -58,6 +61,7 @@ export class AuthComponent implements OnInit {
       this.onUserError(err.error.message, 'dismiss', false);
     });
   }
+
   onUserError(message: string, action: string, positive: boolean) {
     let extra = 'alert-negative';
     if (positive) {
