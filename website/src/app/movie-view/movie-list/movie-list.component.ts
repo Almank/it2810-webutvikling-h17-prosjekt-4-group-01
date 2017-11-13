@@ -1,11 +1,11 @@
 import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
-  Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../import-module';
+  Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../../import-module';
 
 import { HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import { MovieListService } from './movie-list.service';
+import { MovieListService } from '../movie-view.service';
 
 @Component({
   selector: 'movieList',
@@ -194,7 +194,6 @@ export class MovieListComponent implements OnInit {
       this.changeValues(this.paginator);
 
     } else if (value !== "") {
-
       this.validRefresh = true;
       this.paginator.pageIndex = 0;
       this.have = 0;
@@ -203,8 +202,8 @@ export class MovieListComponent implements OnInit {
       this.searchFor(value);
     } else {
       this.searchWord = '';
-      }
 
+      }
   }
 
   searchFor(value) {

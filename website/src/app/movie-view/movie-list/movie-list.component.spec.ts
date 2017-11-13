@@ -1,4 +1,4 @@
-import { TestBed, async, MovieListComponent } from '../import-module'
+import { TestBed, async, MovieListComponent } from '../../import-module'
 
 
 describe('AppComponent', () => {
