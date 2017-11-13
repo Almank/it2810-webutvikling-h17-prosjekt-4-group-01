@@ -24,7 +24,6 @@ export class MovieListComponent implements OnInit {
   searchTitle: string;
   searchActor: string;
   searchDirector: string;
-  searchResults: number;
   searchWord: string;
   dataChange: BehaviorSubject<MovieList[]>;
   validRefresh: boolean;
@@ -32,7 +31,7 @@ export class MovieListComponent implements OnInit {
   endYear: any = new Date().getFullYear();
   have: any = 0;
   need: any = 10;
-  pageLength: any = this.movieListService.getAmountOfMovies().subscribe(length => this.pageLength = length);
+  pageLength: any;
   genres: any = [
     {viewValue: 'Action'},
     {viewValue: 'Adventure'},
@@ -79,11 +78,17 @@ export class MovieListComponent implements OnInit {
   ngOnInit(): void {
     this.getMovieList();
   }
+
+  getAmountOfMatches(): void {
+    this.movieListService.getAmountOfMovies(this).then(length => this.pageLength = length);
+  }
+
   /** Hvorfor heter begge funksjonene get movielist????? */
   getMovieList(): void {
-
+    this.getAmountOfMatches();
     this.movieListService.getMovieList(this).then(movies => this.createList(movies));
   }
+
   /** Sets the Movie data displyed on in the Pop-up. */
   openDialog(data) {
     // If user is logged in, check if movie is favorited
@@ -134,11 +139,9 @@ export class MovieListComponent implements OnInit {
     this.dataSource = new ExampleMovieSource(this, this.paginator);
     /** Fill up the database with 25 movies. */
     for (let i = 0; i < movieData.length ; i++) {
-      this.addMovie(i, movieData);
+        this.addMovie(i, movieData);
     }
     if (this.validRefresh === true) {
-      this.searchResults += movieData.length;
-      this.movieListService.getAmountOfMovies().subscribe(length => this.pageLength = length);
       this.paginator.length = this.pageLength;
     }
   }
@@ -155,7 +158,6 @@ export class MovieListComponent implements OnInit {
   checkDuplicate(copiedData, i, movieList){
     for (let k=0; k<copiedData.length; k++){
       if (movieList[i]._id == copiedData[k]._id){
-        console.log(movieList[i].title, "is already in the list");
         return false;
       }
     }
@@ -187,42 +189,37 @@ export class MovieListComponent implements OnInit {
       this.searchWord = '';
       this.validRefresh = false;
       this.dataChange = new BehaviorSubject<MovieList[]>([]);
-      console.log(this.have, this.need);
       this.paginator.pageIndex = 0;
-      this.paginator.length = 322;
+      this.paginator.length = this.pageLength;
       this.changeValues(this.paginator);
-      this.getMovieList();
 
-    }
+    } else if (value !== "") {
 
-    else if (value !== "") {
-      console.log("SEARCH FUNCTION");
-      console.log(value);
-      this.searchResults = 0;
       this.validRefresh = true;
+      this.paginator.pageIndex = 0;
       this.have = 0;
       this.need = this.paginator.pageSize;
-      this.paginator.pageIndex = 0;
-
       this.dataChange = new BehaviorSubject<MovieList[]>([]);
-      this.searchTitle = value;
-      this.getMovieList();
-
-      this.searchTitle = '';
-      this.searchDirector = value;
-      this.getMovieList();
-
-      this.searchDirector = '';
-      this.searchActor = value;
-      this.getMovieList();
-
-      this.searchActor = '';
-      this.searchWord = value;
+      this.searchFor(value);
     } else {
-      console.log("Searchfield is empty");
       this.searchWord = '';
       }
 
+  }
+
+  searchFor(value) {
+    this.searchTitle = value;
+    this.getMovieList();
+    this.searchTitle = '';
+    this.searchDirector = value;
+    this.getMovieList();
+
+    this.searchDirector = '';
+    this.searchActor = value;
+    this.getMovieList();
+
+    this.searchActor = '';
+    this.searchWord = value;
   }
 
 
@@ -231,11 +228,10 @@ export class MovieListComponent implements OnInit {
     this.paginator.pageIndex = event.pageIndex;
     this.paginator.pageSize = event.pageSize;
     this.need = ((this.paginator.pageIndex + 1) * this.paginator.pageSize) - (this.have);
-    if (0 < this.need && this.searchWord === '') {
-      this.getMovieList();
+    if (0 < this.need) {
+      this.searchFor(this.searchWord);
     }
   }
-
 
   setYear(event, type) {
     if (type === 'start') {

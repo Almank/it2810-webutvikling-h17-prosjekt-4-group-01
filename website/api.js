@@ -279,9 +279,10 @@ router.get('/movies/amount', function(req, res) {
   db.collection('movies').find(
     filter,
     {readMore: 0, plot: 0, runtime: 0, title: 0, poster: 0, actors: 0, director: 0, year: 0}).toArray(function(err, docs) {
-    if (err) {
+      if (err) {
       handleError(res, err.message, "Failed to get amount of movies.");
     } else {
+
       res.status(200).json(docs.length);
     }
   });

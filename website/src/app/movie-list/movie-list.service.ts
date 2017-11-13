@@ -12,16 +12,13 @@ export class MovieListService {
       comp.selectedGenre = comp.selectedGenre.slice(0, -1);
     }
     const params = new HttpParams()
-    /** .set('genre', 'Action').set('year', '2015-2016').set('actors', 'John Krasinski, Pablo Schreiber').set('director', 'Michael Bay'); */
       .set('have', comp.have) .set('need', comp.need)
       .set('year', comp.startYear + '-' + comp.endYear)
       .set('genre', comp.selectedGenre)
       .set('title', comp.searchTitle)
       .set('director', comp.searchDirector)
       .set('actors', comp.searchActor);
-    return this.http.get('/api/movies/list', { params })
-
-      .toPromise()
+    return this.http.get('/api/movies/list', { params }).toPromise()
       .then(data => {
         if (isObject(data)) {
           return  (<MovieList[]> data);
@@ -29,8 +26,18 @@ export class MovieListService {
       .catch(this.handleError);
   }
 
-  getAmountOfMovies() {
-    return this.http.get('/api/movies/amount').map(val => val);
+  getAmountOfMovies(comp) {
+    const params = new HttpParams()
+      .set('year', comp.startYear + '-' + comp.endYear)
+      .set('genre', comp.selectedGenre)
+      .set('title', comp.searchTitle)
+      .set('director', comp.searchDirector)
+      .set('actors', comp.searchActor);
+    return this.http.get('/api/movies/amount', { params }).toPromise()
+      .then(data => {
+          return  (data);
+        })
+      .catch(this.handleError);
   }
 
   getMovieModal(listData): Promise<MovieList[]> {
