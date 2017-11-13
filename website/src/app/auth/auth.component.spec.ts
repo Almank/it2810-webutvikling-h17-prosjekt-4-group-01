@@ -3,10 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {AuthComponent} from './auth.component';
 import {
   MatCard, MatFormFieldModule, MatInkBar, MatInputModule, MatRipple, MatSnackBarModule, MatTab,
-  MatTabBody, MatTabGroup,
-  MatTabHeader,
-  MatTabLabel,
-  MatTabLabelWrapper
+  MatTabBody, MatTabGroup, MatTabHeader, MatTabLabel, MatTabLabelWrapper
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {PortalModule} from '@angular/cdk/portal';
