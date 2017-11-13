@@ -5,6 +5,8 @@
 
 .profile-card{
   width: 70%;
+  max-width: 650px;
+  min-width: 350px;
   top: 50px;
 }
 
@@ -27,6 +29,7 @@
 
 .mat-card-content{
   margin: 10px 20px 10px 20px;
+  text-align: center;
 }
 
 .card-hr{
@@ -34,13 +37,15 @@
 }
 
 .save-button{
-  background-color: #009f02;
+  background-color: #3f94b5;
   color: white;
 }
 
 .logout-button{
-  background-color: red;
+  background-color: tomato;
   color: white;
+  display: inline-block;
+  float: right;
 }
 
 /* alert styling */
@@ -50,4 +55,13 @@ snack-bar-container.alert-negative{
 
 snack-bar-container.alert-positive{
   background-color: darkgreen;
+}
+.profile-head{
+    display: inline-block;
+}
+mat-tab-header{
+    align-self: center;
+}
+.title{
+    text-align: center;
 }

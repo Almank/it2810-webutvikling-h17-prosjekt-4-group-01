@@ -1,5 +1,7 @@
 import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
-          Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../import-module';
+  Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../import-module';
+
+import { HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -12,12 +14,14 @@ import { MovieListService } from './movie-list.service';
 })
 
 export class MovieListComponent implements OnInit {
+  private headers = new HttpHeaders({'Content-Type': 'application/json'});
   displayedColumns = ['title', 'year', 'genre', ];
   dataSource: ExampleMovieSource | null;
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   dialogResult = '';
   movieList: MovieList[];
+<<<<<<< HEAD
   searchTitle: string;
   searchActor: string;
   searchDirector: string;
@@ -64,6 +68,18 @@ export class MovieListComponent implements OnInit {
     this.searchDirector = '';
     this.searchActor = '';
     this.searchWord ='';
+=======
+  auth: boolean;
+  token: string;
+
+  constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
+    const session = JSON.parse(localStorage.getItem('session'));
+    if (!(session === null || session.auth === false)) {
+      this.auth = session.auth;
+      this.token = session.token;
+    }
+  }
+>>>>>>> f80d640a924977f808302e0d53920814ca5a6ba0
 
   }
 
@@ -77,8 +93,29 @@ export class MovieListComponent implements OnInit {
   }
   /** Sets the Movie data displyed on in the Pop-up. */
   openDialog(data) {
+    // If user is logged in, check if movie is favorited
+    if (this.auth) {
+      const params = JSON.stringify({
+        token: this.token,
+        movie_id: data._id,
+      });
+      this.http.post('/api/favorites/exists', params, {headers: this.headers}).subscribe(favorites => {
+        if (favorites) {
+          this.generateModal(data, true);
+        } else {
+          this.generateModal(data, false);
+        }
+      });
+    } else {
+      this.generateModal(data, false);
+    }
+  }
+
+  generateModal(data, exists) {
+    // Generate modal data
     this.movieListService.getMovieModal(data).then( movies => {
       data = {
+        '_id': data._id,
         'title': data.title,
         'poster': movies[0].poster,
         'plot': movies[0].plot,
@@ -87,10 +124,12 @@ export class MovieListComponent implements OnInit {
         'director': data.director,
         'genre': data.genre,
         'year': data.year,
+        'favorited': exists,
+        'auth': this.auth,
       };
-    const dialogRef = this.dialog.open(MovieDetailsComponent, {
-      data,
-    });
+      const dialogRef = this.dialog.open(MovieDetailsComponent, {
+        data,
+      });
 
       dialogRef.afterClosed().subscribe(result => {
         this.dialogResult = result;
