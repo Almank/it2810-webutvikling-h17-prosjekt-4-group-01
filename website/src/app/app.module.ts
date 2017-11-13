@@ -8,22 +8,22 @@ MatFormFieldModule, MatSnackBarModule, MatGridListModule, MatSelectModule } from
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import {CdkTableModule} from '@angular/cdk/table';
-import { MovieListComponent } from './movie-list/movie-list.component';
+import { MovieListComponent } from './movie-view/movie-list/movie-list.component';
 import { HeaderComponent } from './header/header.component';
-import { GridComponent } from './movie-list/grid.component';
+import { MovieGridComponent} from "./movie-view/movie-grid/movie-grid.component";
 import { ProfileComponent } from './profile/profile.component';
 import { AuthComponent } from './auth/auth.component';
-import { MovieListService } from './movie-list/movie-list.service';
+import { MovieListService } from './movie-view/movie-view.service';
 import { Favorite } from './profile/profile.favorite.service';
 
 
 import { MovieDetailsComponent, RouterModule, Routes } from './import-module';
-import { SearchBarComponent } from './search-bar/search-bar.component';
+import { MovieModalComponent } from './movie-view/movie-modal/movie-modal.component';
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},
   { path: 'list', component: MovieListComponent },
-  { path: 'grid',  component: GridComponent },
+  { path: 'grid',  component: MovieGridComponent },
   { path: '**', component: MovieListComponent }
 ];
 
@@ -35,8 +35,9 @@ const appRoutes: Routes = [
     ProfileComponent,
     AuthComponent,
     MovieDetailsComponent,
-    SearchBarComponent,
-    GridComponent,
+    MovieGridComponent,
+    MovieModalComponent,
+    MovieGridComponent,
   ],
   imports: [
     BrowserModule,

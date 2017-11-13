@@ -1,7 +1,7 @@
 .content{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Search form */
@@ -22,8 +22,8 @@
   padding-left: 25px;
 }
 img{
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 
 mat-grid-tile {
@@ -31,23 +31,23 @@ mat-grid-tile {
   margin: 10px;
 }
 mat-grid-tile:hover mat-grid-tile-footer{
-    background-color: #3f94b5;
-    cursor: pointer;
+  background-color: #3f94b5;
+  cursor: pointer;
 }
 .mat-grid-tile:hover {
   cursor: pointer;
   opacity: 0.90;
 }
 mat-grid-list {
-    margin-top: 20px;
-    margin-left: 50px;
-    margin-right: 50px;
+  margin-top: 20px;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 mat-grid-tile-footer {
-    font-family: Webly Sleek Kursiv;
-    font-weight: bold;
+  font-family: Webly Sleek Kursiv;
+  font-weight: bold;
 }
 #viewBtnWrap{
-    margin-left: 18%;
-    margin-bottom: 10px;
+  margin-left: 18%;
+  margin-bottom: 10px;
 }

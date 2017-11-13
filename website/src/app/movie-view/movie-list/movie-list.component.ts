@@ -1,11 +1,11 @@
 import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
-  Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../import-module';
+  Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../../import-module';
 
 import { HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
-import { MovieListService } from './movie-list.service';
+import { MovieListService } from '../movie-view.service';
 
 @Component({
   selector: 'movieList',
@@ -138,8 +138,8 @@ export class MovieListComponent implements OnInit {
     }
     if (this.validRefresh === true) {
       this.searchResults += movieData.length;
-      this.movieListService.getAmountOfMovies().subscribe(length => this.pageLength = length);
-      this.paginator.length = this.pageLength;
+      console.log(movieData);
+      this.pageLength = this.searchResults;
     }
   }
 
@@ -155,7 +155,6 @@ export class MovieListComponent implements OnInit {
   checkDuplicate(copiedData, i, movieList){
     for (let k=0; k<copiedData.length; k++){
       if (movieList[i]._id == copiedData[k]._id){
-        console.log(movieList[i].title, "is already in the list");
         return false;
       }
     }
@@ -187,17 +186,14 @@ export class MovieListComponent implements OnInit {
       this.searchWord = '';
       this.validRefresh = false;
       this.dataChange = new BehaviorSubject<MovieList[]>([]);
-      console.log(this.have, this.need);
       this.paginator.pageIndex = 0;
       this.paginator.length = 322;
       this.changeValues(this.paginator);
-      this.getMovieList();
+
 
     }
 
     else if (value !== "") {
-      console.log("SEARCH FUNCTION");
-      console.log(value);
       this.searchResults = 0;
       this.validRefresh = true;
       this.have = 0;
@@ -219,8 +215,8 @@ export class MovieListComponent implements OnInit {
       this.searchActor = '';
       this.searchWord = value;
     } else {
-      console.log("Searchfield is empty");
       this.searchWord = '';
+
       }
 
   }
