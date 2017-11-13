@@ -21,7 +21,6 @@ export class MovieListComponent implements OnInit {
   paginator: MatPaginator;
   dialogResult = '';
   movieList: MovieList[];
-<<<<<<< HEAD
   searchTitle: string;
   searchActor: string;
   searchDirector: string;
@@ -58,8 +57,10 @@ export class MovieListComponent implements OnInit {
     {viewValue: 'War'},
     {viewValue: 'Western'}];
   selectedGenre: any = [];
+  auth: boolean;
+  token: string;
 
-  constructor(public dialog: MatDialog, private movieListService: MovieListService) {
+  constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
     this.have = 0;
     this.need = 10;
     this.dataChange = new BehaviorSubject<MovieList[]>([]);
@@ -67,20 +68,12 @@ export class MovieListComponent implements OnInit {
     this.searchTitle = '';
     this.searchDirector = '';
     this.searchActor = '';
-    this.searchWord ='';
-=======
-  auth: boolean;
-  token: string;
-
-  constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
+    this.searchWord = '';
     const session = JSON.parse(localStorage.getItem('session'));
     if (!(session === null || session.auth === false)) {
       this.auth = session.auth;
       this.token = session.token;
     }
-  }
->>>>>>> f80d640a924977f808302e0d53920814ca5a6ba0
-
   }
 
   ngOnInit(): void {
