@@ -21,18 +21,18 @@ export class MovieListComponent implements OnInit {
   paginator: MatPaginator;
   dialogResult = '';
   movieList: MovieList[];
-  searchTitle: string;
-  searchActor: string;
-  searchDirector: string;
-  searchWord: string;
-  dataChange: BehaviorSubject<MovieList[]>;
-  validRefresh: boolean;
+  searchTitle = '';
+  searchActor = '';
+  searchDirector = '';
+  searchWord = '';
+  dataChange: BehaviorSubject<MovieList[]> = new BehaviorSubject<MovieList[]>([]);
+  validRefresh = false;
   startYear: any = 0;
   endYear: any = new Date().getFullYear();
-  have: any = 0;
-  need: any = 10;
-  pageLength: any;
-  genres: any = [
+  have = 0;
+  need = 10;
+  pageLength = 0;
+  genres = [
     {viewValue: 'Action'},
     {viewValue: 'Adventure'},
     {viewValue: 'Animation'},
@@ -60,14 +60,6 @@ export class MovieListComponent implements OnInit {
   token: string;
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
-    this.have = 0;
-    this.need = 10;
-    this.dataChange = new BehaviorSubject<MovieList[]>([]);
-    this.validRefresh = false;
-    this.searchTitle = '';
-    this.searchDirector = '';
-    this.searchActor = '';
-    this.searchWord = '';
     const session = JSON.parse(localStorage.getItem('session'));
     if (!(session === null || session.auth === false)) {
       this.auth = session.auth;
@@ -139,45 +131,21 @@ export class MovieListComponent implements OnInit {
     this.dataSource = new MovieSource(this, this.paginator);
     /** Fill up the database with 25 movies. */
     for (let i = 0; i < movieData.length ; i++) {
-        this.addMovie(i, movieData);
+      const copiedData = this.data;
+      if (!(this.checkDuplicate(copiedData, i, movieData))) {
+        copiedData.push(movieData[i]);
+      }
+      this.dataChange.next(copiedData);
     }
     if (this.validRefresh === true) {
       this.paginator.length = this.pageLength;
     }
   }
 
-  /** Adds a new movie to the database. */
-  addMovie(i, movieList) {
-    const copiedData = this.data.slice();
-    if (this.checkDuplicate(copiedData, i, movieList)) {
-      copiedData.push(this.createNewMovie(i, movieList));
+  checkDuplicate(copiedData, i, movieList) {
+    for (let k = 0; k < copiedData.length; k++) {
+      return movieList[i]._id === copiedData[k]._id;
     }
-    this.dataChange.next(copiedData);
-  }
-
-  checkDuplicate(copiedData, i, movieList){
-    for (let k=0; k<copiedData.length; k++){
-      if (movieList[i]._id == copiedData[k]._id){
-        return false;
-      }
-    }
-    return true;
-  }
-
-  /** Builds and returns a new movie. */
-  private createNewMovie(i, movieList) {
-    return {
-      _id: movieList[i]._id,
-      readMore: movieList[i].readMore,
-      poster: movieList[i].poster,
-      plot: movieList[i].plot,
-      actors: movieList[i].actors,
-      director: movieList[i].director,
-      genre: movieList[i].genre,
-      runtime: movieList[i].runtime,
-      year: movieList[i].year,
-      title: movieList[i].title
-    };
   }
 
   get data(): MovieList[] {
@@ -185,7 +153,7 @@ export class MovieListComponent implements OnInit {
   }
 
   searchDatabase(value) {
-    if (value === "" && this.validRefresh === true) {
+    if (value === '' && this.validRefresh === true) {
       this.searchWord = '';
       this.validRefresh = false;
       this.dataChange = new BehaviorSubject<MovieList[]>([]);
@@ -193,7 +161,7 @@ export class MovieListComponent implements OnInit {
       this.paginator.length = this.pageLength;
       this.changeValues(this.paginator);
 
-    } else if (value !== "") {
+    } else if (value !== '') {
       this.validRefresh = true;
       this.paginator.pageIndex = 0;
       this.have = 0;
@@ -202,7 +170,6 @@ export class MovieListComponent implements OnInit {
       this.searchFor(value);
     } else {
       this.searchWord = '';
-
       }
   }
 
@@ -227,8 +194,11 @@ export class MovieListComponent implements OnInit {
     this.paginator.pageIndex = event.pageIndex;
     this.paginator.pageSize = event.pageSize;
     this.need = ((this.paginator.pageIndex + 1) * this.paginator.pageSize) - (this.have);
-    if (0 < this.need) {
+    console.log('N/H: ', this.need, this.have);
+    if (0 < this.need && this.searchWord !== '') {
       this.searchFor(this.searchWord);
+    } else {
+      this.getMovieList();
     }
   }
 
