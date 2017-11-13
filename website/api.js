@@ -16,15 +16,15 @@ function splitElements(str) {
     return { $exists: true }
   }
   str = str.split(' ');
-  let newArr = [''];
+  let newArr = '';
   for (let i = 0; i < str.length; i++) {
     // Add space between words.
     if (str.length > 1 && i > 0) {
-      newArr[0] += ' '
+      newArr += ' '
     }
-    newArr[0] += str[i].charAt(0).toUpperCase() + str[i].substr(1);
+    newArr += str[i].charAt(0).toUpperCase() + str[i].substr(1);
   }
-  return { "$regex": newArr[0] }
+  return { "$regex": newArr }
 }
 
 // Get start and end year to filter.
