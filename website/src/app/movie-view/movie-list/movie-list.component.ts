@@ -40,7 +40,6 @@ export class MovieListComponent implements OnInit {
     {viewValue: 'Biography'},
     {viewValue: 'Comedy'},
     {viewValue: 'Crime'},
-    {viewValue: 'Documentary'},
     {viewValue: 'Drama'},
     {viewValue: 'Family'},
     {viewValue: 'Fantasy'},
@@ -75,6 +74,15 @@ export class MovieListComponent implements OnInit {
 
   toggleButton(): void {
     this.show = !this.show;
+    if (!this.show) {
+      this.paginator.pageSize = 12;
+      this.need = this.need - this.need % 4;
+      this.dataChange = new BehaviorSubject<MovieList[]>([]);
+      this.getMovieList();
+    }
+    if (this.show) {
+      this.paginator.pageSize = 10;
+    }
   }
 
   getAmountOfMatches(): void {
