@@ -199,7 +199,6 @@ export class MovieListComponent implements OnInit {
     this.paginator.pageIndex = event.pageIndex;
     this.paginator.pageSize = event.pageSize;
     this.need = ((this.paginator.pageIndex + 1) * this.paginator.pageSize) - (this.have);
-    console.log('N/H: ', this.need, this.have);
     if (0 < this.need && this.searchWord !== '') {
       this.searchFor(this.searchWord);
     } else {
