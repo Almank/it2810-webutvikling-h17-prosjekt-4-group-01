@@ -4,6 +4,17 @@
       <input #box (keyup)="searchDatabase(box.value)" autofocus matInput placeholder="Search for Top Movies">
       <mat-hint><strong></strong>Type in Title, Year or Genre and hit enter to save the search if you are logged in </mat-hint>
     </mat-form-field>
+    <label>Search the databse for: </label>
+    <br>
+    <label Title class="form-check-inline"> Titles:
+      <input class="form-check-input" type="radio" name="mode" [value]="1" checked="checked" (change)="searchFor()">
+    </label> <br>
+    <label Directors class="form-check-inline"> Directors:
+      <input class="form-check-input" type="radio" name="mode" [value]="2" (change)="searchFor(); this.searchCriteria = 2">
+    </label> <br>
+    <label Actors class="form-check-inline"> Actors:
+       <input class="form-check-input" type="radio" name="mode" [value]="3" (change)="searchFor(); this.searchCriteria = 3">
+    </label>
   </form>
 </div>
 <div class="example-form">
