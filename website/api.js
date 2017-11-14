@@ -87,7 +87,20 @@ function authenticate(username, password, fn) {
   });
 }
 
-// Login
+//Verify Expiration
+router.post('/login/verify', function (req, res) {
+  let dateNow = new Date();
+  let verifiedToken = jwt.decode(req.body.token, config.secret);
+  let date = String(dateNow.getTime()).slice(0, 10);
+  date = Number(date);
+  if (verifiedToken.exp < date){
+    res.status(401).json({validation: false, message: 'Your session has expired, please login again'});
+  } else {
+    res.status(200).json({validation: true, message: 'Session has expired'});
+  }
+});
+
+//Login
 router.post('/login', function(req, res){
     authenticate(req.body.username, req.body.password, function (err, user) {
       if (err){
@@ -120,6 +133,56 @@ router.post('/new_password', function (req, res) {
       } else {
         res.status(401).send({message: 'Wrong password!'});
       }
+    }
+  });
+});
+
+//Get Favorites
+router.post('/favorites', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if(user !== null) {
+      res.status(200).json(user.favorites);
+    }
+  });
+});
+
+//Check If Favorite Exists
+router.post('/favorites/exists', function (req, res) {
+  let exists = false;
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if(user !== null) {
+      if (user.favorites.indexOf(req.body.movie_id) >= 0){
+        exists = true;
+      }
+      res.status(200).json(exists);
+    }
+  });
+});
+
+//Modify Favorites
+router.post('/favorites/modify', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if(user !== null) {
+      if (req.body.newFavorite) {
+        user.favorites.push(req.body.movie_id);
+      } else {
+        let index = user.favorites.indexOf(req.body.movie_id);
+        if (index > -1) {
+          user.favorites.splice(index, 1);
+        }
+      }
+      db.collection('users').save(user,
+        function(err, docs) {
+          if (err) {
+            handleError(res, err);
+          }else {
+            res.status(200).json(docs);
+          }
+        }
+      );
     }
   });
 });

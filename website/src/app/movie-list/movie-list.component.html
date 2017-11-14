@@ -6,6 +6,10 @@
     </mat-form-field>
   </form>
 </div>
+<div id="viewBtnWrap">
+  <span matTooltip="Grid View"><button mat-button routerLink="/grid"><mat-icon class="viewGrid">view_comfy</mat-icon></button></span>
+  <span matTooltip="List View"><button mat-button routerLink="/list"><mat-icon class="viewList">view_list</mat-icon></button></span>
+</div>
 <div class="example-container mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource">
     <!-- Title Column -->

@@ -11,7 +11,14 @@
   </mat-dialog-content>
   <hr>
   <mat-dialog-actions>
-    <button mat-raised-button (click)="onCloseConfirm()"><mat-icon class="playIcon">stars</mat-icon></button>
+    <div *ngIf="data.auth">
+      <div *ngIf="buttonClicked">
+        <button class="favorite_clicked" [class.favorite_clicked]="yellow" mat-raised-button (click)="toggleFavorite(data._id, data.favorited)"><mat-icon class="playIcon">stars</mat-icon></button>
+      </div>
+      <div *ngIf="!buttonClicked">
+        <button class="favorite_clicked" [class.favorite_clicked]="data.favorited" mat-raised-button (click)="toggleFavorite(data._id, data.favorited)"><mat-icon class="playIcon">stars</mat-icon></button>
+      </div>
+    </div>
     <button mat-raised-button (click)="onCloseCancel()"><mat-icon class="playIcon">cancel</mat-icon></button>
   </mat-dialog-actions>
 </div>

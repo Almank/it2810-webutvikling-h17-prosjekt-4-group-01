@@ -23,7 +23,7 @@
 }
 img{
     height: 100%;
-    width: auto;
+    width: 100%;
 }
 
 mat-grid-tile {
@@ -32,6 +32,11 @@ mat-grid-tile {
 }
 mat-grid-tile:hover mat-grid-tile-footer{
     background-color: #3f94b5;
+    cursor: pointer;
+}
+.mat-grid-tile:hover {
+  cursor: pointer;
+  opacity: 0.90;
 }
 mat-grid-list {
     margin-top: 20px;
@@ -41,4 +46,8 @@ mat-grid-list {
 mat-grid-tile-footer {
     font-family: Webly Sleek Kursiv;
     font-weight: bold;
+}
+#viewBtnWrap{
+    margin-left: 18%;
+    margin-bottom: 10px;
 }

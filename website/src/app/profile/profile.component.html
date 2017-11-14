@@ -1,11 +1,16 @@
 <div class="profile-container">
   <mat-card class="profile-card">
-    <button class="logout-button" mat-button (click)="onLogout()">Logout</button>
+    <div class="profileheader">
+        <p class="profile-head">MY PAGE</p>
+        <button class="logout-button" mat-button (click)="onLogout()">Logout</button>
+    </div>
     <mat-tab-group selectedIndex="0" [@.disabled]="true">
       <mat-tab label="Profile">
+          <h4 class="title">Your profile information</h4>
+          <hr class="card-hr">
         <mat-card-header class="mat-card-header">
           <mat-card-title>
-            <strong>{{user}}</strong>
+            <p>Username:</p><strong>{{user}}</strong>
           </mat-card-title>
           <img src="https://source.unsplash.com/random/200x200">
         </mat-card-header>
@@ -23,14 +28,27 @@
               <input matInput placeholder="New Password" type="password" name="newPassword" ngModel/>
             </mat-form-field>
             <br>
-            <button class="save-button" mat-button>Click me!</button>
+            <button class="save-button" mat-button>Save password</button>
           </form>
         </mat-card-content>
       </mat-tab>
 
       <mat-tab label="Search History">
-        <h3>Search History</h3>
+        <h4 class="title">Search History</h4>
+        <hr class="card-hr">
         <p>Future table of content</p>
+        <mat-nav-list>
+            <mat-list-item *ngFor="let search of searches"> {{ search }} </mat-list-item>
+        </mat-nav-list>
+      </mat-tab>
+
+      <mat-tab label="Favourites">
+        <h4 class="title">Your favourite movies</h4>
+        <hr class="card-hr">
+        <p>Future table of content</p>
+        <mat-nav-list>
+            <mat-list-item *ngFor="let favourite of favourites"> {{ favourite }} </mat-list-item>
+        </mat-nav-list>
       </mat-tab>
 
     </mat-tab-group>

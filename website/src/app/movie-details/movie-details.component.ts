@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import {MAT_DIALOG_DATA} from '@angular/material';
+import {Favorite} from '../profile/profile.favorite.service';
 
 @Component({
   selector: 'app-movie-details',
@@ -8,18 +9,29 @@ import {MAT_DIALOG_DATA} from '@angular/material';
   styleUrls: ['./movie-details.component.css']
 })
 export class MovieDetailsComponent implements OnInit {
+  toggled = false;
+  buttonClicked = false;
 
-  constructor(public thisDialogRef: MatDialogRef<MovieDetailsComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(public thisDialogRef: MatDialogRef<MovieDetailsComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private fav: Favorite) {
+  }
 
   ngOnInit() {
   }
 
-  onCloseConfirm() {
-    this.thisDialogRef.close('Confirm');
+  toggleFavorite(id, favorited) {
+    this.fav.favorite(id);
+    if (!this.buttonClicked) {
+      this.toggled = favorited;
+    }
+    this.toggled = !this.toggled;
+    this.buttonClicked = true;
   }
 
   onCloseCancel() {
     this.thisDialogRef.close('Cancel');
   }
 
+  get yellow() {
+    return this.toggled;
+  }
 }

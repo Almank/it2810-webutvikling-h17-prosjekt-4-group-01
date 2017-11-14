@@ -34,3 +34,7 @@ flex: 1 1 auto;
 .login-button{
   display: inline-flex;
 }
+
+.pageTitle:hover{
+  cursor: pointer;
+}
