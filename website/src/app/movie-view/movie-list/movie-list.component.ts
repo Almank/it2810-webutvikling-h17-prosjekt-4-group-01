@@ -25,6 +25,7 @@ export class MovieListComponent implements OnInit {
   searchActor = '';
   searchDirector = '';
   searchWord = '';
+  searchCriteria = 1;
   dataChange: BehaviorSubject<MovieList[]> = new BehaviorSubject<MovieList[]>([]);
   validRefresh = false;
   startYear: any = 0;
@@ -172,26 +173,27 @@ export class MovieListComponent implements OnInit {
       this.have = 0;
       this.need = this.paginator.pageSize;
       this.dataChange = new BehaviorSubject<MovieList[]>([]);
-      this.searchFor(value);
+      this.searchWord = value;
+      this.searchFor();
     } else {
       this.searchWord = '';
       }
   }
 
-  searchFor(value) {
-    this.searchTitle = value;
-    this.getMovieList();
+  searchFor() {
+    if (this.searchCriteria === 1){
+      this.searchTitle = this.searchWord;
 
+    } else if (this.searchCriteria === 2){
+      this.searchDirector = this.searchWord;
+
+    } else if (this.searchCriteria === 3){
+      this.searchActor = this.searchWord;
+    }
+    this.getMovieList();
     this.searchTitle = '';
-    this.searchDirector = value;
-    this.getMovieList();
-
     this.searchDirector = '';
-    this.searchActor = value;
-    this.getMovieList();
-
     this.searchActor = '';
-    this.searchWord = value;
   }
 
   changeValues(event) {
@@ -200,9 +202,15 @@ export class MovieListComponent implements OnInit {
     this.paginator.pageSize = event.pageSize;
     this.need = ((this.paginator.pageIndex + 1) * this.paginator.pageSize) - (this.have);
     if (0 < this.need && this.searchWord !== '') {
-      this.searchFor(this.searchWord);
+      this.searchFor();
     } else {
       this.getMovieList();
+    }
+  }
+  setSearch(){
+    console.log(this.searchCriteria);
+    if(this.searchWord !== ""){
+      this.searchFor();
     }
   }
 
@@ -234,6 +242,8 @@ export class MovieListComponent implements OnInit {
     this.validRefresh = true;
     this.searchDatabase(this.searchWord);
   }
+
+
 }
 
 /**
