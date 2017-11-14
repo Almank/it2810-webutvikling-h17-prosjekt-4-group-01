@@ -7,13 +7,13 @@
     <label>Search the databse for: </label>
     <br>
     <label Title class="form-check-inline"> Titles:
-      <input class="form-check-input" type="radio" name="mode" [value]="1" checked="checked" (change)="searchFor(1)">
+      <input class="form-check-input" type="radio" name="mode" [value]="1" checked="checked" (change)=" this.searchCriteria = 1; setSearch()">
     </label> <br>
     <label Directors class="form-check-inline"> Directors:
-      <input class="form-check-input" type="radio" name="mode" [value]="2" (change)="searchFor(2)">
+      <input class="form-check-input" type="radio" name="mode" [value]="2" (change)=" this.searchCriteria = 2; setSearch()">
     </label> <br>
     <label Actors class="form-check-inline"> Actors:
-       <input class="form-check-input" type="radio" name="mode" [value]="3" (change)="searchFor(3)">
+       <input class="form-check-input" type="radio" name="mode" [value]="3" (change)=" this.searchCriteria = 3; setSearch()">
     </label>
   </form>
 </div>

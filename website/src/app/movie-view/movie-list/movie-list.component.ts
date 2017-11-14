@@ -207,10 +207,10 @@ export class MovieListComponent implements OnInit {
       this.getMovieList();
     }
   }
-  setSearch(v) {
-    console.log(v);
+
+  setSearch() {
     if (this.searchWord !== '') {
-      this.searchFor();
+      this.searchDatabase(this.searchWord);
     }
   }
 
