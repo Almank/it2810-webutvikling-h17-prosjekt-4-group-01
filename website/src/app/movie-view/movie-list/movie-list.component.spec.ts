@@ -1,28 +1,21 @@
-import { TestBed, async, MovieListComponent } from '../../import-module'
+
+import {TestBed, async, MovieListComponent} from '../../import-module';
+import {MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule, MatTableModule} from '@angular/material';
+import {MovieListService} from '../movie-view.service';
+import {HttpClientModule} from '@angular/common/http';
 
 
-describe('AppComponent', () => {
+describe('MovieListComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        MovieListComponent
-      ],
+      imports: [MatInputModule, MatIconModule, MatTableModule, MatPaginatorModule, MatDialogModule, HttpClientModule],
+      declarations: [MovieListComponent],
+      providers: [{provide: MovieListService}],
     }).compileComponents();
   }));
-  it('should create the app', async(() => {
+  it('should create the MovieList', async(() => {
     const fixture = TestBed.createComponent(MovieListComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  }));
-  it(`should have as title 'app'`, async(() => {
-    const fixture = TestBed.createComponent(MovieListComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app');
-  }));
-  it('should render title in a h1 tag', async(() => {
-    const fixture = TestBed.createComponent(MovieListComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
   }));
 });

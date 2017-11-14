@@ -9,6 +9,8 @@ import {Favorite} from '../../profile/profile.favorite.service';
   styleUrls: ['./movie-details.component.css']
 })
 export class MovieDetailsComponent implements OnInit {
+  toggled = false;
+  buttonClicked = false;
 
   constructor(public thisDialogRef: MatDialogRef<MovieDetailsComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private fav: Favorite) {
   }
@@ -16,12 +18,20 @@ export class MovieDetailsComponent implements OnInit {
   ngOnInit() {
   }
 
-  toggleFavorite(id) {
+  toggleFavorite(id, favorited) {
     this.fav.favorite(id);
+    if (!this.buttonClicked) {
+      this.toggled = favorited;
+    }
+    this.toggled = !this.toggled;
+    this.buttonClicked = true;
   }
 
   onCloseCancel() {
     this.thisDialogRef.close('Cancel');
   }
 
+  get yellow() {
+    return this.toggled;
+  }
 }
