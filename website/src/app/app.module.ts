@@ -17,7 +17,6 @@ import { Favorite } from './profile/profile.favorite.service';
 
 
 import { MovieDetailsComponent, RouterModule, Routes } from './import-module';
-import { MovieModalComponent } from './movie-view/movie-modal/movie-modal.component';
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},
@@ -33,7 +32,6 @@ const appRoutes: Routes = [
     ProfileComponent,
     AuthComponent,
     MovieDetailsComponent,
-    MovieModalComponent,
   ],
   imports: [
     BrowserModule,
