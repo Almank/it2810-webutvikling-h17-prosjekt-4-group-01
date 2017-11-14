@@ -6,7 +6,6 @@ export class MovieListService {
 
   constructor(private http: HttpClient) {}
 
-
   getMovieList(comp): Promise<MovieList[]> {
     if (!(comp.selectedGenre === undefined || comp.selectedGenre === '')) {
       comp.selectedGenre = comp.selectedGenre.slice(0, -1);

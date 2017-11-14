@@ -27,11 +27,21 @@
   </form>
 </div>
 <div id="viewBtnWrap">
-  <span matTooltip="Grid View"><button mat-button routerLink="/grid"><mat-icon class="viewGrid">view_comfy</mat-icon></button></span>
-  <span matTooltip="List View"><button mat-button routerLink="/list"><mat-icon class="viewList">view_list</mat-icon></button></span>
+  <span matTooltip="Grid View">
+    <button mat-button (click)="toggleButton()">
+      <mat-icon class="viewGrid">view_comfy</mat-icon>
+    </button>
+  </span>
 </div>
-<div class="example-container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource">
+<div><mat-grid-list cols="4" rowHeight="1:1.5" gutterSize="12px" [class.show]="!show">
+  <mat-grid-tile *ngFor="let movie of data" (click)="openDialog(movie)"><img id="gridPoster" src="{{movie.poster}}" alt="">
+    <mat-grid-tile-footer>{{movie.title}}</mat-grid-tile-footer>
+  </mat-grid-tile>
+</mat-grid-list></div>
+
+<div class="example-container mat-elevation-z8" [class.show]="show">
+
+  <mat-table #table [dataSource]="dataSource" >
     <!-- Title Column -->
     <ng-container matColumnDef="title">
       <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>

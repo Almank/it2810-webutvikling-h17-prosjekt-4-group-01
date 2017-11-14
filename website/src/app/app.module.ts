@@ -10,7 +10,6 @@ import { AppComponent } from './app.component';
 import {CdkTableModule} from '@angular/cdk/table';
 import { MovieListComponent } from './movie-view/movie-list/movie-list.component';
 import { HeaderComponent } from './header/header.component';
-import { MovieGridComponent} from "./movie-view/movie-grid/movie-grid.component";
 import { ProfileComponent } from './profile/profile.component';
 import { AuthComponent } from './auth/auth.component';
 import { MovieListService } from './movie-view/movie-view.service';
@@ -23,7 +22,6 @@ const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},
   { path: 'list', component: MovieListComponent },
-  { path: 'grid',  component: MovieGridComponent },
   { path: '**', component: MovieListComponent }
 ];
 
@@ -35,9 +33,7 @@ const appRoutes: Routes = [
     ProfileComponent,
     AuthComponent,
     MovieDetailsComponent,
-    MovieGridComponent,
     MovieModalComponent,
-    MovieGridComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,6 +68,4 @@ const appRoutes: Routes = [
   providers: [MovieListService, Favorite],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-
-}
+export class AppModule {}
