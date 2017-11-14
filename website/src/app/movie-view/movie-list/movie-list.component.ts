@@ -138,6 +138,7 @@ export class MovieListComponent implements OnInit {
     /** Fill up the database with 25 movies. */
     for (let i = 0; i < movieData.length ; i++) {
       const copiedData = this.data;
+      console.log(copiedData);
       if (!(this.checkDuplicate(copiedData, i, movieData))) {
         copiedData.push(movieData[i]);
       }
@@ -211,7 +212,7 @@ export class MovieListComponent implements OnInit {
   setSearch(){
     console.log(this.searchCriteria);
     if(this.searchWord !== ""){
-      this.searchFor();
+      this.searchDatabase(this.searchWord);
     }
   }
 
