@@ -181,13 +181,13 @@ export class MovieListComponent implements OnInit {
   }
 
   searchFor() {
-    if (this.searchCriteria === 1){
+    if (this.searchCriteria === 1) {
       this.searchTitle = this.searchWord;
 
-    } else if (this.searchCriteria === 2){
+    } else if (this.searchCriteria === 2) {
       this.searchDirector = this.searchWord;
 
-    } else if (this.searchCriteria === 3){
+    } else if (this.searchCriteria === 3) {
       this.searchActor = this.searchWord;
     }
     this.getMovieList();
@@ -207,9 +207,9 @@ export class MovieListComponent implements OnInit {
       this.getMovieList();
     }
   }
-  setSearch(){
-    console.log(this.searchCriteria);
-    if(this.searchWord !== ""){
+  setSearch(v) {
+    console.log(v);
+    if (this.searchWord !== '') {
       this.searchFor();
     }
   }
