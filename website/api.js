@@ -95,7 +95,20 @@ function authenticate(username, password, fn) {
   });
 }
 
-// Login
+//Verify Expiration
+router.post('/login/verify', function (req, res) {
+  let dateNow = new Date();
+  let verifiedToken = jwt.decode(req.body.token, config.secret);
+  let date = String(dateNow.getTime()).slice(0, 10);
+  date = Number(date);
+  if (verifiedToken.exp < date){
+    res.status(401).json({validation: false, message: 'Your session has expired, please login again'});
+  } else {
+    res.status(200).json({validation: true, message: 'Session has expired'});
+  }
+});
+
+//Login
 router.post('/login', function(req, res){
     authenticate(req.body.username, req.body.password, function (err, user) {
       if (err){

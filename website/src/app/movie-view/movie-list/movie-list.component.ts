@@ -10,7 +10,7 @@ import { MovieListService } from '../movie-view.service';
 @Component({
   selector: 'movieList',
   templateUrl: './movie-list.component.html',
-  styleUrls: ['./movie-list.component.css']
+  styleUrls: ['./movie-list.component.css'],
 })
 
 export class MovieListComponent implements OnInit {
@@ -59,6 +59,7 @@ export class MovieListComponent implements OnInit {
   selectedGenre: any = [];
   auth: boolean;
   token: string;
+  show = true;
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
     const session = JSON.parse(localStorage.getItem('session'));
@@ -70,6 +71,10 @@ export class MovieListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMovieList();
+  }
+
+  toggleButton(): void {
+    this.show = !this.show;
   }
 
   getAmountOfMatches(): void {

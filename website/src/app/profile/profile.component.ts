@@ -21,6 +21,7 @@ export class ProfileComponent implements OnInit {
     if (session === null || session.auth === false) {
       this.router.navigate(['/login']);
     } else {
+      this.validateToken(session.token);
       this.username = session.username;
       this.token = session.token;
     }
@@ -48,14 +49,26 @@ export class ProfileComponent implements OnInit {
       this.onUserAlert(error.error.message, 'dismiss', false);
     });
   }
-  onUserAlert(message: string, action: string, positive: boolean) {
+  onUserAlert(message: string, action: string, positive: boolean, duration = 2000) {
     let extra = 'alert-negative';
     if (positive) {
       extra = 'alert-positive';
     }
     this.snackBar.open(message, action, {
       extraClasses: [extra],
-      duration: 2000
+      duration: duration
+    });
+  }
+
+  validateToken(token) {
+    const params = JSON.stringify({
+      token: token,
+    });
+    this.http.post('/api/login/verify', params, {headers: this.headers}).subscribe(data => {}, err => {
+      if (isObject(err)) {
+        this.onUserAlert(err.error.message, 'dismiss', false, 4000);
+        this.onLogout();
+      }
     });
   }
 
