@@ -1,4 +1,4 @@
-export { Component, OnInit, ViewChild, NgModule, Injectable } from '@angular/core';
+export { Component, OnInit, ViewChild, NgModule, Injectable, HostListener } from '@angular/core';
 export { MatDialog } from '@angular/material';
 export { DataSource } from '@angular/cdk/collections';
 export { MatPaginator } from '@angular/material';

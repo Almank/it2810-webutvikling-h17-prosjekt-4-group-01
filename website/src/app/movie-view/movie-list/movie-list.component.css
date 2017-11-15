@@ -149,8 +149,13 @@ img{
   width: 100%;
 }
 
+#gridPoster {
+  text-align: center;
+  vertical-align: middle;
+}
+
 mat-grid-tile {
-  background: lightblue;
+  background: white;
   margin: 10px;
 }
 mat-grid-tile:hover mat-grid-tile-footer{
@@ -163,10 +168,12 @@ mat-grid-tile:hover mat-grid-tile-footer{
 }
 mat-grid-list {
   display: none;
+  padding-bottom: 25px !important;
   margin-top: 20px;
   margin-left: 50px;
   margin-right: 50px;
 }
+
 mat-grid-tile-footer {
   font-family: Webly Sleek Kursiv;
   font-weight: bold;
