@@ -10,16 +10,24 @@ const config = {'secret': 'supersecretkey'};
 
 const bcrypt = require('bcryptjs');
 
+// Uppercase first letter in each word and return regex to be searchable.
 function splitElements(str) {
-  if (str === '' || str === undefined){
-      return {$exists:true};
-  } else {
-      return {$in: str.split(",").map((item) => {
-        return item.trim()})
-    }
+  if (str === undefined || str === '') {
+    return { $exists: true }
   }
+  str = str.split(' ');
+  let newArr = '';
+  for (let i = 0; i < str.length; i++) {
+    // Add space between words.
+    if (str.length > 1 && i > 0) {
+      newArr += ' '
+    }
+    newArr += str[i].charAt(0).toUpperCase() + str[i].substr(1);
+  }
+  return { "$regex": newArr }
 }
 
+// Get start and end year to filter.
 function splitYear(str) {
   if (str === undefined || str === '') {
     return [0, 9999];
@@ -201,25 +209,54 @@ function getSortVariable(str, bool) {
     }
 }
 
+function getGenres(genres) {
+  if (genres === undefined || genres === '') {
+    return ''
+  }
+  genres = genres.trim();
+  if (genres.length > 0) {
+    genres = genres.split(",").map((item) => {
+      return item.trim()
+    });
+  }
+
+  let genreElem = [];
+  for (let genre of genres) {
+    genreElem.push({genre: {$regex: ".*" + genre + ".*"}});
+  }
+  return genreElem;
+}
+
 // Get movies
 router.get('/movies/list', function(req, res) {
-    const page = parseInt(req.query.page * 25);
-    const limit = parseInt(req.query.limit);
 
+    let page = parseInt(req.query.page * req.query.limit);
+    let limit = parseInt(req.query.limit);
+    const have = req.query.have;
+    const need = req.query.need;
+
+    if (have !== undefined && need !== undefined){
+      page = parseInt(have);
+      limit = parseInt(need);
+    }
+    const genre = getGenres(req.query.genre);
     const title = splitElements(req.query.title);
     const year = splitYear(req.query.year);
-    const genre = splitElements(req.query.genre);
     const actors = splitElements(req.query.actors);
     const director = splitElements(req.query.director);
     const sort = getSortVariable(req.query.sort, req.query.desc);
 
-    db.collection('movies').find(
-      // Filter correct values
-      { title: title,
-        genre: genre,
+    let filter = { title: title,
         year: { $gte: year[0], $lte: year[1] },
         actors: actors,
-        director: director },
+        director: director };
+    if (genre.length > 0) {
+      filter['$and'] = genre;
+    }
+
+    db.collection('movies').find(
+      // Filter correct values
+      filter,
       // Remove properties from query
       {
         readMore: 0,
@@ -235,6 +272,33 @@ router.get('/movies/list', function(req, res) {
         res.status(200).json(docs);
       }
     });
+});
+
+router.get('/movies/amount', function(req, res) {
+
+  const genre = getGenres(req.query.genre);
+  const title = splitElements(req.query.title);
+  const year = splitYear(req.query.year);
+  const actors = splitElements(req.query.actors);
+  const director = splitElements(req.query.director);
+
+  let filter = { title: title,
+    year: { $gte: year[0], $lte: year[1] },
+    actors: actors,
+    director: director };
+  if (genre.length > 0) {
+    filter['$and'] = genre;
+  }
+  db.collection('movies').find(
+    filter,
+    {readMore: 0, plot: 0, runtime: 0, title: 0, poster: 0, actors: 0, director: 0, year: 0}).toArray(function(err, docs) {
+      if (err) {
+      handleError(res, err.message, "Failed to get amount of movies.");
+    } else {
+
+      res.status(200).json(docs.length);
+    }
+  });
 });
 
 router.get('/movies/modal', function(req, res) {

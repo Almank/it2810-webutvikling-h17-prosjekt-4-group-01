@@ -1,6 +1,7 @@
 /* Movie Table */
 .example-container {
-  display: flex;
+  display: none;
+
   flex-direction: column;
   min-width: 300px;
   width: 65%;
@@ -16,12 +17,15 @@
   font-size: 20px;
 }
 
+.show {
+  display: block;
+}
+
 .mat-table {
   overflow: auto;
   height: auto;
   padding-bottom: 20px;
 }
-
 
 .mat-header-cell{
   font-weight: 900;
@@ -103,7 +107,73 @@
 .mat-hint {
   padding-left: 25px;
 }
+
+.inputYear {
+  width: 80px;
+}
+
+.inputYearTextField {
+  text-align: center;
+}
+
 #viewBtnWrap{
     margin-left: 18%;
     margin-bottom: 10px;
+}
+
+.content{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Search form */
+.example-form {
+  min-width: 300px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  display: block;
+  margin: auto;
+  padding-top: 25px;
+  padding-bottom: 18px;
+}
+.example-full-width {
+  width: 100%;
+}
+.mat-hint {
+  padding-left: 25px;
+}
+img{
+  height: 100%;
+  width: 100%;
+}
+
+mat-grid-tile {
+  background: white;
+  margin: 10px;
+}
+mat-grid-tile:hover mat-grid-tile-footer{
+  background-color: #3f94b5;
+  cursor: pointer;
+}
+.mat-grid-tile:hover {
+  cursor: pointer;
+  opacity: 0.90;
+}
+mat-grid-list {
+  display: none;
+  padding-bottom: 25px !important;
+  margin-top: 20px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+mat-grid-tile-footer {
+  font-family: Webly Sleek Kursiv;
+  font-weight: bold;
+}
+#viewBtnWrap{
+  margin-left: 18%;
+  margin-bottom: 10px;
 }
