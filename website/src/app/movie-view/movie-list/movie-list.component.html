@@ -39,7 +39,7 @@
 </div>
 <div id="viewBtnWrap">
   <span matTooltip="Grid View">
-    <button mat-button (click)="toggleButton()">
+    <button mat-button (click)="toggleButton()" aria-label="toggleButton">
       <mat-icon class="viewGrid">view_comfy</mat-icon>
     </button>
   </span>
@@ -47,7 +47,7 @@
 <div>
   <mat-grid-list cols="4" rowHeight="1:1.45" gutterSize="12px" [class.show]="!show" class="gridList">
     <mat-grid-tile *ngFor="let movie of data" (click)="openDialog(movie)" title={{movie.title}}>
-      <img id="gridPoster" src="{{movie.poster}}" alt="">
+      <img class="gridPoster" src="{{movie.poster}}" alt="">
       <mat-grid-tile-footer>{{movie.title}}</mat-grid-tile-footer>
     </mat-grid-tile>
   </mat-grid-list>
