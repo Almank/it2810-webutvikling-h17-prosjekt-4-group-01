@@ -34,3 +34,38 @@ serve it. Proceed with the following commands inside the `/website` folder.
 - `node server.js`
 
 You may now visit your local website on `localhost:8084`.
+
+### The Projects Tests <a name="Tests"></a>
+
+If you would like to run through the projects tests, you have to make sure that you have
+installed all dependencies using `npm install` first.
+
+To proceed running the tests, use the command: `npm test`  
+Karma will now launch the testing environment, and you have to wait a couple of seconds
+until the browser opens and runs the tests.  
+
+After all tests have completed, you will have a nice overview over all the tests ran, including
+descriptive information if any of the tests fail to success.
+
+#### Test Structure
+
+The testing environment consists of the packages `Jasmine` and `Karma`.
+These ensure that we have a structured environment, and can easily write more tests underway
+the project.  
+
+All test files are located in the `/src` folder, and have the file ending `.spec.ts`.  
+You may think that the tests are scattered around the repository, but in good old fashioned
+angular style, they are not. They are actually bundled together with its parent component, such
+that you always will know where to find the bug/error that broke the test upon failure.
+
+Current test files and their location:
+```
+- api.component.spec.ts           (/src)
+- app.component.spec.ts           (/src/app)
+- auth.component.spec.ts          (/src/app/auth)
+- header.component.spec.ts        (/src/app/header)
+- movie-details.component.spec.ts (/src/app/movie-view/movie-details)
+- movie-list.component.spec.ts    (/src/app/movie-view/movie-list)
+- profile.component.spec.ts       (/src/app/profile)
+- search-bar.component.spec.ts    (/src/app/search-bar)
+```
