@@ -1,5 +1,5 @@
 import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
-  Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../../import-module';
+  Observable, HttpClient, MovieDetailsComponent, MatSelectModule, HostListener } from '../../import-module';
 
 import { HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/startWith';
@@ -40,7 +40,6 @@ export class MovieListComponent implements OnInit {
     {viewValue: 'Biography'},
     {viewValue: 'Comedy'},
     {viewValue: 'Crime'},
-    {viewValue: 'Documentary'},
     {viewValue: 'Drama'},
     {viewValue: 'Family'},
     {viewValue: 'Fantasy'},
@@ -75,6 +74,27 @@ export class MovieListComponent implements OnInit {
 
   toggleButton(): void {
     this.show = !this.show;
+    if (!this.show) {
+      this.paginator.pageSize = 12;
+      this.need = 12;
+      this.have = 0;
+      this.dataChange = new BehaviorSubject<MovieList[]>([]);
+      this.getMovieList();
+    }
+    if (this.show) {
+      this.paginator.pageSize = 10;
+    }
+  }
+
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    if (!this.show) {
+      if (document.documentElement.scrollTop + document.documentElement.offsetHeight === document.documentElement.scrollHeight) {
+        this.have += 12;
+        this.need = 12;
+        this.getMovieList();
+      }
+    }
   }
 
   getAmountOfMatches(): void {
