@@ -60,6 +60,16 @@ export class MovieListComponent implements OnInit {
   auth: boolean;
   token: string;
   show = true;
+  sorts = [
+      {viewValue: 'Title (Descending)'},
+      {viewValue: 'Title (Ascending)'},
+      {viewValue: 'Year (Descending)'},
+      {viewValue: 'Year (Ascending)'},
+      {viewValue: 'Genre (Descending)'},
+      {viewValue: 'Genre (Ascending)'}];
+  selectedSort: string;
+  descAsc: string;
+  sortCriteria = 1;
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
     const session = JSON.parse(localStorage.getItem('session'));
@@ -242,7 +252,28 @@ export class MovieListComponent implements OnInit {
     this.validRefresh = true;
     this.searchDatabase(this.searchWord);
   }
-
+  setSort(event) {
+    var selected = event.value.toLowerCase();
+    const index = selected.indexOf(" ");
+    this.selectedSort = selected.substr(0, index);
+    var direction = selected.substr(index + 1);
+    if (this.selectedSort === 'year'){
+        if (direction === '(descending)'){
+                this.descAsc = 'true';
+            }else if (direction === '(ascending)'){
+                this.descAsc = 'false';
+        }
+    }
+    else{
+        if (direction === '(descending)'){
+                this.descAsc = 'false';
+            }else if (direction === '(ascending)'){
+                this.descAsc = 'true';
+        }
+    }
+    this.validRefresh = true;
+    this.searchDatabase(this.searchWord);
+  }
 
 }
 
