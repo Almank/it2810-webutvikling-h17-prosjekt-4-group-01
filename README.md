@@ -12,7 +12,7 @@ please visit our[**wiki**](https://github.com/IT2810/it2810-webutvikling-h17-pro
 
 ### Table of contents:
 1. [Running Website Locally](#Local)
-2. [The Projects Tests]($Tests)
+2. [The Projects Tests](#Tests)
 
 ### Running Website Locally <a name="Local"></a>
 To run the website locally, you have to make sure you have the following dependencies
