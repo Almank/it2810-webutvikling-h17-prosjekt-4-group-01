@@ -149,11 +149,6 @@ img{
   width: 100%;
 }
 
-#gridPoster {
-  text-align: center;
-  vertical-align: middle;
-}
-
 mat-grid-tile {
   background: white;
   margin: 10px;
