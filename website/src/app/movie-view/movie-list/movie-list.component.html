@@ -1,6 +1,6 @@
 <div class="searchWrap">
-  <form class="example-form">
-    <mat-form-field class="example-full-width">
+  <form class="form">
+    <mat-form-field class="full-width">
       <input #box (keyup)="searchDatabase(box.value)" autofocus matInput placeholder="Search for Top Movies">
       <mat-hint><strong></strong>Type in Title, Year or Genre and hit enter to save the search if you are logged in </mat-hint>
     </mat-form-field>
@@ -17,7 +17,7 @@
     </label>
   </form>
 </div>
-<div class="example-form">
+<div class="form">
   <form>
     <mat-form-field class="inputYear">
       <input type="tel" class="inputYearTextField" matInput #startYear (keyup)="setYear(startYear.value, 'start')" maxlength=4 placeholder="From" pattern="/^\d{4}$/">
@@ -53,7 +53,7 @@
   </mat-grid-list>
 </div>
 
-<div class="example-container mat-elevation-z8" [class.show]="show">
+<div class="container mat-elevation-z8" [class.show]="show">
 
   <mat-table #table [dataSource]="dataSource" >
     <!-- Title Column -->

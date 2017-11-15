@@ -1,5 +1,5 @@
 /* Movie Table */
-.example-container {
+.container {
   display: none;
 
   flex-direction: column;
@@ -9,7 +9,7 @@
   text-align: center;
 }
 
-.example-header {
+.header {
   min-height: 64px;
   display: flex;
   align-items: center;
@@ -89,7 +89,7 @@
 }
 
 /* Search form */
-.example-form {
+.form {
   min-width: 150px;
   max-width: 500px;
   width: 100%;
@@ -100,7 +100,7 @@
   padding-bottom: 18px;
 }
 
-.example-full-width {
+.full-width {
   width: 100%;
 }
 
@@ -128,7 +128,7 @@
 }
 
 /* Search form */
-.example-form {
+.form {
   min-width: 300px;
   max-width: 500px;
   width: 100%;
@@ -138,7 +138,7 @@
   padding-top: 25px;
   padding-bottom: 18px;
 }
-.example-full-width {
+.full-width {
   width: 100%;
 }
 .mat-hint {
