@@ -31,6 +31,10 @@
   margin: 3px 0 0 0;
 }
 
+.mat-button {
+  height: 50px;
+}
+
 .viewFilter {
   width: 75px;
   height: 25px;
@@ -67,6 +71,7 @@
 .mat-header-row {
   background-color: #34384c;
 }
+
 
 .mat-cell{
   font-size: 18px;
@@ -243,7 +248,7 @@ mat-grid-list {
 
 #viewBtnWrap{
   position: absolute;
-  bottom: 22px;
+  bottom: 15px;
 }
 
 .viewGrid {
