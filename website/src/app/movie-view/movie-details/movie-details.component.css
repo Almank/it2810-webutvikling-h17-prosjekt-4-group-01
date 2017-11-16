@@ -21,3 +21,7 @@
 #imageWrap{
   text-align: center;
 }
+
+.favorite_clicked {
+  background-color: #FCA311;
+}

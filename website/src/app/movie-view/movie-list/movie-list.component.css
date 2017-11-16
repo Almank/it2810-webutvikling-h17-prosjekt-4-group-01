@@ -17,7 +17,7 @@
 
 .fixedSearch {
   position: fixed !important;
-  top: 0px;
+  top: 0;
 }
 
 .title {
@@ -59,8 +59,13 @@
 }
 
 .mat-header-cell{
-  font-weight: 900;
+  font-weight: 400;
   font-size: 21px;
+  color: #FEFDFD;
+}
+
+.mat-header-row {
+  background-color: #34384c;
 }
 
 .mat-cell{
@@ -219,7 +224,7 @@ mat-grid-tile {
   box-shadow: 0px 4px 33px 0px rgba(0,0,0,0.75);
 }
 mat-grid-tile:hover mat-grid-tile-footer{
-  background-color: #3f94b5;
+  background-color: #34384c;
   cursor: pointer;
 }
 .mat-grid-tile:hover {
@@ -230,11 +235,6 @@ mat-grid-list {
   display: none;
   padding-bottom: 25px !important;
   margin: 0 16.8% 25px 16.8%;
-}
-
-mat-grid-tile-footer {
-  font-family: Webly Sleek Kursiv;
-  font-weight: bold;
 }
 
 .gridList {
