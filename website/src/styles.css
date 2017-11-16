@@ -26,7 +26,7 @@ html, body {
   font-family: GeosansLight;
 }
 
-.mat-select-arrow, .mat-select-value, .mat-input-placeholder  {
+.selectSearch .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow, .mat-select-value, .mat-input-placeholder  {
   color: rgba(254,253,253,0.4) !important;
   font: 14px GeosansLight !important;
   text-align: center;
@@ -46,3 +46,13 @@ html, body {
   transform: scale(.0);
 }
 
+
+.mat-paginator-page-size-select, .ng-tns-c6-4, .mat-select-arrow {
+  color: #1E2339 !important;
+}
+
+.mat-paginator-page-size-select {
+  height: 30px;
+  background-color: #FEFDFD;
+  border: 1px solid #1E2339;
+}

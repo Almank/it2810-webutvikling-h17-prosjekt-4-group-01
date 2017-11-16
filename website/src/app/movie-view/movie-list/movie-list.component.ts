@@ -105,13 +105,15 @@ export class MovieListComponent implements OnInit {
 
   @HostListener('window:scroll', [])
   onScroll(): void {
+    console.log(document.body.scrollTop);
     if (!this.show) {
-      if (document.documentElement.scrollTop > 100) {
+      if (document.documentElement.scrollTop || document.body.scrollTop > 100) {
         this.fixedSearch = true;
-      } else if (document.documentElement.scrollTop < 100) {
+      } else if (document.documentElement.scrollTop || document.body.scrollTop < 100) {
         this.fixedSearch = false;
       }
-      if (document.documentElement.scrollTop + document.documentElement.offsetHeight === document.documentElement.scrollHeight) {
+      if ((document.documentElement.scrollTop + document.documentElement.offsetHeight === document.documentElement.scrollHeight)
+      || (document.body.scrollTop + document.body.offsetHeight === document.body.scrollHeight)) {
         this.have += 12;
         this.need = 12;
         if (this.searchWord !== '' || this.searchWord !== undefined) {
@@ -127,7 +129,7 @@ export class MovieListComponent implements OnInit {
     this.movieListService.getAmountOfMovies(this).then(length => this.pageLength = length);
   }
 
-  /** Hvorfor heter begge funksjonene get movielist????? */
+  /** Get movies and amount from service file. */
   getMovieList(): void {
     this.getAmountOfMatches();
     this.movieListService.getMovieList(this).then(movies => this.createList(movies));
@@ -278,7 +280,6 @@ export class MovieListComponent implements OnInit {
   }
 
   setGenre(event) {
-    console.log(event);
     this.selectedGenre = '';
     if (event.value[0] !== undefined && event.value[0] !== 'All') {
       for (const genre of event.value) {
@@ -313,6 +314,10 @@ export class MovieSource extends DataSource<any> {
     ];
     return Observable.merge(...displayDataChanges).map(() => {
       const data = this._movieComponent.data.slice();
+      /** Add space between genres. */
+      for (let i = 0; i < data.length; i++) {
+        data[i].genre = data[i].genre.toString().split(',').join(', ');
+      }
   /** Grab the page's slice of data. */
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
       return data.splice(startIndex, this._paginator.pageSize);

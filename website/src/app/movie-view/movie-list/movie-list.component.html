@@ -3,12 +3,20 @@
   <div class="searchContent" [class.fixedSearch]="fixedSearch">
     <h1 class="title">Search Blockbuster for your favourite movies!</h1>
     <div class="searchBar">
+      <div id="viewBtnWrap">
+      <span matTooltip="{{this.viewTooltip}}">
+        <button mat-button (click)="toggleButton()" aria-label="toggleButton">
+          <mat-icon class="viewGrid">{{this.viewIcon}}</mat-icon>
+        </button>
+      </span>
+      </div>
+
       <span matTooltip="Search movies">
         <input #input class="searchInputField" (keyup)="searchDatabase(input.value)" autofocus placeholder="Search for movies">
       </span>
+
       <span matTooltip="Choose search">
         <mat-select class="selectSearch" [value]="1" (change)=setSearch($event)>
-
             <mat-option class="searchOption mat-selected mat-active" aria-selected="true" [value]="1">
               Title
             </mat-option>
@@ -21,6 +29,7 @@
         </mat-select>
       </span>
     </div>
+
     <div class="showFilter">
       <p class="titleFilter">Filter search</p>
       <span matTooltip="Show filters">
@@ -29,6 +38,7 @@
         </button>
       </span>
     </div>
+
     <div class="filterWrapper" [class.showFilterToggle]="showFilter">
         <div class="inputYear">
           <span matTooltip="From year">
@@ -43,23 +53,16 @@
           <p class="inputYearNum" align="end">{{endYear.value.length}} / 4</p>
           </span>
         </div>
-      <mat-form-field class="selectGenre">
-        <span matTooltip="Choose genre">
-          <mat-select  multiple placeholder="Genre" (change)=setGenre($event)>
-            <mat-option *ngFor="let genre of genres" [value]="genre.viewValue">
-              {{ genre.viewValue }}
-            </mat-option>
-          </mat-select>
-        </span>
-        </mat-form-field>
-    </div>
 
-    <div id="viewBtnWrap">
-      <span matTooltip="{{this.viewTooltip}}">
-        <button mat-button (click)="toggleButton()" aria-label="toggleButton">
-          <mat-icon class="viewGrid">{{this.viewIcon}}</mat-icon>
-        </button>
-      </span>
+        <mat-form-field class="selectGenre">
+          <span matTooltip="Choose genre">
+            <mat-select  multiple placeholder="Genre" (change)=setGenre($event)>
+              <mat-option *ngFor="let genre of genres" [value]="genre.viewValue">
+                {{ genre.viewValue }}
+              </mat-option>
+            </mat-select>
+          </span>
+        </mat-form-field>
     </div>
   </div>
 
