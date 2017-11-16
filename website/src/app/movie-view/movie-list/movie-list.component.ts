@@ -86,7 +86,7 @@ export class MovieListComponent implements OnInit {
       this.need = 12;
       this.have = 0;
       this.dataChange = new BehaviorSubject<MovieList[]>([]);
-      this.getMovieList();
+      this.searchDatabase(this.searchWord);
     }
     if (this.show) {
       this.paginator.pageSize = 10;
@@ -102,17 +102,15 @@ export class MovieListComponent implements OnInit {
   @HostListener('window:scroll', [])
   onScroll(): void {
     if (!this.show) {
-      console.log(document.documentElement.scrollTop);
       if (document.documentElement.scrollTop > 100) {
         this.fixedSearch = true;
-        console.log('tru', this.fixedSearch);
-      } else if (document.documentElement.scrollTop < 100){
+      } else if (document.documentElement.scrollTop < 100) {
         this.fixedSearch = false;
       }
       if (document.documentElement.scrollTop + document.documentElement.offsetHeight === document.documentElement.scrollHeight) {
         this.have += 12;
         this.need = 12;
-        this.getMovieList();
+        this.searchFor();
       }
     }
   }
