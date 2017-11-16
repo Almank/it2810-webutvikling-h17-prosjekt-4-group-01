@@ -1,8 +1,8 @@
 <mat-toolbar color="primary" [class.fixedSearch]="!show">
   <div class="header">
     <div matTooltip="Home">
-      <div class="pageTitleContainer" routerLink="/">
-        <mat-icon class="playIcon">play_circle_filled</mat-icon>
+      <div class="pageTitleContainer" routerLink="/" (click)="toggleIcon()">
+        <mat-icon class="playIcon">{{playIcon}}</mat-icon>
         <span class="pageTitle">Blockbuster</span>
       </div>
     </div>

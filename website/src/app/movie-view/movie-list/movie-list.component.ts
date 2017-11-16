@@ -105,11 +105,10 @@ export class MovieListComponent implements OnInit {
 
   @HostListener('window:scroll', [])
   onScroll(): void {
-    console.log(document.body.scrollTop);
     if (!this.show) {
-      if (document.documentElement.scrollTop || document.body.scrollTop > 100) {
+      if ((document.documentElement.scrollTop > 95) || (document.body.scrollTop > 95)) {
         this.fixedSearch = true;
-      } else if (document.documentElement.scrollTop || document.body.scrollTop < 100) {
+      } else if ((document.documentElement.scrollTop > 95) || (document.body.scrollTop < 95)) {
         this.fixedSearch = false;
       }
       if ((document.documentElement.scrollTop + document.documentElement.offsetHeight === document.documentElement.scrollHeight)

@@ -26,12 +26,18 @@ html, body {
   font-family: GeosansLight;
 }
 
-.selectSearch .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow, .mat-select-value, .mat-input-placeholder  {
-  color: rgba(254,253,253,0.4) !important;
+.mat-select-value, .mat-input-placeholder  {
   font: 14px GeosansLight !important;
   text-align: center;
   top:13px;
   font-weight: lighter;
+}
+
+.selectSearch .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow, .mat-select-value,
+.selectGenre .mat-input-wrapper .mat-input-flex .mat-input-infix .mat-input-placeholder-wrapper .mat-input-placeholder,
+.selectGenre .mat-input-wrapper .mat-input-flex .mat-input-infix span .mat-select .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow
+{
+  color: rgba(254,253,253,0.4) !important;
 }
 
 .mat-form-field-underline, .mat-form-field-ripple {
@@ -47,12 +53,12 @@ html, body {
 }
 
 
-.mat-paginator-page-size-select, .ng-tns-c6-4, .mat-select-arrow {
+.mat-paginator-page-size-select, .mat-input-infix .mat-select .mat-select-trigger .mat-select-value .mat-select-value-text, .mat-select-arrow {
   color: #1E2339 !important;
 }
 
 .mat-paginator-page-size-select {
   height: 30px;
   background-color: #FEFDFD;
-  border: 1px solid #1E2339;
+  border: 1px solid rgba(0,0,0,.54);
 }
