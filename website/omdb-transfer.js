@@ -1218,40 +1218,45 @@ function splitElements(str){
 let progress = 0;
 // Access omdb api with movie as query, extract wanted data and save to database.
 for(let movie in list_of_movies){
-    setTimeout(function () {
         let omdb = 'http://www.omdbapi.com/?apikey=8fda5bb&t=' + list_of_movies[movie] + '&type=movie&plot=full';
         let omdbData = '';
-        http.get(omdb, (res) => {
-            // A chunk of data has been recieved.
-            res.on('data', (chunk) => {
-                omdbData += chunk;
-            });
-            // The whole response has been received. save the result to db.
-            res.on('end', () => {
-                omdbData = JSON.parse(omdbData);
-                let genre = splitElements(omdbData.Genre);
-                let director = splitElements(omdbData.Director);
-                let actors = splitElements(omdbData.Actors);
-                if (!(omdbData.Title === undefined)) {
-                  let new_movie = new movie_model({
-                    title: omdbData.Title,
-                    year: omdbData.Year,
-                    runtime: omdbData.Runtime,
-                    genre: genre,
-                    director: director,
-                    actors: actors,
-                    plot: omdbData.Plot,
-                    poster: omdbData.Poster,
-                    readMore: omdbData.Website,
-                  });
+        transferMovie(omdb, omdbData);
+}
 
-                  db.collection('movies').save(new_movie);
-                }
-                progress += 1;
-                console.log(parseFloat(Math.round((100/list_of_movies.length) * progress)).toFixed(2) + "% of data transfered");
-            });
-        }).on("error", (err) => {
-            console.log("Error: " + err.message);
-        });
-    }, 250);
+
+function transferMovie(omdb, omdbData) {
+  setTimeout(function () {
+    http.get(omdb, (res) => {
+      // A chunk of data has been recieved.
+      res.on('data', (chunk) => {
+        omdbData += chunk;
+      });
+      // The whole response has been received. save the result to db.
+      res.on('end', () => {
+        omdbData = JSON.parse(omdbData);
+        let genre = splitElements(omdbData.Genre);
+        let director = splitElements(omdbData.Director);
+        let actors = splitElements(omdbData.Actors);
+        if (!(omdbData.Title === undefined)) {
+          let new_movie = new movie_model({
+            title: omdbData.Title,
+            year: omdbData.Year,
+            runtime: omdbData.Runtime,
+            genre: genre,
+            director: director,
+            actors: actors,
+            plot: omdbData.Plot,
+            poster: omdbData.Poster,
+            readMore: omdbData.Website,
+          });
+
+          db.collection('movies').save(new_movie);
+        }
+        progress += 1;
+        console.log(parseFloat(Math.round((100/list_of_movies.length) * progress)).toFixed(2) + "% of data transfered");
+      });
+    }).on("error", (err) => {
+      console.log("Error: " + err.message);
+    });
+  }, 100);
 }
