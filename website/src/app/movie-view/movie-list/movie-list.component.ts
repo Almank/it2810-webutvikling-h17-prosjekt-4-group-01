@@ -59,6 +59,11 @@ export class MovieListComponent implements OnInit {
   auth: boolean;
   token: string;
   show = true;
+  showFilter = false;
+  arrow = 'keyboard_arrow_down';
+  viewIcon = 'view_comfy';
+  viewTooltip = 'Grid view';
+  fixedSearch = false;
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
     const session = JSON.parse(localStorage.getItem('session'));
@@ -74,6 +79,8 @@ export class MovieListComponent implements OnInit {
 
   toggleButton(): void {
     this.show = !this.show;
+    this.show ? this.viewIcon = 'view_comfy' : this.viewIcon = 'format_list_bulleted';
+    this.show ? this.viewTooltip = 'Grid view' : this.viewTooltip = 'List view';
     if (!this.show) {
       this.paginator.pageSize = 12;
       this.need = 12;
@@ -83,12 +90,25 @@ export class MovieListComponent implements OnInit {
     }
     if (this.show) {
       this.paginator.pageSize = 10;
+      this.fixedSearch = false;
     }
+  }
+
+  toggleFilterButton(): void {
+      this.showFilter = !this.showFilter;
+      this.showFilter ? this.arrow = 'keyboard_arrow_up' : this.arrow = 'keyboard_arrow_down';
   }
 
   @HostListener('window:scroll', [])
   onScroll(): void {
     if (!this.show) {
+      console.log(document.documentElement.scrollTop);
+      if (document.documentElement.scrollTop > 100) {
+        this.fixedSearch = true;
+        console.log('tru', this.fixedSearch);
+      } else if (document.documentElement.scrollTop < 100){
+        this.fixedSearch = false;
+      }
       if (document.documentElement.scrollTop + document.documentElement.offsetHeight === document.documentElement.scrollHeight) {
         this.have += 12;
         this.need = 12;
@@ -228,7 +248,8 @@ export class MovieListComponent implements OnInit {
     }
   }
 
-  setSearch() {
+  setSearch(num) {
+    this.searchCriteria = num.value;
     if (this.searchWord !== '') {
       this.searchDatabase(this.searchWord);
     }
@@ -251,8 +272,9 @@ export class MovieListComponent implements OnInit {
   }
 
   setGenre(event) {
+    console.log(event);
     this.selectedGenre = '';
-    if (event.value[0] !== undefined) {
+    if (event.value[0] !== undefined && event.value[0] !== 'All') {
       for (const genre of event.value) {
         this.selectedGenre += genre;
         this.selectedGenre += ',';

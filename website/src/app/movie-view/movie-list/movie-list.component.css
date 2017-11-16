@@ -1,24 +1,55 @@
 /* Movie Table */
 .container {
   display: none;
-
   flex-direction: column;
   min-width: 300px;
   width: 65%;
-  margin: auto;
   text-align: center;
-}
-
-.header {
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  padding-left: 24px;
-  font-size: 20px;
+  margin: auto auto 25px auto;
+  -webkit-box-shadow: 0px 4px 33px 4px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 4px 33px 4px rgba(0,0,0,0.75);
+  box-shadow: 0px 4px 33px 4px rgba(0,0,0,0.75);
 }
 
 .show {
   display: block;
+}
+
+.fixedSearch {
+  position: fixed !important;
+  top: 0px;
+}
+
+.title {
+  color: #FEFDFD;
+  margin: 5px;
+  text-align: center;
+}
+
+.titleFilter {
+  color: #FEFDFD;
+  margin: 3px 0 0 0;
+}
+
+.viewFilter {
+  width: 75px;
+  height: 25px;
+}
+
+.filterArrow {
+  color: #FEFDFD;
+  top: 5px;
+  vertical-align: top;
+}
+
+.showFilter {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.showFilterToggle {
+  display: flex !important;
 }
 
 .mat-table {
@@ -61,89 +92,120 @@
   cursor: pointer;
 }
 
-.mat-header-row, .mat-row {
-  font-family: GeosansLight;
+.content{
+  display: flex;
+  flex-direction: column;
+  background-color: #1E2339;
 }
 
-/* Paginator inside the table */
-.mat-paginator, .mat-paginator-page-size .mat-select-trigger {
+.searchContent {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-self: center;
+  width: auto;
+  padding:25px 45px 15px 25px;
+  background-color: #1E2339;
+  z-index: 1;
+}
 
-  font-family: GeosansLight;
+.searchOptions {
+  display: flex;
+  color: #FEFDFD;
+  justify-content: space-around;
+}
+
+.searchInputField {
+  border: 0.5px solid rgba(254,253,253,0.4);
+  background-color: #1E2339;
+  color: #FEFDFD;
+  padding: 10px 15px;
+  margin:15px 0 5px 15px;
+  height: 29px;
+  min-width: 300px;
+  max-width: 500px;
   font-size: 16px;
 }
 
-.mat-select-value-text span {
-  font-family: GeosansLight;
+.searchBar {
+  display: flex;
+  justify-content: center;
 }
 
-.mat-select-value{
-  font-family: GeosansLight;
+.form-check-input{
+  -webkit-appearance: checkbox;
+  -moz-appearance: checkbox;
+  appearance: checkbox;
 }
 
-.mat-option {
-  font-family: GeosansLight !important;
-}
-
-.mat-option-text{
-  font-family: GeosansLight !important;
-}
-
-/* Search form */
-.form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
-  display: block;
-  margin: auto;
-  padding-top: 25px;
-  padding-bottom: 18px;
-}
-
-.full-width {
-  width: 100%;
-}
-
-.mat-hint {
-  padding-left: 25px;
+.form-check-inline label {
+  color: rgba(254,253,253,0.4);
 }
 
 .inputYear {
   width: 80px;
+  color: rgba(254,253,253,0.4);
+}
+
+.inputYearNum {
+  color: rgba(254,253,253,0.4);
 }
 
 .inputYearTextField {
   text-align: center;
+  color: rgba(254,253,253,0.4);
+  border: 0;
+  border: 1px solid rgba(254,253,253,0.4);
+  background-color: #1E2339;
+  height: 25px;
+  font-size: 14px;
+  width: 60px;
 }
 
-#viewBtnWrap{
-    margin-left: 18%;
-    margin-bottom: 10px;
+.inputYearNum {
+  font-size: 9px;
+  width: 60px;
+  margin-top:3px;
 }
 
-.content{
-  display: flex;
-  flex-direction: column;
+.selectSearch, .selectGenre {
+  font-size: 20px;
+  width: 75px;
+  padding: 10px 15px;
+  background-color: #1E2339;
+  color: rgba(254,253,253,0.4) !important;
+  border: 1px solid rgba(254,253,253,0.4);
+  border-radius: 0;
+  margin: 15px 15px 5px 0;
+  border-left: 0;
+}
+
+.searchOption, .mat-select-panel .mat-optgroup-label, .mat-select-panel .mat-option {
+  font-size: 16px !important;
+  height: 2em !important;
+  line-height: 2em !important;
+}
+
+.mat-form-field-placeholder-wrapper {
+  height: auto;
+  width: auto;
+}
+
+.selectGenre {
+  border: 1px solid rgba(254,253,253,0.4);
+  font-size: 10px;
+  margin: 0;
+  padding: 0;
+  height: 26.5px;
+  width: 90px;
+}
+
+.filterWrapper {
+  display: none;
   justify-content: center;
+  height: 40px;
 }
 
-/* Search form */
-.form {
-  min-width: 300px;
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
-  display: block;
-  margin: auto;
-  padding-top: 25px;
-  padding-bottom: 18px;
-}
-.full-width {
-  width: 100%;
-}
-.mat-hint {
-  padding-left: 25px;
-}
 img{
   height: 100%;
   width: 100%;
@@ -152,6 +214,9 @@ img{
 mat-grid-tile {
   background: white;
   margin: 10px;
+  -webkit-box-shadow: 0px 4px 33px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 4px 33px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 4px 33px 0px rgba(0,0,0,0.75);
 }
 mat-grid-tile:hover mat-grid-tile-footer{
   background-color: #3f94b5;
@@ -164,16 +229,27 @@ mat-grid-tile:hover mat-grid-tile-footer{
 mat-grid-list {
   display: none;
   padding-bottom: 25px !important;
-  margin-top: 20px;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin: 0 16.8% 25px 16.8%;
 }
 
 mat-grid-tile-footer {
   font-family: Webly Sleek Kursiv;
   font-weight: bold;
 }
+
+.gridList {
+  background-color: #1E2339;
+}
+
 #viewBtnWrap{
-  margin-left: 18%;
-  margin-bottom: 10px;
+  position: absolute;
+  bottom: 22px;
+}
+
+.viewGrid {
+  color: #FEFDFD;
+}
+
+.marginTop {
+  margin-top:245px;
 }

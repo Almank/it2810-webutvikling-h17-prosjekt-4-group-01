@@ -1,88 +1,109 @@
-<div class="searchWrap">
-  <form class="form">
-    <mat-form-field class="full-width">
-      <input #box (keyup)="searchDatabase(box.value)" autofocus matInput placeholder="Search for Top Movies">
-      <mat-hint><strong></strong>Type in Title, Year or Genre and hit enter to save the search if you are logged in </mat-hint>
-    </mat-form-field>
-    <label>Search the databse for: </label>
-    <br>
-    <label Title class="form-check-inline"> Titles:
-      <input class="form-check-input" type="radio" name="mode" [value]="1" checked="checked" (change)=" this.searchCriteria = 1; setSearch()">
-    </label> <br>
-    <label Directors class="form-check-inline"> Directors:
-      <input class="form-check-input" type="radio" name="mode" [value]="2" (change)=" this.searchCriteria = 2; setSearch()">
-    </label> <br>
-    <label Actors class="form-check-inline"> Actors:
-       <input class="form-check-input" type="radio" name="mode" [value]="3" (change)=" this.searchCriteria = 3; setSearch()">
-    </label>
-  </form>
-</div>
-<div class="form">
-  <form>
-    <mat-form-field class="inputYear">
-      <input type="tel" class="inputYearTextField" matInput #startYear (keyup)="setYear(startYear.value, 'start')" maxlength=4 placeholder="From" pattern="/^\d{4}$/">
-      <mat-hint align="end">{{startYear.value.length}} / 4</mat-hint>
-    </mat-form-field>
+<div class="content">
 
-    <mat-form-field class="inputYear">
-      <input type="tel" class="inputYearTextField" matInput #endYear maxlength=4 (keyup)="setYear(endYear.value, 'end')" placeholder="To" pattern="/^\d{4}$/">
-      <mat-hint align="end">{{endYear.value.length}} / 4</mat-hint>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-select placeholder="Genre" multiple (change)=setGenre($event)>
-        <mat-option *ngFor="let genre of genres" [value]="genre.viewValue">
-          {{ genre.viewValue }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </form>
-</div>
-<div id="viewBtnWrap">
-  <span matTooltip="Grid View">
-    <button mat-button (click)="toggleButton()" aria-label="toggleButton">
-      <mat-icon class="viewGrid">view_comfy</mat-icon>
-    </button>
-  </span>
-</div>
-<div>
-  <mat-grid-list cols="4" rowHeight="1:1.45" gutterSize="12px" [class.show]="!show" class="gridList">
-    <mat-grid-tile *ngFor="let movie of data" (click)="openDialog(movie)" title={{movie.title}}>
-      <img class="gridPoster" src="{{movie.poster}}" alt="">
-      <mat-grid-tile-footer>{{movie.title}}</mat-grid-tile-footer>
-    </mat-grid-tile>
-  </mat-grid-list>
-</div>
+  <div class="searchContent" [class.fixedSearch]="fixedSearch">
+    <h1 class="title">Search Blockbuster for your favourite movies!</h1>
+    <div class="searchBar">
+      <span matTooltip="Search movies">
+        <input #input class="searchInputField" (keyup)="searchDatabase(input.value)" autofocus placeholder="Search for movies">
+      </span>
+      <span matTooltip="Choose search">
+        <mat-select class="selectSearch" [value]="1" (change)=setSearch($event)>
 
-<div class="container mat-elevation-z8" [class.show]="show">
+            <mat-option class="searchOption mat-selected mat-active" aria-selected="true" [value]="1">
+              Title
+            </mat-option>
+            <mat-option class="searchOption" [value]="2">
+              Director
+            </mat-option>
+            <mat-option class="searchOption" [value]="3">
+              Actors
+            </mat-option>
+        </mat-select>
+      </span>
+    </div>
+    <div class="showFilter">
+      <p class="titleFilter">Filter search</p>
+      <span matTooltip="Show filters">
+        <button class="viewFilter" mat-button (click)="toggleFilterButton()">
+          <mat-icon class="filterArrow">{{this.arrow}}</mat-icon>
+        </button>
+      </span>
+    </div>
+    <div class="filterWrapper" [class.showFilterToggle]="showFilter">
+        <div class="inputYear">
+          <span matTooltip="From year">
+          <input type="tel" class="inputYearTextField" #startYear (keyup)="setYear(startYear.value, 'start')" maxlength=4 placeholder="From" pattern="/^\d{4}$/">
+          <p class="inputYearNum" align="end">{{startYear.value.length}} / 4</p>
+          </span>
+        </div>
 
-  <mat-table #table [dataSource]="dataSource" >
-    <!-- Title Column -->
-    <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.title}} </mat-cell>
-    </ng-container>
+        <div class="inputYear">
+          <span matTooltip="To year">
+          <input type="tel" class="inputYearTextField" #endYear maxlength=4 (keyup)="setYear(endYear.value, 'end')" placeholder="To" pattern="/^\d{4}$/">
+          <p class="inputYearNum" align="end">{{endYear.value.length}} / 4</p>
+          </span>
+        </div>
+      <mat-form-field class="selectGenre">
+        <span matTooltip="Choose genre">
+          <mat-select  multiple placeholder="Genre" (change)=setGenre($event)>
+            <mat-option *ngFor="let genre of genres" [value]="genre.viewValue">
+              {{ genre.viewValue }}
+            </mat-option>
+          </mat-select>
+        </span>
+        </mat-form-field>
+    </div>
 
-    <!-- Year Column -->
-    <ng-container matColumnDef="year">
-      <mat-header-cell *matHeaderCellDef> Year </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.year}} </mat-cell>
-    </ng-container>
+    <div id="viewBtnWrap">
+      <span matTooltip="{{this.viewTooltip}}">
+        <button mat-button (click)="toggleButton()" aria-label="toggleButton">
+          <mat-icon class="viewGrid">{{this.viewIcon}}</mat-icon>
+        </button>
+      </span>
+    </div>
+  </div>
 
-    <!-- Genre Column -->
-    <ng-container matColumnDef="genre">
-      <mat-header-cell *matHeaderCellDef> Genre </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.genre}} </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"  (click)="openDialog(row)"></mat-row>
-  </mat-table>
-
-  <mat-paginator #paginator
-                 [length]="pageLength"
-                 [pageSize]="10"
-                 [pageSizeOptions]="[10, 25, 50]"
-                  (page)= changeValues($event)>
-  </mat-paginator>
+  <div>
+    <mat-grid-list cols="3" rowHeight="1:1.45" gutterSize="12px" [class.show]="!show" [class.marginTop]="fixedSearch" class="gridList">
+      <mat-grid-tile *ngFor="let movie of data" (click)="openDialog(movie)" title={{movie.title}}>
+        <img class="gridPoster" src="{{movie.poster}}" alt="">
+        <mat-grid-tile-footer>{{movie.title}}</mat-grid-tile-footer>
+      </mat-grid-tile>
+    </mat-grid-list>
 
   </div>
+
+  <div class="container mat-elevation-z8" [class.show]="show">
+
+    <mat-table #table [dataSource]="dataSource" >
+      <!-- Title Column -->
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.title}} </mat-cell>
+      </ng-container>
+
+      <!-- Year Column -->
+      <ng-container matColumnDef="year">
+        <mat-header-cell *matHeaderCellDef> Year </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.year}} </mat-cell>
+      </ng-container>
+
+      <!-- Genre Column -->
+      <ng-container matColumnDef="genre">
+        <mat-header-cell *matHeaderCellDef> Genre </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.genre}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"  (click)="openDialog(row)"></mat-row>
+    </mat-table>
+
+    <mat-paginator #paginator
+                   [length]="pageLength"
+                   [pageSize]="10"
+                   [pageSizeOptions]="[10, 25, 50]"
+                    (page)= changeValues($event)>
+    </mat-paginator>
+
+  </div>
+</div>
