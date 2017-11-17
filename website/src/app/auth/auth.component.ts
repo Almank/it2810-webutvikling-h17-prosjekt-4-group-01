@@ -32,7 +32,6 @@ export class AuthComponent implements OnInit {
     });
     this.http.post('/api/register', params, {headers: this.headers}).subscribe(data => {
       if (isObject(data)) {
-        console.log(data);
         this.onLogin(form);
       }
     }, err => {
@@ -45,16 +44,18 @@ export class AuthComponent implements OnInit {
       username: form.value.username,
       password: form.value.password,
     });
-    this.http.post('/api/login', params, {headers: this.headers}).subscribe(data => {
+    this.http.post('/api/login', params, {headers: this.headers}).toPromise().then(data => {
       if (isObject(data)) {
         if (data['auth']) {
           localStorage.setItem('session', JSON.stringify({
             token: data['token'],
             auth: data['auth'],
             username: form.value.username,
+            favorites: [],
           }));
           console.log('token saved to LS and user is logged in');
           this.router.navigate(['/profile']);
+          location.reload();
         }
       }
     }, err => {

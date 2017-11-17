@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const MovieSchema = new Schema({
+    _id: {type: String},
     title: { type: String, default: "undefined"},
     year: {type: Number, default: 0},
     runtime: {type: String, default: 'undefined'},
