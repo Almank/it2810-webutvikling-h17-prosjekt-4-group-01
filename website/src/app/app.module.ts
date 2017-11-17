@@ -19,6 +19,8 @@ import {AgWordCloudModule, AgWordCloudData} from 'angular4-word-cloud';
 
 
 import { MovieDetailsComponent, RouterModule, Routes } from './import-module';
+import {MovieDetailsService} from "./movie-view/movie-details/movie-details.service";
+import {ProfileService} from "./profile/profile.service";
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},
@@ -68,7 +70,7 @@ const appRoutes: Routes = [
     MovieDetailsComponent,
   ],
 
-  providers: [MovieListService, Favorite],
+  providers: [MovieListService, Favorite, MovieDetailsService, ProfileService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

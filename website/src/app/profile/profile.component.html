@@ -45,12 +45,15 @@
       <mat-tab label="Favourites">
         <h4 class="title">Your favourite movies</h4>
         <hr class="card-hr">
-        <p>Future table of content</p>
-        <mat-nav-list>
-            <mat-list-item *ngFor="let favourite of favourites"> {{ favourite }} </mat-list-item>
-        </mat-nav-list>
+        <div>
+          <mat-grid-list cols="4" rowHeight="1:1.45" gutterSize="12px" [class.show]="!show" class="gridList">
+            <mat-grid-tile *ngFor="let favorite of favorites" (click)="openDialog(favorite)" title={{favorite.title}}>
+              <img id="gridPoster" src="{{favorite.poster}}" alt="">
+              <mat-grid-tile-footer>{{favorite.title}}</mat-grid-tile-footer>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </div>
       </mat-tab>
-
     </mat-tab-group>
   </mat-card>
 </div>

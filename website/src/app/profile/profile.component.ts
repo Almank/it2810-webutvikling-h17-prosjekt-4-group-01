@@ -1,8 +1,11 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { isObject } from 'util';
-import { Router } from '@angular/router';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {isObject} from 'util';
+import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
+import {Favorite} from './profile.favorite.service';
+import {MovieDetailsService} from "../movie-view/movie-details/movie-details.service";
+import {ProfileService} from "./profile.service";
 
 @Component({
   selector: 'app-profile',
@@ -14,27 +17,37 @@ export class ProfileComponent implements OnInit {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
   username: String;
   token: String;
+  auth: Boolean;
+  favoriteList: Object;
+  favoriteDisplay = [];
+  favoriteListData;
 
   // TODO get username from api
-  constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar) {
+  constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar, private fav: Favorite,
+              private modal: MovieDetailsService, private profile: ProfileService) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null || session.auth === false) {
       this.router.navigate(['/login']);
     } else {
       this.validateToken(session.token);
+      this.auth = session.auth;
       this.username = session.username;
       this.token = session.token;
+      this.loadFavorites();
     }
   }
+
   ngOnInit() {
   }
+
   onLogout() {
-    localStorage.removeItem('session');
-    this.router.navigate(['/']);
+    this.profile.onLogout();
   }
+
   get user() {
     return this.username;
   }
+
   onNewPassword(form) {
     const params = JSON.stringify({
       token: this.token,
@@ -49,27 +62,43 @@ export class ProfileComponent implements OnInit {
       this.onUserAlert(error.error.message, 'dismiss', false);
     });
   }
+
   onUserAlert(message: string, action: string, positive: boolean, duration = 2000) {
-    let extra = 'alert-negative';
-    if (positive) {
-      extra = 'alert-positive';
-    }
-    this.snackBar.open(message, action, {
-      extraClasses: [extra],
-      duration: duration
-    });
+    this.profile.onUserAlert(message, action, positive, duration);
   }
 
   validateToken(token) {
-    const params = JSON.stringify({
-      token: token,
-    });
-    this.http.post('/api/login/verify', params, {headers: this.headers}).subscribe(data => {}, err => {
-      if (isObject(err)) {
-        this.onUserAlert(err.error.message, 'dismiss', false, 4000);
-        this.onLogout();
-      }
-    });
+    this.profile.validateToken(token);
   }
 
+  loadFavorites() {
+    const favorites = this.fav.loadFavorites(this.token);
+    favorites.then(favorite => {
+      for (const key in favorite) {
+        this.favoriteDisplay.push(favorite[key]);
+      }
+      this.loadFavoriteListData(this.favoriteDisplay).then(data => {
+        this.favoriteListData = data;
+      });
+    });
+
+  }
+
+  loadFavoriteListData(favorites) {
+    const params = JSON.stringify({
+      favoriteList: favorites
+    });
+    return this.http.post('/api/favorites/data', params, {headers: this.headers}).toPromise()
+      .then(data => {
+        return (data);
+      });
+  }
+
+  openDialog(favorite) {
+    this.modal.openDialog(favorite, this.auth, this.token);
+  }
+
+  get favorites() {
+    return this.favoriteListData;
+  }
 }
