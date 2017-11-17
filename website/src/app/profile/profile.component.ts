@@ -32,12 +32,11 @@ export class ProfileComponent implements OnInit {
       this.auth = session.auth;
       this.username = session.username;
       this.token = session.token;
-      this.favoriteList = session.favorites;
+      this.loadFavorites();
     }
   }
 
   ngOnInit() {
-    this.loadFavorites();
   }
 
   onLogout() {
@@ -90,13 +89,16 @@ export class ProfileComponent implements OnInit {
   }
 
   loadFavorites() {
-    this.fav.loadFavorites();
-    for (const key in this.favoriteList) {
-      this.favoriteDisplay.push(this.favoriteList[key]);
-    }
-    this.loadFavoriteListData(this.favoriteDisplay).then(data => {
-      this.favoriteListData = data;
+    const favorites = this.fav.loadFavorites();
+    favorites.then(favorite => {
+      for (const key in favorite) {
+        this.favoriteDisplay.push(favorite[key]);
+      }
+      this.loadFavoriteListData(this.favoriteDisplay).then(data => {
+        this.favoriteListData = data;
+      });
     });
+
   }
 
   loadFavoriteListData(favorites) {

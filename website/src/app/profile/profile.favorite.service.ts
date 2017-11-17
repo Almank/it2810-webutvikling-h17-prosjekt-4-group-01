@@ -72,11 +72,12 @@ export class Favorite {
     const params = JSON.stringify({
       token: this.token,
     });
-    this.http.post('/api/favorites', params, {headers: this.headers}).subscribe(favorites => {
+    return this.http.post('/api/favorites', params, {headers: this.headers}).toPromise().then(favorites => {
       if (isObject(favorites)) {
         const session = JSON.parse(localStorage.getItem('session'));
         session['favorites'] = favorites;
         localStorage.setItem('session', JSON.stringify(session));
+        return favorites;
       }
     });
   }
