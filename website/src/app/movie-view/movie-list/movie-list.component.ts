@@ -59,10 +59,10 @@ export class MovieListComponent implements OnInit {
   selectedGenre: any = [];
   auth: boolean;
   token: string;
-  show = true;
+  show = false;
   showFilter = false;
   arrow = 'keyboard_arrow_down';
-  viewIcon = 'view_comfy';
+  viewIcon = 'format_list_bulleted';
   viewTooltip = 'Grid view';
   fixedSearch = false;
   colNum = 3;
@@ -142,7 +142,7 @@ export class MovieListComponent implements OnInit {
   openDialog(data) {
     this.modal.openDialog(data, this.auth, this.token);
   }
-  
+
   createList(movieData) {
     this.dataSource = new MovieSource(this, this.paginator);
     /** Fill up the database with 25 movies. */
