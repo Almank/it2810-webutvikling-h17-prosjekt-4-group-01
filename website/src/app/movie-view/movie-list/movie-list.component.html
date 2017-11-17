@@ -44,10 +44,17 @@
     </mat-form-field>
   </form>
 </div>
-<div id="viewBtnWrap">
+<div id="viewBtnWrap" [class.changebutton]="!show">
   <span matTooltip="Grid View">
     <button mat-button (click)="toggleButton()">
       <mat-icon class="viewGrid">view_comfy</mat-icon>
+    </button>
+  </span>
+</div>
+<div id="viewBtnWrap" [class.changebutton]="show">
+  <span matTooltip="List View">
+    <button mat-button (click)="toggleButton()">
+      <mat-icon class="viewGrid">list</mat-icon>
     </button>
   </span>
 </div>
