@@ -32,7 +32,7 @@ export class MovieListComponent implements OnInit {
   startYear: any = 0;
   endYear: any = new Date().getFullYear();
   have = 0;
-  need = 10;
+  need = 12;
   pageLength = 0;
   genres = [
     {viewValue: 'Action'},
