@@ -55,6 +55,7 @@ export class AuthComponent implements OnInit {
           }));
           console.log('token saved to LS and user is logged in');
           this.router.navigate(['/profile']);
+          location.reload();
         }
       }
     }, err => {

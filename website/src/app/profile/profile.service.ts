@@ -27,7 +27,7 @@ export class ProfileService {
     const params = JSON.stringify({
       token: token,
     });
-    this.http.post('/api/login/verify', params, {headers: this.headers}).subscribe(data => {
+    this.http.post('/api/login/verify', params, {headers: this.headers}).toPromise().then(data => {
     }, err => {
       if (isObject(err)) {
         this.onUserAlert(err.error.message, 'dismiss', false, 4000);

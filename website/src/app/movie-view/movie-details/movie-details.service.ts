@@ -15,9 +15,9 @@ export class MovieDetailsService {
   }
 
   openDialog(data, auth, token) {
-    this.profile.validateToken(token);
     // If user is logged in, check if movie is favorited
     if (auth) {
+      this.profile.validateToken(token);
       const params = JSON.stringify({
         token: token,
         movie_id: data._id,

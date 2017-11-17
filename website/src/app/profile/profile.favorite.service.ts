@@ -26,7 +26,7 @@ export class Favorite {
             movie_id: id,
             newFavorite: false,
           });
-          this.http.post('/api/favorites/modify', params, {headers: this.headers}).toPromise().then(data => {
+          this.http.post('/api/favorites/modify', params, {headers: this.headers}).subscribe(data => {
             if (isObject(data)) {
               console.log('removed favorite');
               const session = JSON.parse(localStorage.getItem('session'));
@@ -36,7 +36,7 @@ export class Favorite {
               const new_session = {
                 auth: session.auth,
                 favorites: favorite,
-                token: session.token,
+                token: this.token,
                 username: session.username
               };
               localStorage.setItem('favorites', JSON.stringify(new_session));
@@ -48,7 +48,7 @@ export class Favorite {
             movie_id: id,
             newFavorite: true,
           });
-          this.http.post('/api/favorites/modify', params, {headers: this.headers}).toPromise().then(data => {
+          this.http.post('/api/favorites/modify', params, {headers: this.headers}).subscribe(data => {
             if (isObject(data)) {
               console.log('added favorite');
               const session = JSON.parse(localStorage.getItem('session'));
@@ -57,7 +57,7 @@ export class Favorite {
               const new_session = {
                 auth: session.auth,
                 favorites: favorite,
-                token: session.token,
+                token: this.token,
                 username: session.username
               };
               localStorage.setItem('session', JSON.stringify(new_session));
