@@ -1,24 +1,40 @@
-<div id="popUpBox">
-  <h2 mat-dialog-title>{{data.title}} ({{data.year}})</h2>
-  <hr>
-  <mat-dialog-content>
-    <p id="imageWrap"><img src="{{data.poster}}" class="posterImage"/></p>
-    <p><span class="infoType">Genre:</span> <span class="infoDetails">{{data.genre}}</span></p>
-    <p><span class="infoType">Director:</span> <span class="infoDetails">{{data.director}}</span></p>
-    <p><span class="infoType">Runtime:</span> <span class="infoDetails">{{data.runtime}}</span></p>
-    <p><span class="infoType">Actors:</span> <span class="infoDetails">{{data.actors}}</span></p>
-    <p><span class="infoType">Plot:</span> <span class="infoDetails">{{data.plot}}</span></p>
-  </mat-dialog-content>
-  <hr>
-  <mat-dialog-actions>
-    <div *ngIf="data.auth">
-      <div *ngIf="buttonClicked">
-        <button class="favorite_clicked" [class.favorite_clicked]="yellow" mat-raised-button (click)="toggleFavorite(data._id, data.favorited)"><mat-icon class="playIcon">stars</mat-icon></button>
-      </div>
-      <div *ngIf="!buttonClicked">
-        <button class="favorite_clicked" [class.favorite_clicked]="data.favorited" mat-raised-button (click)="toggleFavorite(data._id, data.favorited)"><mat-icon class="playIcon">stars</mat-icon></button>
-      </div>
+<div class="popUpBox">
+  <div class="popupHeader">
+    <div class="titleContainer">
+      <h2 mat-dialog-title>{{data.title}} ({{data.year}})</h2>
+      <span class="subTitle">Movie / {{data.runtime}} / {{data.genre}}</span>
     </div>
-    <button mat-raised-button (click)="onCloseCancel()"><mat-icon class="playIcon">cancel</mat-icon></button>
-  </mat-dialog-actions>
+    <div class="modalIcons">
+      <div *ngIf="data.auth">
+        <div *ngIf="buttonClicked">
+          <button class="favButton"  mat-raised-button (click)="toggleFavorite(data._id, data.favorited)">
+            <mat-icon class="favIcon" [class.favorite_clicked]="yellow">stars</mat-icon>
+          </button>
+        </div>
+        <div *ngIf="!buttonClicked">
+          <button class="favButton"  mat-raised-button (click)="toggleFavorite(data._id, data.favorited)">
+            <mat-icon class="favIcon" [class.favorite_clicked]="data.favorited">stars</mat-icon>
+          </button>
+        </div>
+      </div>
+      <button class="favButton" mat-raised-button (click)="onCloseCancel()">
+        <mat-icon class="favIcon">cancel</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <mat-dialog-content class="modalContent">
+    <!--<div class="imageWrap"><img src="{{data.poster}}" class="posterImage"/></div> -->
+    <div class="infoContainer">
+      <span class="infoType">Director:</span>
+      <span class="infoDetails">{{data.director}}</span>
+    </div>
+    <div class="infoContainer">
+      <span class="infoType">Actors:</span>
+      <span class="infoDetails">{{data.actors}}</span>
+    </div>
+    <p>{{data.plot}}</p>
+    <a *ngIf="data.readMore !== 'N/A'" class="readMore" target="_blank" href="{{data.readMore}}">Read more</a>
+  </mat-dialog-content>
+
 </div>

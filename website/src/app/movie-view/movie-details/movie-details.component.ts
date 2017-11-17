@@ -19,6 +19,7 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   toggleFavorite(id, favorited) {
+    console.log(favorited);
     this.fav.favorite(id);
     if (!this.buttonClicked) {
       this.toggled = favorited;
