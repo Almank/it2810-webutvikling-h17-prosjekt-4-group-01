@@ -57,6 +57,9 @@
 .showFilterToggle {
   display: flex !important;
 }
+.changebutton{
+    display:none;
+}
 
 .mat-table {
   overflow: auto;

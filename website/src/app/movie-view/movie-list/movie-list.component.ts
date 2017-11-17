@@ -65,6 +65,16 @@ export class MovieListComponent implements OnInit {
   viewTooltip = 'Grid view';
   fixedSearch = false;
   colNum = 3;
+  sorts = [
+      {viewValue: 'Title (Descending)'},
+      {viewValue: 'Title (Ascending)'},
+      {viewValue: 'Year (Descending)'},
+      {viewValue: 'Year (Ascending)'},
+      {viewValue: 'Genre (Descending)'},
+      {viewValue: 'Genre (Ascending)'}];
+  selectedSort: string;
+  descAsc: string;
+  sortCriteria = 1;
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
     const session = JSON.parse(localStorage.getItem('session'));
@@ -293,7 +303,6 @@ export class MovieListComponent implements OnInit {
     this.validRefresh = true;
     this.searchDatabase(this.searchWord);
   }
-
   @HostListener('window:resize', ['$event'])
   onResize() {
     if (window.innerWidth < 480) {
@@ -302,6 +311,29 @@ export class MovieListComponent implements OnInit {
       this.colNum = 3;
     }
   }
+
+  setSort(event) {
+    let selected = event.value.toLowerCase();
+    const index = selected.indexOf(' ');
+    this.selectedSort = selected.substr(0, index);
+    let direction = selected.substr(index + 1);
+    if (this.selectedSort === 'year') {
+        if (direction === '(descending)') {
+                this.descAsc = 'true';
+            }else if (direction === '(ascending)') {
+                this.descAsc = 'false';
+        }
+    } else {
+        if (direction === '(descending)') {
+                this.descAsc = 'false';
+            }else if (direction === '(ascending)') {
+                this.descAsc = 'true';
+        }
+    }
+    this.validRefresh = true;
+    this.searchDatabase(this.searchWord);
+  }
+
 }
 
 /**
