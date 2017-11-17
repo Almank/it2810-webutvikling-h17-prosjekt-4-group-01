@@ -14,6 +14,9 @@ export class Favorite {
     }
   }
 
+  // Main logic behind favoriting movies.
+  // If a user favorites or unfavorites a movie, this function will be invoked and sends a http request
+  // to the api telling it what to handle.
   favorite(id) {
     let params = JSON.stringify({
       token: this.token,
@@ -68,6 +71,7 @@ export class Favorite {
     });
   }
 
+  // Handles loading of the favorite ID list by session by http
   loadFavorites(token) {
     const params = JSON.stringify({
       token: token,
@@ -80,5 +84,16 @@ export class Favorite {
         return favorites;
       }
     });
+  }
+
+  // Handles the http request for matching favorite ID's up against movies in database.
+  loadFavoriteListData(favorites) {
+    const params = JSON.stringify({
+      favoriteList: favorites
+    });
+    return this.http.post('/api/favorites/data', params, {headers: this.headers}).toPromise()
+      .then(data => {
+        return data;
+      });
   }
 }
