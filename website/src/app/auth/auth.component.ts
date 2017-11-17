@@ -44,7 +44,7 @@ export class AuthComponent implements OnInit {
       username: form.value.username,
       password: form.value.password,
     });
-    this.http.post('/api/login', params, {headers: this.headers}).subscribe(data => {
+    this.http.post('/api/login', params, {headers: this.headers}).toPromise().then(data => {
       if (isObject(data)) {
         if (data['auth']) {
           localStorage.setItem('session', JSON.stringify({

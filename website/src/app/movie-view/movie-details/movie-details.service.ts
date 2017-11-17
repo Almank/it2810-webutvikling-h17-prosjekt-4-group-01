@@ -3,16 +3,19 @@ import {MovieDetailsComponent} from './movie-details.component';
 import {HttpHeaders} from '@angular/common/http';
 import {MovieListService} from '../movie-view.service';
 import 'rxjs/add/operator/toPromise';
+import {ProfileService} from '../../profile/profile.service';
 
 @Injectable()
 export class MovieDetailsService {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
   dialogResult: String;
 
-  constructor(private http: HttpClient, public dialog: MatDialog, private movieListService: MovieListService) {
+  constructor(private http: HttpClient, public dialog: MatDialog, private movieListService: MovieListService,
+              private profile: ProfileService) {
   }
 
   openDialog(data, auth, token) {
+    this.profile.validateToken(token);
     // If user is logged in, check if movie is favorited
     if (auth) {
       const params = JSON.stringify({

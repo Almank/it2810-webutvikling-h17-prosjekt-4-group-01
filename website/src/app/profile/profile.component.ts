@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import {Favorite} from './profile.favorite.service';
 import {MovieDetailsService} from "../movie-view/movie-details/movie-details.service";
+import {ProfileService} from "./profile.service";
 
 @Component({
   selector: 'app-profile',
@@ -23,7 +24,7 @@ export class ProfileComponent implements OnInit {
 
   // TODO get username from api
   constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar, private fav: Favorite,
-              private modal: MovieDetailsService) {
+              private modal: MovieDetailsService, private profile: ProfileService) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null || session.auth === false) {
       this.router.navigate(['/login']);
@@ -40,9 +41,7 @@ export class ProfileComponent implements OnInit {
   }
 
   onLogout() {
-    localStorage.removeItem('session');
-    console.log('session is removed');
-    this.router.navigate(['/']);
+    this.profile.onLogout();
   }
 
   get user() {
@@ -65,27 +64,11 @@ export class ProfileComponent implements OnInit {
   }
 
   onUserAlert(message: string, action: string, positive: boolean, duration = 2000) {
-    let extra = 'alert-negative';
-    if (positive) {
-      extra = 'alert-positive';
-    }
-    this.snackBar.open(message, action, {
-      extraClasses: [extra],
-      duration: duration
-    });
+    this.profile.onUserAlert(message, action, positive, duration);
   }
 
   validateToken(token) {
-    const params = JSON.stringify({
-      token: token,
-    });
-    this.http.post('/api/login/verify', params, {headers: this.headers}).subscribe(data => {
-    }, err => {
-      if (isObject(err)) {
-        this.onUserAlert(err.error.message, 'dismiss', false, 4000);
-        this.onLogout();
-      }
-    });
+    this.profile.validateToken(token);
   }
 
   loadFavorites() {
