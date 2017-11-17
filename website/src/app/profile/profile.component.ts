@@ -33,7 +33,6 @@ export class ProfileComponent implements OnInit {
       this.username = session.username;
       this.token = session.token;
       this.favoriteList = session.favorites;
-      console.log(this.favoriteList);
     }
   }
 

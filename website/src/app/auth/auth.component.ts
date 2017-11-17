@@ -32,7 +32,6 @@ export class AuthComponent implements OnInit {
     });
     this.http.post('/api/register', params, {headers: this.headers}).subscribe(data => {
       if (isObject(data)) {
-        console.log(data);
         this.onLogin(form);
       }
     }, err => {
