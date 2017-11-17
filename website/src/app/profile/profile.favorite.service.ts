@@ -28,7 +28,11 @@ export class Favorite {
           });
           this.http.post('/api/favorites/modify', params, {headers: this.headers}).subscribe(data => {
             if (isObject(data)) {
-              console.log("removed favorite");
+              console.log('removed favorite');
+              const favorite = JSON.parse(localStorage.getItem('favorites'));
+              const index = favorite.indexOf(id);
+              favorite.splice(index, 1);
+              localStorage.setItem('favorites', JSON.stringify(favorite));
             }
           });
         } else {
@@ -39,10 +43,25 @@ export class Favorite {
           });
           this.http.post('/api/favorites/modify', params, {headers: this.headers}).subscribe(data => {
             if (isObject(data)) {
-              console.log("added favorite");
+              console.log('added favorite');
+              const favorite = JSON.parse(localStorage.getItem('favorites'));
+              favorite.push(id);
+              localStorage.setItem('favorites', JSON.stringify(favorite));
             }
           });
         }
+      }
+    });
+  }
+
+  loadFavorites() {
+    const params = JSON.stringify({
+      token: this.token,
+    });
+    this.http.post('/api/favorites', params, {headers: this.headers}).subscribe(favorites => {
+      if (isObject(favorites)) {
+        const favoriteList = JSON.stringify(favorites);
+        localStorage.setItem('favorites', favoriteList);
       }
     });
   }

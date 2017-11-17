@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { isObject } from 'util';
-import { Router } from '@angular/router';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {isObject} from 'util';
+import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
+import {Favorite} from './profile.favorite.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,9 +15,11 @@ export class ProfileComponent implements OnInit {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
   username: String;
   token: String;
+  favoriteList: Object;
+  favoriteDisplay = [];
 
   // TODO get username from api
-  constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar) {
+  constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar, private fav: Favorite) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null || session.auth === false) {
       this.router.navigate(['/login']);
@@ -26,15 +29,20 @@ export class ProfileComponent implements OnInit {
       this.token = session.token;
     }
   }
+
   ngOnInit() {
+    this.loadFavorites();
   }
+
   onLogout() {
     localStorage.removeItem('session');
     this.router.navigate(['/']);
   }
+
   get user() {
     return this.username;
   }
+
   onNewPassword(form) {
     const params = JSON.stringify({
       token: this.token,
@@ -49,6 +57,7 @@ export class ProfileComponent implements OnInit {
       this.onUserAlert(error.error.message, 'dismiss', false);
     });
   }
+
   onUserAlert(message: string, action: string, positive: boolean, duration = 2000) {
     let extra = 'alert-negative';
     if (positive) {
@@ -64,7 +73,8 @@ export class ProfileComponent implements OnInit {
     const params = JSON.stringify({
       token: token,
     });
-    this.http.post('/api/login/verify', params, {headers: this.headers}).subscribe(data => {}, err => {
+    this.http.post('/api/login/verify', params, {headers: this.headers}).subscribe(data => {
+    }, err => {
       if (isObject(err)) {
         this.onUserAlert(err.error.message, 'dismiss', false, 4000);
         this.onLogout();
@@ -72,4 +82,15 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  loadFavorites() {
+    this.fav.loadFavorites();
+    this.favoriteList = JSON.parse(localStorage.getItem('favorites'));
+    for (const key in this.favoriteList) {
+      this.favoriteDisplay.push(this.favoriteList[key]);
+    }
+  }
+
+  get favorites() {
+    return this.favoriteDisplay;
+  }
 }
