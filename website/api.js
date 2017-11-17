@@ -334,7 +334,6 @@ router.get('/movies/modal', function (req, res) {
     // Remove properties from query
     {
       title: 0,
-      readMore: 0,
       genre: 0,
       year: 0,
       actors: 0,

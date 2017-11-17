@@ -1,12 +1,16 @@
-<mat-toolbar color="primary">
-  <span matTooltip="Home">
-  <span class="pageTitle" routerLink="/"><mat-icon class="playIcon">play_circle_filled</mat-icon> TopMoviesList</span>
-  </span>
-  <span class="example-spacer"></span>
-  <span matTooltip="Profile">
-      <button class="login-button" mat-button routerLink="/profile">
-        <span id="userText">{{user}}</span>
-        <mat-icon class="profileIcon">account_circle</mat-icon>
-      </button>
-  </span>
+<mat-toolbar color="primary" [class.fixedSearch]="!show">
+  <div class="header">
+    <div matTooltip="Home">
+      <div class="pageTitleContainer" routerLink="/" (click)="toggleIcon()">
+        <mat-icon class="playIcon">{{playIcon}}</mat-icon>
+        <span class="pageTitle">Blockbuster</span>
+      </div>
+    </div>
+    <div matTooltip="Profile">
+        <button class="login-button" mat-button routerLink="/profile">
+          <span id="userText">{{user}}</span>
+          <mat-icon class="profileIcon">account_circle</mat-icon>
+        </button>
+    </div>
+  </div>
 </mat-toolbar>

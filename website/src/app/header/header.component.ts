@@ -7,11 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   username: String;
+  playIcon = 'play_circle_filled';
+  changeIcon = true;
   constructor() {
   }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  toggleIcon() {
+    this.changeIcon = ! this.changeIcon;
+    this.changeIcon ? this.playIcon = 'play_circle_filled' : this.playIcon = 'play_circle_outline';
   }
+
   userStatus() {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null) {

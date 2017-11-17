@@ -65,3 +65,33 @@ mat-tab-header{
 .title{
     text-align: center;
 }
+
+@media screen and (max-width: 650px) {
+  .profile-container {
+    width: 100%;
+  }
+  .mat-card {
+    width: 100%;
+    min-width: 100%;
+    padding: 0 !important;
+    top:0;
+  }
+
+  .mat-tab-header {
+    width: 100%;
+  }
+
+  .profile-head {
+    margin-left: 20px;
+  }
+
+  .logout-button {
+    margin:5px;
+  }
+
+  .mat-card-header {
+    justify-content: space-around;
+  }
+
+
+}
