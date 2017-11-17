@@ -4,6 +4,7 @@ import {isObject} from 'util';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import {Favorite} from './profile.favorite.service';
+import {MovieDetailsService} from "../movie-view/movie-details/movie-details.service";
 
 @Component({
   selector: 'app-profile',
@@ -15,17 +16,20 @@ export class ProfileComponent implements OnInit {
   private headers = new HttpHeaders({'Content-Type': 'application/json'});
   username: String;
   token: String;
+  auth: Boolean;
   favoriteList: Object;
   favoriteDisplay = [];
   favoriteListData;
 
   // TODO get username from api
-  constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar, private fav: Favorite) {
+  constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar, private fav: Favorite,
+              private modal: MovieDetailsService) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null || session.auth === false) {
       this.router.navigate(['/login']);
     } else {
       this.validateToken(session.token);
+      this.auth = session.auth;
       this.username = session.username;
       this.token = session.token;
       this.favoriteList = session.favorites;
@@ -107,7 +111,7 @@ export class ProfileComponent implements OnInit {
   }
 
   openDialog(favorite) {
-    console.log(favorite);
+    this.modal.openDialog(favorite, this.auth, this.token);
   }
 
   get favorites() {

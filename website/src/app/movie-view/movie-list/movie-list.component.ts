@@ -6,6 +6,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import { MovieListService } from '../movie-view.service';
+import { MovieDetailsService } from '../movie-details/movie-details.service';
 
 @Component({
   selector: 'movieList',
@@ -60,7 +61,8 @@ export class MovieListComponent implements OnInit {
   token: string;
   show = true;
 
-  constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
+  constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient,
+              private modal: MovieDetailsService) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (!(session === null || session.auth === false)) {
       this.auth = session.auth;
@@ -109,50 +111,8 @@ export class MovieListComponent implements OnInit {
 
   /** Sets the Movie data displyed on in the Pop-up. */
   openDialog(data) {
-    // If user is logged in, check if movie is favorited
-    if (this.auth) {
-      const params = JSON.stringify({
-        token: this.token,
-        movie_id: data._id,
-      });
-      this.http.post('/api/favorites/exists', params, {headers: this.headers}).subscribe(favorites => {
-        if (favorites) {
-          this.generateModal(data, true);
-        } else {
-          this.generateModal(data, false);
-        }
-      });
-    } else {
-      this.generateModal(data, false);
-    }
+    this.modal.openDialog(data, this.auth, this.token);
   }
-
-  generateModal(data, exists) {
-    // Generate modal data
-    this.movieListService.getMovieModal(data).then( movies => {
-      data = {
-        '_id': data._id,
-        'title': data.title,
-        'poster': movies[0].poster,
-        'plot': movies[0].plot,
-        'runtime': movies[0].runtime,
-        'actors': data.actors,
-        'director': data.director,
-        'genre': data.genre,
-        'year': data.year,
-        'favorited': exists,
-        'auth': this.auth,
-      };
-      const dialogRef = this.dialog.open(MovieDetailsComponent, {
-        data,
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        this.dialogResult = result;
-      });
-    });
-  }
-
   createList(movieData) {
     this.dataSource = new MovieSource(this, this.paginator);
     /** Fill up the database with 25 movies. */

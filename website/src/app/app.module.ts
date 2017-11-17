@@ -17,6 +17,7 @@ import { Favorite } from './profile/profile.favorite.service';
 
 
 import { MovieDetailsComponent, RouterModule, Routes } from './import-module';
+import {MovieDetailsService} from "./movie-view/movie-details/movie-details.service";
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},
@@ -63,7 +64,7 @@ const appRoutes: Routes = [
     MovieDetailsComponent,
   ],
 
-  providers: [MovieListService, Favorite],
+  providers: [MovieListService, Favorite, MovieDetailsService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
