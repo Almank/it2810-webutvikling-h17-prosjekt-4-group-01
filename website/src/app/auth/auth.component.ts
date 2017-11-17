@@ -52,6 +52,7 @@ export class AuthComponent implements OnInit {
             token: data['token'],
             auth: data['auth'],
             username: form.value.username,
+            favorites: [],
           }));
           console.log('token saved to LS and user is logged in');
           this.router.navigate(['/profile']);

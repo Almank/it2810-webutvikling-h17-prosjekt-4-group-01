@@ -29,10 +29,17 @@ export class Favorite {
           this.http.post('/api/favorites/modify', params, {headers: this.headers}).subscribe(data => {
             if (isObject(data)) {
               console.log('removed favorite');
-              const favorite = JSON.parse(localStorage.getItem('favorites'));
-              const index = favorite.indexOf(id);
+              const session = JSON.parse(localStorage.getItem('session'));
+              const index = session['favorites'].indexOf(id);
+              const favorite = session.favorites;
               favorite.splice(index, 1);
-              localStorage.setItem('favorites', JSON.stringify(favorite));
+              const new_session = {
+                auth: session.auth,
+                favorites: favorite,
+                token: session.token,
+                username: session.username
+              };
+              localStorage.setItem('favorites', JSON.stringify(new_session));
             }
           });
         } else {
@@ -44,9 +51,16 @@ export class Favorite {
           this.http.post('/api/favorites/modify', params, {headers: this.headers}).subscribe(data => {
             if (isObject(data)) {
               console.log('added favorite');
-              const favorite = JSON.parse(localStorage.getItem('favorites'));
+              const session = JSON.parse(localStorage.getItem('session'));
+              const favorite = session.favorites;
               favorite.push(id);
-              localStorage.setItem('favorites', JSON.stringify(favorite));
+              const new_session = {
+                auth: session.auth,
+                favorites: favorite,
+                token: session.token,
+                username: session.username
+              };
+              localStorage.setItem('session', JSON.stringify(new_session));
             }
           });
         }
@@ -60,8 +74,9 @@ export class Favorite {
     });
     this.http.post('/api/favorites', params, {headers: this.headers}).subscribe(favorites => {
       if (isObject(favorites)) {
-        const favoriteList = JSON.stringify(favorites);
-        localStorage.setItem('favorites', favoriteList);
+        const session = JSON.parse(localStorage.getItem('session'));
+        session['favorites'] = favorites;
+        localStorage.setItem('session', JSON.stringify(session));
       }
     });
   }

@@ -17,6 +17,7 @@ export class ProfileComponent implements OnInit {
   token: String;
   favoriteList: Object;
   favoriteDisplay = [];
+  favoriteListData;
 
   // TODO get username from api
   constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar, private fav: Favorite) {
@@ -27,6 +28,8 @@ export class ProfileComponent implements OnInit {
       this.validateToken(session.token);
       this.username = session.username;
       this.token = session.token;
+      this.favoriteList = session.favorites;
+      console.log(this.favoriteList);
     }
   }
 
@@ -36,6 +39,7 @@ export class ProfileComponent implements OnInit {
 
   onLogout() {
     localStorage.removeItem('session');
+    console.log('session is removed');
     this.router.navigate(['/']);
   }
 
@@ -84,13 +88,29 @@ export class ProfileComponent implements OnInit {
 
   loadFavorites() {
     this.fav.loadFavorites();
-    this.favoriteList = JSON.parse(localStorage.getItem('favorites'));
     for (const key in this.favoriteList) {
       this.favoriteDisplay.push(this.favoriteList[key]);
     }
+    this.loadFavoriteListData(this.favoriteDisplay).then(data => {
+      this.favoriteListData = data;
+    });
+  }
+
+  loadFavoriteListData(favorites) {
+    const params = JSON.stringify({
+      favoriteList: favorites
+    });
+    return this.http.post('/api/favorites/data', params, {headers: this.headers}).toPromise()
+      .then(data => {
+        return (data);
+      });
+  }
+
+  openDialog(favorite) {
+    console.log(favorite);
   }
 
   get favorites() {
-    return this.favoriteDisplay;
+    return this.favoriteListData;
   }
 }
