@@ -59,6 +59,12 @@ export class MovieListComponent implements OnInit {
   auth: boolean;
   token: string;
   show = true;
+  showFilter = false;
+  arrow = 'keyboard_arrow_down';
+  viewIcon = 'view_comfy';
+  viewTooltip = 'Grid view';
+  fixedSearch = false;
+  colNum = 3;
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
     const session = JSON.parse(localStorage.getItem('session'));
@@ -70,29 +76,52 @@ export class MovieListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMovieList();
+    this.onResize();
   }
 
   toggleButton(): void {
     this.show = !this.show;
+    this.show ? this.viewIcon = 'view_comfy' : this.viewIcon = 'format_list_bulleted';
+    this.show ? this.viewTooltip = 'Grid view' : this.viewTooltip = 'List view';
     if (!this.show) {
       this.paginator.pageSize = 12;
       this.need = 12;
       this.have = 0;
       this.dataChange = new BehaviorSubject<MovieList[]>([]);
-      this.getMovieList();
+      if (this.searchWord !== '' || this.searchWord !== undefined) {
+        this.searchFor();
+      } else {
+        this.getMovieList();
+      }
     }
     if (this.show) {
       this.paginator.pageSize = 10;
+      this.fixedSearch = false;
     }
+  }
+
+  toggleFilterButton(): void {
+      this.showFilter = !this.showFilter;
+      this.showFilter ? this.arrow = 'keyboard_arrow_up' : this.arrow = 'keyboard_arrow_down';
   }
 
   @HostListener('window:scroll', [])
   onScroll(): void {
     if (!this.show) {
-      if (document.documentElement.scrollTop + document.documentElement.offsetHeight === document.documentElement.scrollHeight) {
+      if ((document.documentElement.scrollTop > 95) || (document.body.scrollTop > 95)) {
+        this.fixedSearch = true;
+      } else if ((document.documentElement.scrollTop > 95) || (document.body.scrollTop < 95)) {
+        this.fixedSearch = false;
+      }
+      if ((document.documentElement.scrollTop + document.documentElement.offsetHeight === document.documentElement.scrollHeight)
+      || (document.body.scrollTop + document.body.offsetHeight === document.body.scrollHeight)) {
         this.have += 12;
         this.need = 12;
-        this.getMovieList();
+        if (this.searchWord !== '' || this.searchWord !== undefined) {
+          this.searchFor();
+        } else {
+          this.getMovieList();
+        }
       }
     }
   }
@@ -101,7 +130,7 @@ export class MovieListComponent implements OnInit {
     this.movieListService.getAmountOfMovies(this).then(length => this.pageLength = length);
   }
 
-  /** Hvorfor heter begge funksjonene get movielist????? */
+  /** Get movies and amount from service file. */
   getMovieList(): void {
     this.getAmountOfMatches();
     this.movieListService.getMovieList(this).then(movies => this.createList(movies));
@@ -140,6 +169,7 @@ export class MovieListComponent implements OnInit {
         'director': data.director,
         'genre': data.genre,
         'year': data.year,
+        'readMore': movies[0].readMore,
         'favorited': exists,
         'auth': this.auth,
       };
@@ -228,7 +258,8 @@ export class MovieListComponent implements OnInit {
     }
   }
 
-  setSearch() {
+  setSearch(num) {
+    this.searchCriteria = num.value;
     if (this.searchWord !== '') {
       this.searchDatabase(this.searchWord);
     }
@@ -252,7 +283,7 @@ export class MovieListComponent implements OnInit {
 
   setGenre(event) {
     this.selectedGenre = '';
-    if (event.value[0] !== undefined) {
+    if (event.value[0] !== undefined && event.value[0] !== 'All') {
       for (const genre of event.value) {
         this.selectedGenre += genre;
         this.selectedGenre += ',';
@@ -263,7 +294,14 @@ export class MovieListComponent implements OnInit {
     this.searchDatabase(this.searchWord);
   }
 
-
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    if (window.innerWidth < 480) {
+      this.colNum = 1;
+    } else {
+      this.colNum = 3;
+    }
+  }
 }
 
 /**
@@ -277,6 +315,21 @@ export class MovieSource extends DataSource<any> {
   constructor(private _movieComponent: MovieListComponent, private _paginator: MatPaginator) {
     super();
   }
+
+  splitElements(data, typeOfData) {
+    for (let i = 0; i < data.length; i++) {
+      switch (typeOfData) {
+        case 'genre':
+            data[i].genre = data[i].genre.toString().split(',').join(', ');
+            break;
+        case 'actors':
+            data[i].actors = data[i].actors.toString().split(',').join(', ');
+            break;
+      }
+    }
+    return data;
+  }
+
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<MovieList[]> {
     const displayDataChanges = [
@@ -284,7 +337,11 @@ export class MovieSource extends DataSource<any> {
       this._paginator.page,
     ];
     return Observable.merge(...displayDataChanges).map(() => {
-      const data = this._movieComponent.data.slice();
+      let data = this._movieComponent.data.slice();
+      /** Add space between genres. */
+      data = this.splitElements(data, 'genre');
+      data = this.splitElements(data, 'actors');
+
   /** Grab the page's slice of data. */
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
       return data.splice(startIndex, this._paginator.pageSize);
