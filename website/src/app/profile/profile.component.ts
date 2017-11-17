@@ -4,8 +4,8 @@ import {isObject} from 'util';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import {Favorite} from './profile.favorite.service';
-import {MovieDetailsService} from "../movie-view/movie-details/movie-details.service";
-import {ProfileService} from "./profile.service";
+import {MovieDetailsService} from '../movie-view/movie-details/movie-details.service';
+import {ProfileService} from './profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +22,6 @@ export class ProfileComponent implements OnInit {
   favoriteDisplay = [];
   favoriteListData;
 
-  // TODO get username from api
   constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar, private fav: Favorite,
               private modal: MovieDetailsService, private profile: ProfileService) {
     const session = JSON.parse(localStorage.getItem('session'));
@@ -40,21 +39,21 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
   }
 
+  // Logs out the user by removing the session and therefore removing the JasonWebToken
+  // resulting in no more authenticated access to services.
+  // Also reloads the website due to interference.
   onLogout() {
-    this.profile.onLogout();
+    localStorage.removeItem('session');
+    console.log('session is removed');
+    this.router.navigate(['/']);
+    location.reload();
   }
 
-  get user() {
-    return this.username;
-  }
-
+  // Invokes a http request with old password to change to a new one.
+  // Alerts user wether or not the password change was applied.
   onNewPassword(form) {
-    const params = JSON.stringify({
-      token: this.token,
-      oldPassword: form.value.oldPassword,
-      newPassword: form.value.newPassword
-    });
-    this.http.post('/api/new_password', params, {headers: this.headers}).subscribe(data => {
+    const newPassword = this.profile.onNewPassword(form);
+    newPassword.then(data => {
       if (isObject(data)) {
         this.onUserAlert('Password successfully changed', 'dismiss', true);
       }
@@ -63,42 +62,58 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  onUserAlert(message: string, action: string, positive: boolean, duration = 2000) {
-    this.profile.onUserAlert(message, action, positive, duration);
-  }
-
+  // Validates the current token to see if it has expired. If the token has expired,
+  // the user will be logged out and prompted to login again.
   validateToken(token) {
-    this.profile.validateToken(token);
+    const validation = this.profile.validateToken(token);
+    validation.then(data => {
+    }, err => {
+      if (isObject(err)) {
+        this.onUserAlert(err.error.message, 'dismiss', false, 4000);
+        this.onLogout();
+      }
+    });
   }
 
+  // Loads all favorite ID's from a users session in the database.
+  // This it is then passed to loadFavoriteListData() which gets all details from the
+  // Movie objects in the database.
   loadFavorites() {
     const favorites = this.fav.loadFavorites(this.token);
     favorites.then(favorite => {
       for (const key in favorite) {
         this.favoriteDisplay.push(favorite[key]);
       }
-      this.loadFavoriteListData(this.favoriteDisplay).then(data => {
+      this.fav.loadFavoriteListData(this.favoriteDisplay).then(data => {
         this.favoriteListData = data;
       });
     });
-
   }
 
-  loadFavoriteListData(favorites) {
-    const params = JSON.stringify({
-      favoriteList: favorites
+  // Alerts the user when a user tries to change its password or fails to validate token.
+  onUserAlert(message: string, action: string, positive: boolean, duration = 2000) {
+    let extra = 'alert-negative';
+    if (positive) {
+      extra = 'alert-positive';
+    }
+    this.snackBar.open(message, action, {
+      extraClasses: [extra],
+      duration: duration
     });
-    return this.http.post('/api/favorites/data', params, {headers: this.headers}).toPromise()
-      .then(data => {
-        return (data);
-      });
   }
 
+  // Handles the opening of the modal of favorited movies.
   openDialog(favorite) {
     this.modal.openDialog(favorite, this.auth, this.token);
   }
 
+  // Passes favorites to HTML
   get favorites() {
     return this.favoriteListData;
+  }
+
+  // Passes username to HTML
+  get user() {
+    return this.username;
   }
 }
