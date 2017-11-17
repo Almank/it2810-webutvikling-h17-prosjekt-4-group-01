@@ -5,7 +5,7 @@
     <div class="searchBar">
       <div id="viewBtnWrap">
       <span matTooltip="{{this.viewTooltip}}">
-        <button mat-button (click)="toggleButton()" aria-label="toggleButton">
+        <button mat-button class="viewButton" (click)="toggleButton()" aria-label="toggleButton">
           <mat-icon class="viewGrid">{{this.viewIcon}}</mat-icon>
         </button>
       </span>
@@ -67,7 +67,7 @@
   </div>
 
   <div>
-    <mat-grid-list cols="3" rowHeight="1:1.45" gutterSize="12px" [class.show]="!show" [class.marginTop]="fixedSearch" class="gridList">
+    <mat-grid-list cols="{{this.colNum}}" rowHeight="1:1.45" gutterSize="12px" [class.show]="!show" [class.marginTop]="fixedSearch" class="gridList">
       <mat-grid-tile *ngFor="let movie of data" (click)="openDialog(movie)" title={{movie.title}}>
         <img class="gridPoster" src="{{movie.poster}}" alt="">
         <mat-grid-tile-footer>{{movie.title}}</mat-grid-tile-footer>

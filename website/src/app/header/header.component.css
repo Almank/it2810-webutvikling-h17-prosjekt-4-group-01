@@ -39,3 +39,22 @@
 .pageTitleContainer:hover .playIcon {
   color: rgba(254,253,253,1);
 }
+
+@media screen and (max-width: 480px) {
+  .playIcon {
+    height: 36px;
+    width: 36px;
+    font-size: 32px;
+    top:23px;
+  }
+
+  .pageTitle {
+    top:15px;
+    font-size: 26px;
+  }
+
+  .mat-toolbar.mat-primary {
+    padding-top:5px;
+    padding-bottom: 5px;
+  }
+}

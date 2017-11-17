@@ -64,6 +64,7 @@ export class MovieListComponent implements OnInit {
   viewIcon = 'view_comfy';
   viewTooltip = 'Grid view';
   fixedSearch = false;
+  colNum = 3;
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
     const session = JSON.parse(localStorage.getItem('session'));
@@ -75,6 +76,7 @@ export class MovieListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMovieList();
+    this.onResize();
   }
 
   toggleButton(): void {
@@ -292,7 +294,14 @@ export class MovieListComponent implements OnInit {
     this.searchDatabase(this.searchWord);
   }
 
-
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    if (window.innerWidth < 480) {
+      this.colNum = 1;
+    } else {
+      this.colNum = 3;
+    }
+  }
 }
 
 /**
