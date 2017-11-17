@@ -20,6 +20,7 @@ export class ProfileService {
     localStorage.removeItem('session');
     console.log('session is removed');
     this.router.navigate(['/']);
+    location.reload();
   }
 
   validateToken(token) {

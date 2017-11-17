@@ -72,7 +72,7 @@ export class ProfileComponent implements OnInit {
   }
 
   loadFavorites() {
-    const favorites = this.fav.loadFavorites();
+    const favorites = this.fav.loadFavorites(this.token);
     favorites.then(favorite => {
       for (const key in favorite) {
         this.favoriteDisplay.push(favorite[key]);

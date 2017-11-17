@@ -26,7 +26,7 @@ export class Favorite {
             movie_id: id,
             newFavorite: false,
           });
-          this.http.post('/api/favorites/modify', params, {headers: this.headers}).subscribe(data => {
+          this.http.post('/api/favorites/modify', params, {headers: this.headers}).toPromise().then(data => {
             if (isObject(data)) {
               console.log('removed favorite');
               const session = JSON.parse(localStorage.getItem('session'));
@@ -48,7 +48,7 @@ export class Favorite {
             movie_id: id,
             newFavorite: true,
           });
-          this.http.post('/api/favorites/modify', params, {headers: this.headers}).subscribe(data => {
+          this.http.post('/api/favorites/modify', params, {headers: this.headers}).toPromise().then(data => {
             if (isObject(data)) {
               console.log('added favorite');
               const session = JSON.parse(localStorage.getItem('session'));
@@ -68,9 +68,9 @@ export class Favorite {
     });
   }
 
-  loadFavorites() {
+  loadFavorites(token) {
     const params = JSON.stringify({
-      token: this.token,
+      token: token,
     });
     return this.http.post('/api/favorites', params, {headers: this.headers}).toPromise().then(favorites => {
       if (isObject(favorites)) {
