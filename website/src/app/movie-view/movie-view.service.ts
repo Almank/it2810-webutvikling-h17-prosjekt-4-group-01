@@ -16,7 +16,9 @@ export class MovieListService {
       .set('genre', comp.selectedGenre)
       .set('title', comp.searchTitle)
       .set('director', comp.searchDirector)
-      .set('actors', comp.searchActor);
+      .set('actors', comp.searchActor)
+      .set('sort', comp.selectedSort)
+      .set('desc', comp.descAsc);
     return this.http.get('/api/movies/list', { params }).toPromise()
       .then(data => {
         if (isObject(data)) {
@@ -31,7 +33,9 @@ export class MovieListService {
       .set('genre', comp.selectedGenre)
       .set('title', comp.searchTitle)
       .set('director', comp.searchDirector)
-      .set('actors', comp.searchActor);
+      .set('actors', comp.searchActor)
+      .set('sort', comp.selectedSort)
+      .set('desc', comp.descAsc);
     return this.http.get('/api/movies/amount', { params }).toPromise()
       .then(data => {
           return  (data);

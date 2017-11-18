@@ -18,6 +18,10 @@
   z-index: 0;
 }
 
+.changebutton{
+    display:none;
+}
+
 .mat-table {
   overflow: auto;
   height: auto;
@@ -82,7 +86,7 @@
 }
 
 .marginTop {
-  margin-top:215px;
+  margin-top:125px;
 }
 
 /* Search functionality */
@@ -128,7 +132,7 @@
   flex-direction: column;
   align-self: center;
   width: 100%;
-  padding:25px 0 15px 0;
+  padding:0 0 5px 0;
   background-color: #1E2339;
 }
 
