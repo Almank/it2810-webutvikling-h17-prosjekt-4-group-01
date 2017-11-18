@@ -35,7 +35,11 @@ html, body {
 
 .selectSearch .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow, .mat-select-value,
 .selectGenre .mat-input-wrapper .mat-input-flex .mat-input-infix .mat-input-placeholder-wrapper .mat-input-placeholder,
-.selectGenre .mat-input-wrapper .mat-input-flex .mat-input-infix span .mat-select .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow
+.selectGenre .mat-input-wrapper .mat-input-flex .mat-input-infix span .mat-select .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow,
+.selectSearch .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow,
+.mat-select-value,
+.selectGenre .mat-input-wrapper .mat-input-flex .mat-input-infix .mat-input-placeholder-wrapper .mat-input-placeholder,
+.selectGenre .mat-input-wrapper .mat-input-flex .mat-input-infix .mat-select .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow
 {
   color: rgba(254,253,253,0.4) !important;
 }
