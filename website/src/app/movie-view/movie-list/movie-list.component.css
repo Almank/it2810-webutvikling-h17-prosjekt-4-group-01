@@ -21,6 +21,9 @@
 .changebutton{
     display:none;
 }
+.changebutton{
+    display:none;
+}
 
 .mat-table {
   overflow: auto;
