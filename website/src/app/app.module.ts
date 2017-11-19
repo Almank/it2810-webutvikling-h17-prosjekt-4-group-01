@@ -17,11 +17,11 @@ import { Favorite } from './profile/profile.favorite.service';
 import { WordcloudComponent } from './movie-view/wordcloud/wordcloud.component';
 import {AgWordCloudModule, AgWordCloudData} from 'angular4-word-cloud';
 
-
 import { MovieDetailsComponent, RouterModule, Routes } from './import-module';
 import {MovieDetailsService} from './movie-view/movie-details/movie-details.service';
 import {ProfileService} from './profile/profile.service';
 import {AuthenticationService} from './auth/auth.service';
+
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},

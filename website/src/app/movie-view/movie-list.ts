@@ -1,5 +1,4 @@
 export class MovieList {
-  _id?: number;
   readMore?: string;
   poster?: string;
   plot?: string;

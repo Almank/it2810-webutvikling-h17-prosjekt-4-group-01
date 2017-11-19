@@ -10,39 +10,6 @@ const config = {'secret': 'supersecretkey'};
 
 const bcrypt = require('bcryptjs');
 
-// Uppercase first letter in each word and return regex to be searchable.
-function splitElements(str) {
-  if (str === undefined || str === '') {
-    return {$exists: true}
-  }
-  str = str.split(' ');
-  let newArr = '';
-  for (let i = 0; i < str.length; i++) {
-    // Add space between words.
-    if (str.length > 1 && i > 0) {
-      newArr += ' '
-    }
-    newArr += str[i].charAt(0).toUpperCase() + str[i].substr(1);
-  }
-  return {"$regex": newArr}
-}
-
-// Get start and end year to filter.
-function splitYear(str) {
-  if (str === undefined || str === '') {
-    return [0, 9999];
-  } else {
-    return str.split("-").map((item) => {
-      return parseInt(item.trim());
-    });
-  }
-}
-
-// GET api listing.
-router.get('/', (req, res) => {
-  res.send('api works');
-});
-
 //Error handler used by all.
 function handleError(res, reason, message, code) {
   console.log("ERROR: " + reason);
@@ -151,6 +118,9 @@ router.post('/new_password', function (req, res) {
 router.post('/favorites', function (req, res) {
   let verifiedToken = jwt.verify(req.body.token, config.secret);
   db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if (err) {
+      handleError(res, err.message, "Failed to find token.");
+    }
     if (user !== null) {
       res.status(200).json(user.favorites);
     }
@@ -162,7 +132,7 @@ router.post('/favorites/data', function (req, res) {
   const favoriteList = req.body.favoriteList;
   db.collection('movies').find({_id: {$in: favoriteList}}).toArray(function (err, docs) {
     if (err) {
-      handleError(res, err.message, "Failed to get movies with no actors.");
+      handleError(res, err.message, "Failed to get favorites.");
     } else {
       res.status(200).json(docs);
     }
@@ -174,6 +144,9 @@ router.post('/favorites/exists', function (req, res) {
   let exists = false;
   let verifiedToken = jwt.verify(req.body.token, config.secret);
   db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if (err) {
+      handleError(res, err.message, "Failed to see if favorite exist");
+    }
     if (user !== null) {
       if (user.favorites.indexOf(req.body.movie_id) >= 0) {
         exists = true;
@@ -199,7 +172,7 @@ router.post('/favorites/modify', function (req, res) {
       db.collection('users').save(user,
         function (err, docs) {
           if (err) {
-            handleError(res, err);
+            handleError(res, err.message, "Failed to modify favorite");
           } else {
             res.status(200).json(docs);
           }
@@ -214,21 +187,54 @@ router.post('/favorites/modify', function (req, res) {
 router.get('/wordcloud', function (req, res) {
   let genreData = {};
   db.collection('movies').find().toArray(function (err, data) {
-    for (let key in data){
+    for (let key in data) {
       let genreList = data[key].genre;
-      for (let key2 in genreList){
+      for (let key2 in genreList) {
         let genre = genreList[key2];
-        if (!genreData.hasOwnProperty(genre)){
+        if (!genreData.hasOwnProperty(genre)) {
           genreData[genre] = 1;
         } else {
           genreData[genre] += 1;
         }
       }
     }
-    res.status(200).json(genreData);
+    if (err) {
+      handleError(res, err.message, "Failed to get genres to wordcloud");
+    } else {
+      res.status(200).json(genreData);
+    }
   });
 });
 
+// Uppercase first letter in each word and return regex to be searchable.
+function splitElements(str) {
+  if (str === undefined || str === '') {
+    return {$exists: true}
+  }
+  str = str.split(' ');
+  let newArr = '';
+  for (let i = 0; i < str.length; i++) {
+    // Add space between words.
+    if (str.length > 1 && i > 0) {
+      newArr += ' '
+    }
+    newArr += str[i].charAt(0).toUpperCase() + str[i].substr(1);
+  }
+  return {"$regex": newArr}
+}
+
+// Get start and end year to filter.
+function splitYear(str) {
+  if (str === undefined || str === '') {
+    return [0, 9999];
+  } else {
+    return str.split("-").map((item) => {
+      return parseInt(item.trim());
+    });
+  }
+}
+
+// Find what to sort on function
 function getSortVariable(str, bool) {
   let num = 1;
   if (bool === 'true') {
@@ -243,6 +249,7 @@ function getSortVariable(str, bool) {
   }
 }
 
+// Find genre and add them to a regex to be searchable.
 function getGenres(genres) {
   if (genres === undefined || genres === '') {
     return ''
@@ -253,7 +260,6 @@ function getGenres(genres) {
       return item.trim()
     });
   }
-
   let genreElem = [];
   for (let genre of genres) {
     genreElem.push({genre: {$regex: ".*" + genre + ".*"}});
@@ -264,6 +270,7 @@ function getGenres(genres) {
 // Get movies
 router.get('/movies/list', function (req, res) {
 
+  // Set all variables from get request
   let page = parseInt(req.query.page * req.query.limit);
   let limit = parseInt(req.query.limit);
   const have = req.query.have;
@@ -280,6 +287,7 @@ router.get('/movies/list', function (req, res) {
   const director = splitElements(req.query.director);
   const sort = getSortVariable(req.query.sort, req.query.desc);
 
+  // Filter variables
   let filter = {
     title: title,
     year: {$gte: year[0], $lte: year[1]},
@@ -291,7 +299,6 @@ router.get('/movies/list', function (req, res) {
   }
 
   db.collection('movies').find(
-    // Filter correct values
     filter,
     // Remove properties from query
     {
@@ -303,13 +310,14 @@ router.get('/movies/list', function (req, res) {
     .sort(sort).limit(limit).skip(page).toArray(function (err, docs) {
 
     if (err) {
-      handleError(res, err.message, "Failed to get movies with no actors.");
+      handleError(res, err.message, "Failed to get movies.");
     } else {
       res.status(200).json(docs);
     }
   });
 });
 
+// Get amount of movies matching search.
 router.get('/movies/amount', function (req, res) {
 
   const genre = getGenres(req.query.genre);
@@ -342,12 +350,13 @@ router.get('/movies/amount', function (req, res) {
     if (err) {
       handleError(res, err.message, "Failed to get amount of movies.");
     } else {
-
       res.status(200).json(docs.length);
     }
   });
 });
 
+
+// Get detailed info for movies.
 router.get('/movies/modal', function (req, res) {
 
   db.collection('movies').find(
@@ -363,7 +372,6 @@ router.get('/movies/modal', function (req, res) {
     })
   // Sort and limit matches
     .sort().toArray(function (err, docs) {
-
     if (err) {
       handleError(res, err.message, "Failed to get movies with no actors.");
     } else {

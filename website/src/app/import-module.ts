@@ -1,4 +1,4 @@
-export { Component, OnInit, ViewChild, NgModule, Injectable, HostListener } from '@angular/core';
+export { Component, OnInit, ViewChild, NgModule, Injectable, HostListener, Directive } from '@angular/core';
 export { MatDialog } from '@angular/material';
 export { DataSource } from '@angular/cdk/collections';
 export { MatPaginator } from '@angular/material';
@@ -21,3 +21,4 @@ export { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export { BrowserModule } from '@angular/platform-browser';
 export { MovieList } from './movie-view/movie-list';
 export { WordcloudComponent } from './movie-view/wordcloud/wordcloud.component';
+export { MovieSource } from './movie-view/movie-list/movie-source.component';

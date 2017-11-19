@@ -16,10 +16,10 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.data._id);
   }
 
   toggleFavorite(id, favorited) {
-    console.log(favorited);
     this.fav.favorite(id);
     if (!this.buttonClicked) {
       this.toggled = favorited;

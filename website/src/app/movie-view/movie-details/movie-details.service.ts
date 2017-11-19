@@ -43,6 +43,7 @@ export class MovieDetailsService {
         'poster': movies[0].poster,
         'plot': movies[0].plot,
         'runtime': movies[0].runtime,
+        'readMore': movies[0].readMore,
         'actors': data.actors,
         'director': data.director,
         'genre': data.genre,
@@ -59,5 +60,4 @@ export class MovieDetailsService {
       });
     });
   }
-
 }

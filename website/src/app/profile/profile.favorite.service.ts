@@ -31,7 +31,6 @@ export class Favorite {
           });
           this.http.post('/api/favorites/modify', params, {headers: this.headers}).subscribe(data => {
             if (isObject(data)) {
-              console.log('removed favorite');
               const session = JSON.parse(localStorage.getItem('session'));
               const index = session['favorites'].indexOf(id);
               const favorite = session.favorites;
@@ -53,7 +52,6 @@ export class Favorite {
           });
           this.http.post('/api/favorites/modify', params, {headers: this.headers}).subscribe(data => {
             if (isObject(data)) {
-              console.log('added favorite');
               const session = JSON.parse(localStorage.getItem('session'));
               const favorite = session.favorites;
               favorite.push(id);
