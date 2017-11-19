@@ -1,11 +1,11 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {isObject} from 'util';
+import {Component, OnInit, HttpClient, HttpHeaders, isObject} from '../import-module';
+/** Importing these separately as the site crashes if they are barreled */
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
-import {Favorite} from './profile.favorite.service';
 import {MovieDetailsService} from '../movie-view/movie-details/movie-details.service';
 import {ProfileService} from './profile.service';
+import {ViewEncapsulation} from "@angular/core";
+import {Favorite} from "./profile.favorite.service";
 
 @Component({
   selector: 'app-profile',

@@ -12,7 +12,7 @@
       </div>
 
       <span matTooltip="Search movies">
-        <input #input class="searchInputField" (keyup)="searchDatabase(input.value)" autofocus placeholder="Search for movies">
+        <input #input class="searchInputField" (keyup)="searchDatabase(input.value.toLowerCase())" autofocus placeholder="Search for movies">
       </span>
 
       <span matTooltip="Choose search">

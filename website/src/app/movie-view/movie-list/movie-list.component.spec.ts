@@ -1,10 +1,7 @@
-import {TestBed, async, MovieListComponent} from '../../import-module';
-import {
-  MatDialogModule, MatIconModule, MatInputModule, MatOptionModule, MatPaginatorModule,
-  MatTableModule
-} from '@angular/material';
+import {TestBed, async, MovieListComponent,  MatDialogModule, MatIconModule, MatInputModule, MatOptionModule, MatPaginatorModule,
+  MatTableModule, HttpClientModule} from '../../import-module';
+/** Importing these separately as the site crashes if they are barreled */
 import {MovieListService} from '../movie-view.service';
-import {HttpClientModule} from '@angular/common/http';
 
 
 describe('MovieListComponent', () => {

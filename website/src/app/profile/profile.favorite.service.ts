@@ -1,6 +1,5 @@
-import {Injectable, HttpClient} from '../import-module';
-import {HttpHeaders} from '@angular/common/http';
-import {isObject} from 'util';
+import {Injectable, HttpClient, HttpHeaders, isObject} from '../import-module';
+
 
 @Injectable()
 export class Favorite {

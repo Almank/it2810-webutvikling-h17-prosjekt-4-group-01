@@ -1,4 +1,6 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit} from '../../import-module';
+/** Importing these separately as the site crashes if they are barreled */
+import {Inject} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import {MAT_DIALOG_DATA} from '@angular/material';
 import {Favorite} from '../../profile/profile.favorite.service';

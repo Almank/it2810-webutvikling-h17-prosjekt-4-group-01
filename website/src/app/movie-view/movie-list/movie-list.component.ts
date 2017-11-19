@@ -1,6 +1,6 @@
 import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
   Observable, HttpClient, MovieDetailsComponent, MatSelectModule, HostListener } from '../../import-module';
-
+/** Importing these separately as the site crashes if they are barreled */
 import { HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
@@ -142,7 +142,7 @@ export class MovieListComponent implements OnInit {
   openDialog(data) {
     this.modal.openDialog(data, this.auth, this.token);
   }
-  
+
   createList(movieData) {
     this.dataSource = new MovieSource(this, this.paginator);
     /** Fill up the database with 25 movies. */
