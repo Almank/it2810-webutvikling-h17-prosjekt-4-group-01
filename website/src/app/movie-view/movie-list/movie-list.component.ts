@@ -1,6 +1,6 @@
 import {  MovieList, Component, OnInit, ViewChild, MatDialog, MatPaginator, BehaviorSubject,
-  Observable, HttpClient, MovieDetailsComponent, MatSelectModule, HostListener, MovieSource } from '../../import-module';
-
+  HostListener, MovieSource } from '../../import-module';
+/** Importing these separately as the site crashes if they are barreled */
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -49,7 +49,7 @@ export class MovieListComponent implements OnInit {
   descAsc: string;
   sortCriteria = 1;
 
-  constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient,
+  constructor(public dialog: MatDialog, private movieListService: MovieListService,
               private modal: MovieDetailsService) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (!(session === null || session.auth === false)) {

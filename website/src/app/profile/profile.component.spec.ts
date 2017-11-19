@@ -1,11 +1,5 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
-import {ProfileComponent} from './profile.component';
-import {FormsModule} from '@angular/forms';
-import {MatCardModule, MatSnackBarModule} from '@angular/material';
-import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientModule} from '@angular/common/http';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {async, ComponentFixture, TestBed, ProfileComponent, FormsModule, MatCardModule, MatSnackBarModule,
+  RouterTestingModule, HttpClientModule, BrowserAnimationsModule} from '../import-module';
 
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
