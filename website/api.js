@@ -182,6 +182,64 @@ router.post('/favorites/modify', function (req, res) {
   });
 });
 
+/** User History **/
+// UserHistory - Get list of movie id's from user session
+router.post('/history', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if (user !== null) {
+      const response = [];
+      for (let key in user.searchHistory) {
+        response.push(user.searchHistory[key].id);
+      }
+      res.status(200).send(response);
+    }
+  });
+});
+
+// UserHistory - Add a new movie id to user session
+router.post('/history/add', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if (user !== null) {
+      const save = [];
+      for (let key in req.body.movie_ids) {
+        save.push({key: key, id: req.body.movie_ids[key]});
+      }
+      user.searchHistory = save;
+      db.collection('users').save(user,
+        function (err, docs) {
+          if (err) {
+            handleError(res, err);
+          } else {
+            res.status(200).json(docs);
+          }
+        }
+      );
+    }
+  });
+});
+
+// UserHistory - Find movie data and map it to the users history.
+router.post('/history/data', function (req, res) {
+  const historyList = req.body.historyList;
+  const mapping = {};
+  for (let key in historyList) {
+    mapping[key] = historyList[key];
+  }
+  db.collection('movies').find({_id: {$in: historyList}}).toArray(function (err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get movies with no actors.");
+    } else {
+      const mapped = {};
+      for (let key in docs) {
+        mapped[docs[key]._id] = docs[key];
+      }
+      res.status(200).json({mapping: mapping, mapped: mapped});
+    }
+  });
+});
+
 /** WordCloud **/
 // Scan database and calculate genre data
 router.get('/wordcloud', function (req, res) {

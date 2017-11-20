@@ -6,7 +6,7 @@ import {BrowserModule, NgModule, BrowserAnimationsModule, HttpClientModule, MatB
   MatSelectModule, FormsModule, AppComponent, CdkTableModule, MovieListComponent, HeaderComponent, ProfileComponent,
   AuthComponent, MovieListService, Favorite, MovieDetailsComponent, RouterModule, Routes, MovieDetailsService,
   ProfileService, AuthenticationService } from './import-module';
-
+import {ProfileHistoryService} from './profile/profile.history.service';
 import { WordcloudService} from './movie-view/wordcloud/wordcloud.service';
 
 const appRoutes: Routes = [
@@ -64,8 +64,9 @@ const appRoutes: Routes = [
     MovieDetailsService,
     ProfileService,
     AuthenticationService,
+    ProfileHistoryService,
     WordcloudService
-    ],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

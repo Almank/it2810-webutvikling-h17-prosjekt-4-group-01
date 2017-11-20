@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {Favorite} from './profile.favorite.service';
 import {MovieDetailsService} from '../movie-view/movie-details/movie-details.service';
 import {ProfileService} from './profile.service';
+import {ProfileHistoryService} from './profile.history.service';
 import {ViewEncapsulation} from '@angular/core';
 
 @Component({
@@ -20,9 +21,11 @@ export class ProfileComponent implements OnInit {
   favoriteList: Object;
   favoriteDisplay = [];
   favoriteListData;
+  searchHistory: Object[];
 
   constructor(private router: Router, private http: HttpClient, private fav: Favorite,
-              private modal: MovieDetailsService, private profile: ProfileService) {
+              private modal: MovieDetailsService, private profile: ProfileService,
+              public history: ProfileHistoryService) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null || session.auth === false) {
       this.router.navigate(['/login']);
@@ -32,10 +35,12 @@ export class ProfileComponent implements OnInit {
       this.username = session.username;
       this.token = session.token;
       this.loadFavorites();
+      this.loadHistory();
     }
   }
 
   ngOnInit() {
+    this.searchHistory = this.history.getCurrentHistory();
   }
 
   // Calls the service onLogout()
@@ -69,6 +74,24 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  // Uses the profile.hsistory service to update the profile content to match
+  // the servers session object.
+  loadHistory() {
+    this.history.updateHistory(this.token).then(data => {
+      this.searchHistory = [];
+      this.history.loadHistoryMovieData(data).then(liste => {
+        let result = [];
+        const mapping = liste['mapping'];
+        const mapped = liste['mapped'];
+        for (let map in mapping) {
+          result.push(mapped[mapping[map]]);
+        }
+        this.searchHistory = result;
+        this.history.currentHistory = result;
+      });
+    });
+  }
+
   // Handles the opening of the modal of favorited movies.
   openDialog(favorite) {
     this.modal.openDialog(favorite, this.auth, this.token);
@@ -82,5 +105,11 @@ export class ProfileComponent implements OnInit {
   // Passes username to HTML
   get user() {
     return this.username;
+  }
+
+  // Passes history data to HTML
+  get userHistory() {
+    const history = this.history.currentHistory;
+    return history.reverse();
   }
 }
