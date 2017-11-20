@@ -7,6 +7,7 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import { MovieListService } from '../movie-view.service';
 import { MovieDetailsService } from '../movie-details/movie-details.service';
+import {ProfileService} from '../../profile/profile.service';
 
 @Component({
   selector: 'movieList',
@@ -78,7 +79,7 @@ export class MovieListComponent implements OnInit {
   sortCriteria = 1;
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient,
-              private modal: MovieDetailsService) {
+              private modal: MovieDetailsService, public profile: ProfileService) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (!(session === null || session.auth === false)) {
       this.auth = session.auth;
@@ -89,6 +90,9 @@ export class MovieListComponent implements OnInit {
   ngOnInit(): void {
     this.getMovieList();
     this.onResize();
+    if (this.auth) {
+      this.profile.validateToken(this.token);
+    }
   }
 
   toggleButton(): void {

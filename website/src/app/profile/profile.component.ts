@@ -2,7 +2,6 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {isObject} from 'util';
 import {Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material';
 import {Favorite} from './profile.favorite.service';
 import {MovieDetailsService} from '../movie-view/movie-details/movie-details.service';
 import {ProfileService} from './profile.service';
@@ -22,13 +21,13 @@ export class ProfileComponent implements OnInit {
   favoriteDisplay = [];
   favoriteListData;
 
-  constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar, private fav: Favorite,
+  constructor(private router: Router, private http: HttpClient, private fav: Favorite,
               private modal: MovieDetailsService, private profile: ProfileService) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null || session.auth === false) {
       this.router.navigate(['/login']);
     } else {
-      this.validateToken(session.token);
+      this.profile.validateToken(session.token);
       this.auth = session.auth;
       this.username = session.username;
       this.token = session.token;
@@ -39,14 +38,9 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
   }
 
-  // Logs out the user by removing the session and therefore removing the JasonWebToken
-  // resulting in no more authenticated access to services.
-  // Also reloads the website due to interference.
+  // Calls the service onLogout()
   onLogout() {
-    localStorage.removeItem('session');
-    console.log('session is removed');
-    this.router.navigate(['/']);
-    location.reload();
+    this.profile.onLogout();
   }
 
   // Invokes a http request with old password to change to a new one.
@@ -55,23 +49,10 @@ export class ProfileComponent implements OnInit {
     const newPassword = this.profile.onNewPassword(form);
     newPassword.then(data => {
       if (isObject(data)) {
-        this.onUserAlert('Password successfully changed', 'dismiss', true);
+        this.profile.onUserAlert('Password successfully changed', 'dismiss', true);
       }
     }, error => {
-      this.onUserAlert(error.error.message, 'dismiss', false);
-    });
-  }
-
-  // Validates the current token to see if it has expired. If the token has expired,
-  // the user will be logged out and prompted to login again.
-  validateToken(token) {
-    const validation = this.profile.validateToken(token);
-    validation.then(data => {
-    }, err => {
-      if (isObject(err)) {
-        this.onUserAlert(err.error.message, 'dismiss', false, 4000);
-        this.onLogout();
-      }
+      this.profile.onUserAlert(error.error.message, 'dismiss', false);
     });
   }
 
@@ -87,18 +68,6 @@ export class ProfileComponent implements OnInit {
       this.fav.loadFavoriteListData(this.favoriteDisplay).then(data => {
         this.favoriteListData = data;
       });
-    });
-  }
-
-  // Alerts the user when a user tries to change its password or fails to validate token.
-  onUserAlert(message: string, action: string, positive: boolean, duration = 2000) {
-    let extra = 'alert-negative';
-    if (positive) {
-      extra = 'alert-positive';
-    }
-    this.snackBar.open(message, action, {
-      extraClasses: [extra],
-      duration: duration
     });
   }
 
