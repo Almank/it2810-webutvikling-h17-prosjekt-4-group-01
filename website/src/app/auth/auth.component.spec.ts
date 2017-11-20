@@ -1,15 +1,6 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
-import {AuthComponent} from './auth.component';
-import {
-  MatCard, MatFormFieldModule, MatInkBar, MatInputModule, MatRipple, MatSnackBarModule, MatTab,
-  MatTabBody, MatTabGroup, MatTabHeader, MatTabLabel, MatTabLabelWrapper
-} from '@angular/material';
-import {FormsModule} from '@angular/forms';
-import {PortalModule} from '@angular/cdk/portal';
-import {HttpClientModule} from '@angular/common/http';
-import {RouterTestingModule} from '@angular/router/testing';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {async, ComponentFixture, TestBed, AuthComponent, MatCard, MatFormFieldModule, MatInkBar, MatInputModule,
+  MatRipple, MatSnackBarModule, MatTab, MatTabBody, MatTabGroup, MatTabHeader, MatTabLabel, MatTabLabelWrapper,
+  FormsModule, PortalModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule  } from '../import-module';
 import {AuthenticationService} from './auth.service';
 
 describe('AuthComponent', () => {

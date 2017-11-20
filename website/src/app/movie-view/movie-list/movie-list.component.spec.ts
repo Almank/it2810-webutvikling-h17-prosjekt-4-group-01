@@ -1,14 +1,10 @@
-import {TestBed, async, MovieListComponent} from '../../import-module';
-import {
-  MatDialogModule, MatGridListModule, MatIconModule, MatInputModule, MatOptionModule, MatPaginatorModule,
-  MatSelectModule, MatSnackBarModule, MatTableModule, MatTooltipModule
-} from '@angular/material';
+import {TestBed, async, MovieListComponent,  MatDialogModule, MatIconModule, MatInputModule, MatOptionModule, MatPaginatorModule,
+  MatTableModule, HttpClientModule, MatTooltipModule, MatSelectModule, MatGridListModule, MatSnackBarModule} from '../../import-module';
+/** Importing these separately as the site crashes if they are barreled */
 import {MovieListService} from '../movie-view.service';
-import {HttpClientModule} from '@angular/common/http';
 import {MovieDetailsService} from '../movie-details/movie-details.service';
 import {ProfileService} from '../../profile/profile.service';
-import {RouterTestingModule} from "@angular/router/testing";
-
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('MovieListComponent', () => {
   beforeEach(async(() => {
