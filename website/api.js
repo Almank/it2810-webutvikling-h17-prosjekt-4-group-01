@@ -212,7 +212,11 @@ router.post('/history', function (req, res) {
   let verifiedToken = jwt.verify(req.body.token, config.secret);
   db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
     if (user !== null) {
-      res.status(200).send(user.searchHistory);
+      const response = [];
+      for (let key in user.searchHistory) {
+        response.push(user.searchHistory[key].id);
+      }
+      res.status(200).send(response);
     }
   });
 });
@@ -222,7 +226,11 @@ router.post('/history/add', function (req, res) {
   let verifiedToken = jwt.verify(req.body.token, config.secret);
   db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
     if (user !== null) {
-      user.searchHistory = req.body.movie_ids;
+      const save = [];
+      for (let key in req.body.movie_ids) {
+        save.push({key: key, id: req.body.movie_ids[key]});
+      }
+      user.searchHistory = save;
       db.collection('users').save(user,
         function (err, docs) {
           if (err) {
@@ -236,6 +244,25 @@ router.post('/history/add', function (req, res) {
   });
 });
 
+// UserHistory find movie data
+router.post('/history/data', function (req, res) {
+  const historyList = req.body.historyList;
+  const mapping = {};
+  for (let key in historyList) {
+    mapping[key] = historyList[key];
+  }
+  db.collection('movies').find({_id: {$in: historyList}}).toArray(function (err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get movies with no actors.");
+    } else {
+      const mapped = {};
+      for (let key in docs) {
+        mapped[docs[key]._id] = docs[key];
+      }
+      res.status(200).json({mapping: mapping, mapped: mapped});
+    }
+  });
+});
 
 function getSortVariable(str, bool) {
   let num = 1;

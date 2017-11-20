@@ -98,11 +98,15 @@ export class ProfileComponent implements OnInit {
   loadHistory() {
     this.history.updateHistory(this.token).then(data => {
       this.searchHistory = [];
-      this.fav.loadFavoriteListData(data).then(liste => {
-        for (let key in liste) {
-          this.searchHistory.push(liste[key]);
+      this.history.loadHistoryMovieData(data).then(liste => {
+        let result = [];
+        const mapping = liste['mapping'];
+        const mapped = liste['mapped'];
+        for (let map in mapping) {
+          result.push(mapped[mapping[map]]);
         }
-        this.history.currentHistory = this.searchHistory;
+        this.searchHistory = result;
+        this.history.currentHistory = result;
       });
     });
   }
@@ -135,6 +139,7 @@ export class ProfileComponent implements OnInit {
   }
 
   get userHistory() {
-    return this.history.currentHistory;
+    const history = this.history.currentHistory;
+    return history.reverse();
   }
 }

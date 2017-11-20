@@ -64,6 +64,16 @@ export class ProfileHistoryService {
     });
   }
 
+  loadHistoryMovieData(historyList) {
+    const params = JSON.stringify({
+      historyList: historyList
+    });
+    return this.http.post('/api/history/data', params, {headers: this.headers}).toPromise()
+      .then(data => {
+        return data;
+      });
+  }
+
   getCurrentHistory() {
     const history = this.currentHistory;
     return history;
