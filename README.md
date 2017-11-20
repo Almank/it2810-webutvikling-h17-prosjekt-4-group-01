@@ -41,16 +41,13 @@ You may now visit your local website on `localhost:8084`.
 If you would like to run through the projects tests, you have to make sure that you have
 installed all dependencies using `npm install` first.
 
-To proceed running the tests, use the command: `npm test`  
-Karma will now launch the testing environment, and you have to wait a couple of seconds
-until the browser opens and runs the tests.  
-
-After all tests have completed, you will have a nice overview over all the tests ran, including
-descriptive information if any of the tests fail to success.
-
+To proceed running the tests, use the commands:
+- Front-end tests: `npm test`
+- Back-end tests: `npm test-backend`
+- End-to-End tests: `npm e2e`
 #### Test Structure
 
-The testing environment consists of the packages `Jasmine` and `Karma`.
+The testing environment consists of the packages `Jasmine`, `Karma` and `Protractor`.
 These ensure that we have a structured environment, and can easily write more tests underway
 the project.  
 
@@ -69,4 +66,10 @@ Current test files and their location:
 - movie-list.component.spec.ts    (/src/app/movie-view/movie-list)
 - profile.component.spec.ts       (/src/app/profile)
 - search-bar.component.spec.ts    (/src/app/search-bar)
+```
+
+End-to-End tests:
+```
+- app.e2e-spec.ts                 (/e2e)
+- app.po.ts                       (/e2e)
 ```

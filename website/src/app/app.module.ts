@@ -7,6 +7,8 @@ import {BrowserModule, NgModule, BrowserAnimationsModule, HttpClientModule, MatB
   AuthComponent, MovieListService, Favorite, MovieDetailsComponent, RouterModule, Routes, MovieDetailsService,
   ProfileService, AuthenticationService } from './import-module';
 
+import { WordcloudService} from './movie-view/wordcloud/wordcloud.service';
+
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},
@@ -61,7 +63,9 @@ const appRoutes: Routes = [
     Favorite,
     MovieDetailsService,
     ProfileService,
-    AuthenticationService],
+    AuthenticationService,
+    WordcloudService
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
