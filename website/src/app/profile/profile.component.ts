@@ -22,6 +22,7 @@ export class ProfileComponent implements OnInit {
   favoriteList: Object;
   favoriteDisplay = [];
   favoriteListData;
+  searchHistory: Object[];
 
   constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar, private fav: Favorite,
               private modal: MovieDetailsService, private profile: ProfileService,
@@ -35,10 +36,12 @@ export class ProfileComponent implements OnInit {
       this.username = session.username;
       this.token = session.token;
       this.loadFavorites();
+      this.loadHistory();
     }
   }
 
   ngOnInit() {
+    this.searchHistory = this.history.getCurrentHistory();
   }
 
   // Logs out the user by removing the session and therefore removing the JasonWebToken
@@ -92,6 +95,18 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  loadHistory() {
+    this.history.updateHistory(this.token).then(data => {
+      this.searchHistory = [];
+      this.fav.loadFavoriteListData(data).then(liste => {
+        for (let key in liste) {
+          this.searchHistory.push(liste[key]);
+        }
+        this.history.currentHistory = this.searchHistory;
+      });
+    });
+  }
+
   // Alerts the user when a user tries to change its password or fails to validate token.
   onUserAlert(message: string, action: string, positive: boolean, duration = 2000) {
     let extra = 'alert-negative';
@@ -120,6 +135,6 @@ export class ProfileComponent implements OnInit {
   }
 
   get userHistory() {
-    return this.history.getCurrentHistory();
+    return this.history.currentHistory;
   }
 }

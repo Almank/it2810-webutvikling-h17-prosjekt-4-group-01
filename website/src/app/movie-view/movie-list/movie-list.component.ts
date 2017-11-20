@@ -142,7 +142,7 @@ export class MovieListComponent implements OnInit {
   openDialog(data) {
     this.modal.openDialog(data, this.auth, this.token);
   }
-  
+
   createList(movieData) {
     this.dataSource = new MovieSource(this, this.paginator);
     /** Fill up the database with 25 movies. */

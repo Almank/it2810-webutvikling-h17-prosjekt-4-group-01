@@ -37,9 +37,12 @@
         <h4 class="title">Search History</h4>
         <hr class="card-hr">
         <p>Future table of content</p>
-        <mat-nav-list>
-            <mat-list-item *ngFor="let movie of userHistory"> {{ movie }} </mat-list-item>
-        </mat-nav-list>
+        <mat-grid-list cols="4" rowHeight="1:1.45" gutterSize="12px" [class.show]="!show" class="gridList">
+          <mat-grid-tile *ngFor="let movie of userHistory" (click)="openDialog(movie)" title={{movie.title}}>
+            <img id="gridPoster" src="{{movie.poster}}" alt="">
+            <mat-grid-tile-footer>{{movie.title}}</mat-grid-tile-footer>
+          </mat-grid-tile>
+        </mat-grid-list>
       </mat-tab>
 
       <mat-tab label="Favourites">

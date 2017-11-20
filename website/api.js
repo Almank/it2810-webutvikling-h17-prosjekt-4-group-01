@@ -207,6 +207,36 @@ router.post('/favorites/modify', function (req, res) {
   });
 });
 
+// UserHistory
+router.post('/history', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if (user !== null) {
+      res.status(200).send(user.searchHistory);
+    }
+  });
+});
+
+// UserHistory ADD
+router.post('/history/add', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if (user !== null) {
+      user.searchHistory = req.body.movie_ids;
+      db.collection('users').save(user,
+        function (err, docs) {
+          if (err) {
+            handleError(res, err);
+          } else {
+            res.status(200).json(docs);
+          }
+        }
+      );
+    }
+  });
+});
+
+
 function getSortVariable(str, bool) {
   let num = 1;
   if (bool === 'true') {

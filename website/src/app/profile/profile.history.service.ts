@@ -1,5 +1,7 @@
 import {Injectable, HttpClient} from '../import-module';
 import {HttpHeaders} from '@angular/common/http';
+import {isObject} from 'util';
+import {Favorite} from './profile.favorite.service';
 
 @Injectable()
 export class ProfileHistoryService {
@@ -8,7 +10,7 @@ export class ProfileHistoryService {
   auth: Boolean;
   currentHistory = [];
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private fav: Favorite) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (!(session === null || session.auth === false)) {
       this.token = session.token;
@@ -18,19 +20,52 @@ export class ProfileHistoryService {
 
   // Check if movie already exists in currentHistory
   // then add it to the stack.
-  addMovie(movie_id) {
-    const index = this.currentHistory.indexOf(movie_id);
-    if (index > -1) {
-      this.currentHistory.splice(index, 1);
+  addMovie(movie) {
+    function containsObject(obj, list) {
+      let i;
+      for (i = 0; i < list.length; i++) {
+        if (list[i]._id === obj._id) {
+          return {exist: true, i: i};
+        }
+      }
+      return {exist: false, i: i};
     }
-    this.currentHistory.push(movie_id);
+
+    const contains = containsObject(movie, this.currentHistory);
+
+    if (contains.exist) {
+      this.currentHistory.splice(contains.i, 1);
+    }
+    this.currentHistory.push(movie);
+    this.addHistory();
   }
 
-  updateUser() {
-    // Todo: API request
+  updateHistory(token) {
+    const params = JSON.stringify({
+      token: token,
+    });
+    return this.http.post('/api/history', params, {headers: this.headers}).toPromise().then(data => {
+      return data;
+    });
+  }
+
+  addHistory() {
+    const movie_list = [];
+    for (let key in this.currentHistory) {
+      movie_list.push(this.currentHistory[key]._id);
+    }
+    const params = JSON.stringify({
+      token: this.token,
+      movie_ids: movie_list
+    });
+    return this.http.post('/api/history/add', params, {headers: this.headers}).toPromise().then(data => {
+      if (isObject(data)) {
+      }
+    });
   }
 
   getCurrentHistory() {
-    return this.currentHistory.reverse();
+    const history = this.currentHistory;
+    return history;
   }
 }
