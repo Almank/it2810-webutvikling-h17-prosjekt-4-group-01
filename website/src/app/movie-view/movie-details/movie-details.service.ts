@@ -4,6 +4,7 @@ import {HttpHeaders} from '@angular/common/http';
 import {MovieListService} from '../movie-view.service';
 import 'rxjs/add/operator/toPromise';
 import {ProfileService} from '../../profile/profile.service';
+import {ProfileHistoryService} from '../../profile/profile.history.service';
 
 @Injectable()
 export class MovieDetailsService {
@@ -11,12 +12,13 @@ export class MovieDetailsService {
   dialogResult: String;
 
   constructor(private http: HttpClient, public dialog: MatDialog, private movieListService: MovieListService,
-              private profile: ProfileService) {
+              private profile: ProfileService, public history: ProfileHistoryService) {
   }
 
   openDialog(data, auth, token) {
     // If user is logged in, check if movie is favorited
     if (auth) {
+      this.history.addMovie(data._id);
       this.profile.validateToken(token);
       const params = JSON.stringify({
         token: token,

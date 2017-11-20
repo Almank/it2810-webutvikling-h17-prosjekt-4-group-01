@@ -6,6 +6,7 @@ import {MatSnackBar} from '@angular/material';
 import {Favorite} from './profile.favorite.service';
 import {MovieDetailsService} from '../movie-view/movie-details/movie-details.service';
 import {ProfileService} from './profile.service';
+import {ProfileHistoryService} from "./profile.history.service";
 
 @Component({
   selector: 'app-profile',
@@ -23,7 +24,8 @@ export class ProfileComponent implements OnInit {
   favoriteListData;
 
   constructor(private router: Router, private http: HttpClient, public snackBar: MatSnackBar, private fav: Favorite,
-              private modal: MovieDetailsService, private profile: ProfileService) {
+              private modal: MovieDetailsService, private profile: ProfileService,
+              public history: ProfileHistoryService) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null || session.auth === false) {
       this.router.navigate(['/login']);
@@ -115,5 +117,9 @@ export class ProfileComponent implements OnInit {
   // Passes username to HTML
   get user() {
     return this.username;
+  }
+
+  get userHistory() {
+    return this.history.getCurrentHistory();
   }
 }

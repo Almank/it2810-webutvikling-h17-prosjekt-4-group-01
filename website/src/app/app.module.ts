@@ -20,6 +20,7 @@ import { MovieDetailsComponent, RouterModule, Routes } from './import-module';
 import {MovieDetailsService} from './movie-view/movie-details/movie-details.service';
 import {ProfileService} from './profile/profile.service';
 import {AuthenticationService} from './auth/auth.service';
+import {ProfileHistoryService} from './profile/profile.history.service';
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},
@@ -71,7 +72,9 @@ const appRoutes: Routes = [
     Favorite,
     MovieDetailsService,
     ProfileService,
-    AuthenticationService],
+    AuthenticationService,
+    ProfileHistoryService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
