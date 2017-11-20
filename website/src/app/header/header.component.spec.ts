@@ -1,8 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed, HeaderComponent, MatIconModule, MatToolbar, MatToolbarRow, CommonModule
+} from '../import-module';
 
-import { HeaderComponent } from './header.component';
-import {MatIconModule, MatToolbar, MatToolbarRow} from '@angular/material';
-import {CommonModule} from '@angular/common';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;

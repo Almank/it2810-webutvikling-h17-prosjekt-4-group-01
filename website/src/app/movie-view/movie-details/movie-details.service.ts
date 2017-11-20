@@ -1,6 +1,5 @@
-import {Injectable, HttpClient, MatDialog} from '../../import-module';
-import {MovieDetailsComponent} from './movie-details.component';
-import {HttpHeaders} from '@angular/common/http';
+import {Injectable, HttpClient, MatDialog, MovieDetailsComponent, HttpHeaders } from '../../import-module';
+/** Importing these separately as the site crashes if they are barreled */
 import {MovieListService} from '../movie-view.service';
 import 'rxjs/add/operator/toPromise';
 import {ProfileService} from '../../profile/profile.service';
@@ -43,6 +42,7 @@ export class MovieDetailsService {
         'poster': movies[0].poster,
         'plot': movies[0].plot,
         'runtime': movies[0].runtime,
+        'readMore': movies[0].readMore,
         'actors': data.actors,
         'director': data.director,
         'genre': data.genre,
@@ -59,5 +59,4 @@ export class MovieDetailsService {
       });
     });
   }
-
 }

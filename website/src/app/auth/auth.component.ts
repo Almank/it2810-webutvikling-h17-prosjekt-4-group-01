@@ -1,6 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {isObject} from '../import-module';
-import {AuthenticationService} from './auth.service';
+import {isObject, Component, OnInit, ViewEncapsulation, AuthenticationService} from '../import-module';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 

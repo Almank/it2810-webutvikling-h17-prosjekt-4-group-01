@@ -1,7 +1,6 @@
-import {Injectable, HttpClient} from '../import-module';
+import {Injectable, HttpClient, HttpHeaders} from '../import-module';
 import 'rxjs/add/operator/toPromise';
 import {Router} from '@angular/router';
-import {HttpHeaders} from '@angular/common/http';
 
 @Injectable()
 export class AuthenticationService {
