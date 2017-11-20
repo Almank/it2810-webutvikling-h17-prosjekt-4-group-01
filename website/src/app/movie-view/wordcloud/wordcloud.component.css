@@ -6,6 +6,16 @@
 .cloud{
     text-align: center;
 }
-text.cloud:hover{
-    font-size-adjust: 20px;
+.cloudIconContainer{
+    text-align: center;
+
+}
+.cloudIcon{
+    color: white;
+    font-size: 150px;
+}
+.cloudtitle{
+    text-align: center;
+    color: white;
+    font-size: 20px;
 }

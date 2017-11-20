@@ -1,44 +1,20 @@
-import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
+import {  Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
   Observable, HttpClient, MovieDetailsComponent, MatSelectModule } from '../../import-module';
-  import { HttpHeaders } from '@angular/common/http';
-  import { MovieListService } from '../movie-view.service';
-  import { MovieListComponent } from '../movie-list/movie-list.component';
   import {AgWordCloudModule, AgWordCloudData} from 'angular4-word-cloud';
-
+  import { WordcloudService } from './wordcloud.service';
 @Component({
   selector: 'wordcloud',
   template: `
+  <div class="cloudIconContainer"><mat-icon class="cloudIcon">cloud</mat-icon></div>
+  <h4 class="cloudtitle">Moviegenres in our database; the bigger they are, the more we got!</h4>
   <div class="cloudcontainer">
     <div class="cloud" AgWordCloud [wordData]="wordData" [options]="options" ></div>
   </div>
   `,
   styleUrls: ['./wordcloud.component.css'],
 })
-export class WordcloudComponent {
-   wordData: AgWordCloudData[] = [
-        {size: 500, text: 'Action'},
-        {size: 301, text: 'Adventure'},
-        {size: 123, text: 'Animation'},
-        {size: 321, text: 'Biography'},
-        {size: 231, text: 'Comedy'},
-        {size: 123, text: 'Crime'},
-        {size: 346, text: 'Documentary'},
-        {size: 107, text: 'Drama'},
-        {size: 436, text: 'Family'},
-        {size: 731, text: 'Fantasy'},
-        {size: 80, text: 'Film-Noir'},
-        {size: 96, text: 'Horror'},
-        {size: 531, text: 'History'},
-        {size: 109, text: 'Music'},
-        {size: 972, text: 'Musical'},
-        {size: 213, text: 'Mystery'},
-        {size: 294, text: 'Romance'},
-        {size: 472, text: 'Sci-Fi'},
-        {size: 297, text: 'Sport'},
-        {size: 456, text: 'Thriller'},
-        {size: 123, text: 'War'},
-        {size: 376, text: 'Western'},
-    ];
+export class WordcloudComponent implements OnInit {
+   wordData: AgWordCloudData[] = [];
 
   options = {
 	  settings: {
@@ -53,14 +29,22 @@ export class WordcloudComponent {
 	  },
 	  labels: true // false to hide hover labels
   };
+
+  constructor(private wordcloud: WordcloudService) {
+
+  }
+
   ngOnInit(): void {
-    console.log();
+      this.constructWordcloud().then(data => this.wordData = data);
   }
 
-  constructor() {
+  constructWordcloud(){
+      return this.wordcloud.getWordcloud().then(data => {
+          let result = [];
+          for (let key in data){
+              result.push({size: data[key] , text: key})
+          }
+          return result;
+      });
   }
-
-  countOccurances(arr): void {
-    }
-
 }
