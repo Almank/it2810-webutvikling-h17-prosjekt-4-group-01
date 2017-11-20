@@ -21,6 +21,8 @@ export class ProfileHistoryService {
   // Check if movie already exists in currentHistory
   // then add it to the stack.
   addMovie(movie) {
+    // Had to make a manual function to check objects, as indexOf in some cases
+    // returned -1.
     function containsObject(obj, list) {
       let i;
       for (i = 0; i < list.length; i++) {
@@ -40,6 +42,7 @@ export class ProfileHistoryService {
     this.addHistory();
   }
 
+  // Update users local object with current history
   updateHistory(token) {
     const params = JSON.stringify({
       token: token,
@@ -49,6 +52,7 @@ export class ProfileHistoryService {
     });
   }
 
+  // Update user session on server with current local history.
   addHistory() {
     const movie_list = [];
     for (let key in this.currentHistory) {
@@ -64,6 +68,8 @@ export class ProfileHistoryService {
     });
   }
 
+  // Takes a list of movie id's (history) as input, and outputs all information to be displayed in modals
+  // and on profile page.
   loadHistoryMovieData(historyList) {
     const params = JSON.stringify({
       historyList: historyList
@@ -74,6 +80,7 @@ export class ProfileHistoryService {
       });
   }
 
+  // Gets the current history such that other components may access them.
   getCurrentHistory() {
     const history = this.currentHistory;
     return history;

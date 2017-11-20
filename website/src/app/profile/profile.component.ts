@@ -6,7 +6,7 @@ import {MatSnackBar} from '@angular/material';
 import {Favorite} from './profile.favorite.service';
 import {MovieDetailsService} from '../movie-view/movie-details/movie-details.service';
 import {ProfileService} from './profile.service';
-import {ProfileHistoryService} from "./profile.history.service";
+import {ProfileHistoryService} from './profile.history.service';
 
 @Component({
   selector: 'app-profile',
@@ -95,6 +95,8 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  // Uses the profile.hsistory service to update the profile content to match
+  // the servers session object.
   loadHistory() {
     this.history.updateHistory(this.token).then(data => {
       this.searchHistory = [];
@@ -138,6 +140,7 @@ export class ProfileComponent implements OnInit {
     return this.username;
   }
 
+  // Passes history data to HTML
   get userHistory() {
     const history = this.history.currentHistory;
     return history.reverse();
