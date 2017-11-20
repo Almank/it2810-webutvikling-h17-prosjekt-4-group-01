@@ -1,21 +1,15 @@
 .cloudcontainer{
-    width: 100%;
-    height: 100%;
+    height:auto;
+    width: auto;
     font-family: 'Roboto', sans-serif;
+    color: white;
 }
 .cloud{
     text-align: center;
-}
-.cloudIconContainer{
-    text-align: center;
-
-}
-.cloudIcon{
-    color: white;
-    font-size: 150px;
+    font-size: 150%;
 }
 .cloudtitle{
     text-align: center;
-    color: white;
-    font-size: 20px;
+    color: rgba(255,255,255,0.87);
+    font-size: 17px;
 }

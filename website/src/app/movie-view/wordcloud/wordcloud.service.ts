@@ -13,5 +13,4 @@ export class WordcloudService {
             return  (data);
           }})
     }
-
 }

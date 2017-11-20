@@ -5,27 +5,32 @@ import {  Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, Beh
 @Component({
   selector: 'wordcloud',
   template: `
-  <div class="cloudIconContainer"><mat-icon class="cloudIcon">cloud</mat-icon></div>
-  <h4 class="cloudtitle">Moviegenres in our database; the bigger they are, the more we got!</h4>
-  <div class="cloudcontainer">
-    <div class="cloud" AgWordCloud [wordData]="wordData" [options]="options" ></div>
+  <div>
+      <h4 class="cloudtitle">Moviegenres in our database; the bigger they are, the more we got! <mat-icon class="cloudIcon">cloud</mat-icon></h4>
+      <div class="cloudcontainer" *ngIf="isDataAvailable">
+        <div class="cloud" AgWordCloud [wordData]="wordData" [options]="options" [width]=900 [height]=500 [color]="colors"></div>
+      </div>
   </div>
+
   `,
   styleUrls: ['./wordcloud.component.css'],
 })
 export class WordcloudComponent implements OnInit {
    wordData: AgWordCloudData[] = [];
+   isDataAvailable:boolean = false
+
+   colors = ["#BFF2E8", "#89BDC6", "#F4FAFF", "#7C9EB2", "#E876A0"]
 
   options = {
 	  settings: {
-  		minFontSize: 50,
-	  	maxFontSize: 500,
+  		minFontSize: 10,
+	  	maxFontSize: 100,
 	  },
 	  margin: {
-		  top: 20,
-		  right: 20,
-		  bottom: 20,
-		  left: 20
+		  top: 5,
+		  right: 5,
+		  bottom: 5,
+		  left: 5
 	  },
 	  labels: true // false to hide hover labels
   };
@@ -35,9 +40,14 @@ export class WordcloudComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      this.constructWordcloud().then(data => this.wordData = data);
+      //Stores data from API in the wordData variable.
+      this.constructWordcloud().then(data => {
+      this.wordData = data;
+      //Used to render wordcloud after data load
+      this.isDataAvailable = true;
+  });
   }
-
+//Gets the wordcloud data from the API
   constructWordcloud(){
       return this.wordcloud.getWordcloud().then(data => {
           let result = [];
