@@ -1,11 +1,19 @@
-import { browser, by, element } from 'protractor';
+import {browser, by, element} from 'protractor';
 
-export class AppPage {
+export class MainPage {
   navigateTo() {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+  getHeaderTitle() {
+    return element(by.css('.pageTitle')).getText();
+  }
+
+  getHeaderIcon() {
+    return element(by.css('.profileIcon')).getText();
+  }
+
+  getUsernameStatus() {
+    return element(by.css('#userText')).getText();
   }
 }

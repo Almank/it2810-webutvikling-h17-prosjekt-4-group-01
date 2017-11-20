@@ -10,6 +10,7 @@ import {PortalModule} from '@angular/cdk/portal';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterTestingModule} from '@angular/router/testing';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AuthenticationService} from './auth.service';
 
 describe('AuthComponent', () => {
   let component: AuthComponent;
@@ -20,7 +21,8 @@ describe('AuthComponent', () => {
       imports: [FormsModule, PortalModule, HttpClientModule, RouterTestingModule, MatSnackBarModule, MatFormFieldModule
         , MatInputModule, BrowserAnimationsModule],
       declarations: [AuthComponent, MatTab, MatTabGroup, MatCard, MatTabHeader, MatTabBody, MatTabLabel,
-        MatTabLabelWrapper, MatRipple, MatInkBar]
+        MatTabLabelWrapper, MatRipple, MatInkBar],
+      providers: [AuthenticationService]
     })
       .compileComponents();
   }));
