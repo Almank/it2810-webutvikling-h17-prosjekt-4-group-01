@@ -10,6 +10,7 @@ import {Favorite} from './profile.favorite.service';
 import {MovieDetailsService} from '../movie-view/movie-details/movie-details.service';
 import {MovieListService} from '../movie-view/movie-view.service';
 import {ProfileService} from './profile.service';
+import {ProfileHistoryService} from './profile.history.service';
 
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
@@ -20,7 +21,7 @@ describe('ProfileComponent', () => {
       imports: [FormsModule, MatCardModule, RouterTestingModule, HttpClientModule, MatSnackBarModule,
         BrowserAnimationsModule, MatDialogModule],
       declarations: [ProfileComponent],
-      providers: [Favorite, MovieDetailsService, MovieListService, ProfileService]
+      providers: [Favorite, MovieDetailsService, MovieListService, ProfileService, ProfileHistoryService]
     })
       .compileComponents();
   }));

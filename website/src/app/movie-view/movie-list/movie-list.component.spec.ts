@@ -8,6 +8,8 @@ import {HttpClientModule} from '@angular/common/http';
 import {MovieDetailsService} from '../movie-details/movie-details.service';
 import {ProfileService} from '../../profile/profile.service';
 import {RouterTestingModule} from "@angular/router/testing";
+import {ProfileHistoryService} from "../../profile/profile.history.service";
+import {Favorite} from "../../profile/profile.favorite.service";
 
 
 describe('MovieListComponent', () => {
@@ -16,7 +18,7 @@ describe('MovieListComponent', () => {
       imports: [MatInputModule, MatIconModule, MatTableModule, MatPaginatorModule, MatDialogModule, HttpClientModule,
         MatOptionModule, MatTooltipModule, MatSelectModule, MatGridListModule, MatSnackBarModule, RouterTestingModule],
       declarations: [MovieListComponent],
-      providers: [{provide: MovieListService}, MovieDetailsService, ProfileService],
+      providers: [{provide: MovieListService}, MovieDetailsService, ProfileService, ProfileHistoryService, Favorite],
     }).compileComponents();
   }));
   it('should create the MovieList', async(() => {
