@@ -1,16 +1,18 @@
 import {TestBed, async, MovieListComponent,  MatDialogModule, MatIconModule, MatInputModule, MatOptionModule, MatPaginatorModule,
-  MatTableModule, HttpClientModule} from '../../import-module';
+  MatTableModule, HttpClientModule, MatTooltipModule, MatSelectModule, MatGridListModule, MatSnackBarModule} from '../../import-module';
 /** Importing these separately as the site crashes if they are barreled */
 import {MovieListService} from '../movie-view.service';
-
+import {MovieDetailsService} from '../movie-details/movie-details.service';
+import {ProfileService} from '../../profile/profile.service';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('MovieListComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatInputModule, MatIconModule, MatTableModule, MatPaginatorModule, MatDialogModule, HttpClientModule,
-        MatOptionModule],
+        MatOptionModule, MatTooltipModule, MatSelectModule, MatGridListModule, MatSnackBarModule, RouterTestingModule],
       declarations: [MovieListComponent],
-      providers: [{provide: MovieListService}],
+      providers: [{provide: MovieListService}, MovieDetailsService, ProfileService],
     }).compileComponents();
   }));
   it('should create the MovieList', async(() => {

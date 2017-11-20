@@ -160,6 +160,9 @@ export class MovieListComponent implements OnInit {
 
   /** Reset list when searching. */
   searchDatabase(value) {
+    if (!this.show) {
+      this.paginator.pageSize = 16;
+    }
     if (value === '' && this.validRefresh === true) {
       this.searchWord = '';
       this.validRefresh = false;
@@ -169,9 +172,6 @@ export class MovieListComponent implements OnInit {
       this.changeValues(this.paginator);
 
     } else if (value !== '') {
-      if (!this.show) {
-        this.paginator.pageSize = 16;
-      }
       this.validRefresh = true;
       this.paginator.pageIndex = 0;
       this.have = 0;
@@ -259,18 +259,15 @@ export class MovieListComponent implements OnInit {
     const index = selected.indexOf(' ');
     this.selectedSort = selected.substr(0, index);
     const direction = selected.substr(index + 1);
-    if (this.selectedSort === 'year') {
-        if (direction === '(descending)') {
-                this.descAsc = 'true';
-            }else if (direction === '(ascending)') {
-                this.descAsc = 'false';
-        }
-    } else {
-        if (direction === '(descending)') {
-                this.descAsc = 'false';
-            }else if (direction === '(ascending)') {
-                this.descAsc = 'true';
-        }
+    if (direction === 'desc') {
+            this.descAsc = 'true';
+        }else if (direction === 'asc)') {
+            this.descAsc = 'false';
+    }
+    if (direction === 'desc') {
+            this.descAsc = 'false';
+        }else if (direction === 'asc') {
+            this.descAsc = 'true';
     }
     this.validRefresh = true;
     this.searchDatabase(this.searchWord);
