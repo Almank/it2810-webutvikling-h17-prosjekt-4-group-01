@@ -1,29 +1,33 @@
 <div class="login-container">
 
   <mat-card class="register-login-card">
-  <mat-tab-group selectedIndex="0" [@.disabled]="true">
+  <mat-tab-group selectedIndex="0" class="tabGroup" [@.disabled]="true">
 
     <mat-tab label="Login">
       <form class="password-form" #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
-        <mat-form-field class="login-username">
-          <input matInput placeholder="Username" name="username" ngModel>
-        </mat-form-field>
-        <mat-form-field class="login-password">
-          <input matInput placeholder="New Password" type="password" name="password" ngModel>
-        </mat-form-field>
-        <button class="save-button" mat-button>Click me!</button>
+        <div class="field">
+          <label for="login-usrn">Username</label>
+          <input class="login-username" id="login-usrn" placeholder="Username" name="username" ngModel>
+        </div>
+        <div class="field">
+          <label for="login-pass">Password</label>
+          <input class="login-password" id="login-pass" placeholder="Password" type="password" name="password" ngModel>
+        </div>
+        <button class="save-button" mat-button>Login</button>
       </form>
     </mat-tab>
 
     <mat-tab label="Register">
       <form class="password-form" #registerForm="ngForm" (ngSubmit)="onRegister(registerForm)">
-        <mat-form-field class="login-username">
-          <input matInput placeholder="Username" name="username" ngModel>
-        </mat-form-field>
-        <mat-form-field class="login-password">
-          <input matInput placeholder="New Password" type="password" name="password" ngModel>
-        </mat-form-field>
-        <button class="save-button" mat-button>Click me!</button>
+        <div class="field">
+          <label for="login-usrnReg">Username</label>
+          <input class="login-username" id="login-usrnReg" placeholder="Username" name="username" ngModel>
+        </div>
+        <div class="field">
+          <label for="login-passReg">Password</label>
+          <input class="login-password" id="login-passReg" placeholder="Password" type="password" name="password" ngModel>
+        </div>
+        <button class="save-button" mat-button>Register</button>
       </form>
     </mat-tab>
 

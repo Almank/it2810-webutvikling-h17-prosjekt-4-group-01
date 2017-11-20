@@ -20,3 +20,4 @@ export { MatSelectModule, MatButtonModule, MatGridListModule, MatDialogModule, M
 export { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export { BrowserModule } from '@angular/platform-browser';
 export { MovieList } from './movie-view/movie-list';
+export { WordcloudComponent } from './movie-view/wordcloud/wordcloud.component';

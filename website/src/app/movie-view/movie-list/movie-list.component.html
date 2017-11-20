@@ -1,7 +1,7 @@
 <div class="content">
-
+  <h1 class="title">Search Blockbuster for your favourite movies!</h1>
   <div class="searchContent" [class.fixedSearch]="fixedSearch">
-    <h1 class="title">Search Blockbuster for your favourite movies!</h1>
+
     <div class="searchBar">
       <div id="viewBtnWrap">
       <span matTooltip="{{this.viewTooltip}}">
@@ -63,6 +63,14 @@
             </mat-select>
           </span>
         </mat-form-field>
+
+        <mat-form-field class="selectGenre">
+          <mat-select placeholder="Sort list by" (change)=setSort($event)>
+            <mat-option *ngFor="let sort of sorts" [value]="sort.viewValue">
+              {{ sort.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
     </div>
   </div>
 
@@ -81,19 +89,19 @@
     <mat-table #table [dataSource]="dataSource" >
       <!-- Title Column -->
       <ng-container matColumnDef="title">
-        <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.title}} </mat-cell>
       </ng-container>
 
       <!-- Year Column -->
       <ng-container matColumnDef="year">
-        <mat-header-cell *matHeaderCellDef> Year </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Year </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.year}} </mat-cell>
       </ng-container>
 
       <!-- Genre Column -->
       <ng-container matColumnDef="genre">
-        <mat-header-cell *matHeaderCellDef> Genre </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Genre </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.genre}} </mat-cell>
       </ng-container>
 

@@ -49,6 +49,7 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({"error": message});
 }
 
+/** User Authentication **/
 // Register user
 router.post('/register', function (req, res) {
   db.collection('users').findOne({'username': req.body.username}, function (err, user) {
@@ -145,6 +146,7 @@ router.post('/new_password', function (req, res) {
   });
 });
 
+/** Favorites **/
 //Get Favorite
 router.post('/favorites', function (req, res) {
   let verifiedToken = jwt.verify(req.body.token, config.secret);
@@ -204,6 +206,26 @@ router.post('/favorites/modify', function (req, res) {
         }
       );
     }
+  });
+});
+
+/** WordCloud **/
+// Scan database and calculate genre data
+router.get('/wordcloud', function (req, res) {
+  let genreData = {};
+  db.collection('movies').find().toArray(function (err, data) {
+    for (let key in data){
+      let genreList = data[key].genre;
+      for (let key2 in genreList){
+        let genre = genreList[key2];
+        if (!genreData.hasOwnProperty(genre)){
+          genreData[genre] = 1;
+        } else {
+          genreData[genre] += 1;
+        }
+      }
+    }
+    res.status(200).json(genreData);
   });
 });
 

@@ -14,16 +14,19 @@ import { ProfileComponent } from './profile/profile.component';
 import { AuthComponent } from './auth/auth.component';
 import { MovieListService } from './movie-view/movie-view.service';
 import { Favorite } from './profile/profile.favorite.service';
-
+import { WordcloudComponent } from './movie-view/wordcloud/wordcloud.component';
+import {AgWordCloudModule, AgWordCloudData} from 'angular4-word-cloud';
 
 import { MovieDetailsComponent, RouterModule, Routes } from './import-module';
 import {MovieDetailsService} from './movie-view/movie-details/movie-details.service';
 import {ProfileService} from './profile/profile.service';
 import {AuthenticationService} from './auth/auth.service';
+import { WordcloudService} from './movie-view/wordcloud/wordcloud.service';
 const appRoutes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: AuthComponent},
   { path: 'list', component: MovieListComponent },
+  { path: 'wordcloud', component: WordcloudComponent },
   { path: '**', component: MovieListComponent }
 ];
 
@@ -35,6 +38,7 @@ const appRoutes: Routes = [
     ProfileComponent,
     AuthComponent,
     MovieDetailsComponent,
+    WordcloudComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +62,7 @@ const appRoutes: Routes = [
     MatCardModule,
     HttpClientModule,
     FormsModule,
+    AgWordCloudModule.forRoot(),
     RouterModule.forRoot(
       appRoutes,
     ),
@@ -71,7 +76,9 @@ const appRoutes: Routes = [
     Favorite,
     MovieDetailsService,
     ProfileService,
-    AuthenticationService],
+    AuthenticationService,
+    WordcloudService
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
