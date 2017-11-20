@@ -37,7 +37,6 @@ html, body {
 .selectGenre .mat-input-wrapper .mat-input-flex .mat-input-infix .mat-input-placeholder-wrapper .mat-input-placeholder,
 .selectGenre .mat-input-wrapper .mat-input-flex .mat-input-infix span .mat-select .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow,
 .selectSearch .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow,
-.mat-select-value,
 .selectGenre .mat-input-wrapper .mat-input-flex .mat-input-infix .mat-input-placeholder-wrapper .mat-input-placeholder,
 .selectGenre .mat-input-wrapper .mat-input-flex .mat-input-infix .mat-select .mat-select-trigger .mat-select-arrow-wrapper .mat-select-arrow
 {
@@ -57,7 +56,8 @@ html, body {
 }
 
 
-.mat-paginator-page-size-select, .mat-input-infix .mat-select .mat-select-trigger .mat-select-value .mat-select-value-text, .mat-select-arrow {
+.mat-paginator-page-size-select, .mat-input-infix .mat-select .mat-select-trigger .mat-select-value .mat-select-value-text .mat-select-arrow,
+.content .container .mat-paginator .mat-paginator-page-size .mat-paginator-page-size-select .mat-input-wrapper .mat-input-flex .mat-input-infix .mat-select .mat-select-trigger .mat-select-value .mat-select-value-text span{
   color: #1E2339 !important;
 }
 

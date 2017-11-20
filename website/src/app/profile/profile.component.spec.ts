@@ -1,11 +1,6 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, TestBed, ProfileComponent, FormsModule, MatCardModule, MatDialogModule,
+  MatSnackBarModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule} from '../import-module';
 
-import {ProfileComponent} from './profile.component';
-import {FormsModule} from '@angular/forms';
-import {MatCardModule, MatDialogModule, MatSnackBarModule} from '@angular/material';
-import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientModule} from '@angular/common/http';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Favorite} from './profile.favorite.service';
 import {MovieDetailsService} from '../movie-view/movie-details/movie-details.service';
 import {MovieListService} from '../movie-view/movie-view.service';
