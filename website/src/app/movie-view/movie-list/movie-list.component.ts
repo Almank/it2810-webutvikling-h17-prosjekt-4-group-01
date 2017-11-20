@@ -32,7 +32,7 @@ export class MovieListComponent implements OnInit {
   startYear: any = 0;
   endYear: any = new Date().getFullYear();
   have = 0;
-  need = 10;
+  need = 12;
   pageLength = 0;
   genres = [
     {viewValue: 'Action'},
@@ -59,13 +59,23 @@ export class MovieListComponent implements OnInit {
   selectedGenre: any = [];
   auth: boolean;
   token: string;
-  show = true;
+  show = false;
   showFilter = false;
   arrow = 'keyboard_arrow_down';
-  viewIcon = 'view_comfy';
+  viewIcon = 'format_list_bulleted';
   viewTooltip = 'Grid view';
   fixedSearch = false;
   colNum = 3;
+  sorts = [
+      {viewValue: 'Title (Descending)'},
+      {viewValue: 'Title (Ascending)'},
+      {viewValue: 'Year (Descending)'},
+      {viewValue: 'Year (Ascending)'},
+      {viewValue: 'Genre (Descending)'},
+      {viewValue: 'Genre (Ascending)'}];
+  selectedSort: string;
+  descAsc: string;
+  sortCriteria = 1;
 
   constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient,
               private modal: MovieDetailsService) {
@@ -110,9 +120,9 @@ export class MovieListComponent implements OnInit {
   @HostListener('window:scroll', [])
   onScroll(): void {
     if (!this.show) {
-      if ((document.documentElement.scrollTop > 95) || (document.body.scrollTop > 95)) {
+      if ((document.documentElement.scrollTop > 140) || (document.body.scrollTop > 140)) {
         this.fixedSearch = true;
-      } else if ((document.documentElement.scrollTop > 95) || (document.body.scrollTop < 95)) {
+      } else if ((document.documentElement.scrollTop > 140) || (document.body.scrollTop < 140)) {
         this.fixedSearch = false;
       }
       if ((document.documentElement.scrollTop + document.documentElement.offsetHeight === document.documentElement.scrollHeight)
@@ -253,7 +263,6 @@ export class MovieListComponent implements OnInit {
     this.validRefresh = true;
     this.searchDatabase(this.searchWord);
   }
-
   @HostListener('window:resize', ['$event'])
   onResize() {
     if (window.innerWidth < 480) {
@@ -262,6 +271,29 @@ export class MovieListComponent implements OnInit {
       this.colNum = 3;
     }
   }
+
+  setSort(event) {
+    let selected = event.value.toLowerCase();
+    const index = selected.indexOf(' ');
+    this.selectedSort = selected.substr(0, index);
+    let direction = selected.substr(index + 1);
+    if (this.selectedSort === 'year') {
+        if (direction === '(descending)') {
+                this.descAsc = 'true';
+            }else if (direction === '(ascending)') {
+                this.descAsc = 'false';
+        }
+    } else {
+        if (direction === '(descending)') {
+                this.descAsc = 'false';
+            }else if (direction === '(ascending)') {
+                this.descAsc = 'true';
+        }
+    }
+    this.validRefresh = true;
+    this.searchDatabase(this.searchWord);
+  }
+
 }
 
 /**

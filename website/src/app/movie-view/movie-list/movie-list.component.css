@@ -1,3 +1,9 @@
+.content{
+  display: flex;
+  flex-direction: column;
+  background-color: #1E2339;
+}
+
 /* Movie Table */
 .container {
   display: none;
@@ -12,16 +18,81 @@
   z-index: 0;
 }
 
+.changebutton{
+    display:none;
+}
+.changebutton{
+    display:none;
+}
+
+.mat-table {
+  overflow: auto;
+  height: auto;
+  padding-bottom: 20px;
+}
+
+.mat-header-cell{
+  font-weight: 400;
+  font-size: 21px;
+  color: #FEFDFD;
+}
+
+.mat-header-row {
+  background-color: #34384c;
+}
+
+.mat-cell{
+  font-size: 18px;
+}
+
+.mat-row{
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: rgba(0,0,0,.12);
+  transition-delay: 0.075s;
+}
+
+.mat-row:before{
+  transition-delay: 0.075s;
+}
+
+.mat-row:after{
+  transition-delay: 0.175s;
+}
+
+.mat-row:hover {
+  border-bottom-color: #8ca2d2;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-top-color: #8ca2d2;
+  border-top-width: 1px;
+  border-top-style: solid;
+  cursor: pointer;
+}
+
+/* Toggle table/grid */
 .show {
   display: block;
 }
 
+#viewBtnWrap{
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 5px;
+}
+
+/* Set navbar to fixed, must be important to override material angular */
 .fixedSearch {
   position: fixed !important;
   top: 0;
   z-index: 1;
 }
 
+.marginTop {
+  margin-top:125px;
+}
+
+/* Search functionality */
 .title {
   color: #FEFDFD;
   margin: 5px;
@@ -58,65 +129,13 @@
   display: flex !important;
 }
 
-.mat-table {
-  overflow: auto;
-  height: auto;
-  padding-bottom: 20px;
-}
-
-.mat-header-cell{
-  font-weight: 400;
-  font-size: 21px;
-  color: #FEFDFD;
-}
-
-.mat-header-row {
-  background-color: #34384c;
-}
-
-
-.mat-cell{
-  font-size: 18px;
-}
-
-.mat-row{
-  border-top-width: 1px;
-  border-top-style: solid;
-  border-top-color: rgba(0,0,0,.12);
-  transition-delay: 0.075s;
-}
-
-.mat-row:before{
-  transition-delay: 0.075s;
-}
-
-.mat-row:after{
-  transition-delay: 0.175s;
-}
-
-.mat-row:hover {
-  border-bottom-color: #8ca2d2;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  border-top-color: #8ca2d2;
-  border-top-width: 1px;
-  border-top-style: solid;
-  cursor: pointer;
-}
-
-.content{
-  display: flex;
-  flex-direction: column;
-  background-color: #1E2339;
-}
-
 .searchContent {
   display: flex;
   position: relative;
   flex-direction: column;
   align-self: center;
   width: 100%;
-  padding:25px 0 15px 0;
+  padding:0 0 5px 0;
   background-color: #1E2339;
 }
 
@@ -133,7 +152,7 @@
   padding: 10px 15px;
   margin:15px 0 5px 0;
   height: 29px;
-  min-width: 150px;
+  min-width: 300px;
   max-width: 500px;
   font-size: 16px;
 }
@@ -144,16 +163,11 @@
   margin: 0 5%;
 }
 
-.form-check-inline label {
-  color: rgba(254,253,253,0.4);
-}
-
 .inputYear {
-  width: 80px;
-  color: rgba(254,253,253,0.4);
+  margin-right: 10px;
 }
 
-.inputYearNum {
+.inputYearNum, .viewGrid, .inputYear, .form-check-inline label {
   color: rgba(254,253,253,0.4);
 }
 
@@ -171,6 +185,7 @@
   font-size: 9px;
   width: 60px;
   margin-top:3px;
+  margin-right: 0;
 }
 
 .selectSearch, .selectGenre {
@@ -204,7 +219,8 @@
 .selectGenre {
   border: 1px solid rgba(254,253,253,0.4);
   font-size: 10px;
-  margin: 0;
+  margin-top: 0;
+  margin-right: 10px;
   padding: 0;
   height: 26.5px;
   width: 90px;
@@ -216,6 +232,7 @@
   height: 40px;
 }
 
+/* Grid view */
 img{
   height: 100%;
   width: 100%;
@@ -228,14 +245,17 @@ mat-grid-tile {
   -moz-box-shadow: 0px 6px 22px -2px rgba(0,0,0,0.75);
   box-shadow: 0px 6px 22px -2px rgba(0,0,0,0.75);
 }
+
 mat-grid-tile:hover mat-grid-tile-footer{
   background-color: #34384c;
   cursor: pointer;
 }
+
 .mat-grid-tile:hover {
   cursor: pointer;
   opacity: 0.90;
 }
+
 mat-grid-list {
   display: none;
   padding-bottom: 25px !important;
@@ -246,43 +266,36 @@ mat-grid-list {
   background-color: #1E2339;
 }
 
-#viewBtnWrap{
-  display: flex;
-  align-items: flex-end;
-  margin-bottom: 5px;
-}
-
-.viewGrid {
-  color: rgba(254,253,253,0.4);
-}
-
-.marginTop {
-  margin-top:215px;
-}
-
+/* Responsive styles for small screens. */
 @media screen and (max-width: 480px) {
+
   .container {
     width: auto;
     min-width: 100px;
     margin:0;
   }
+
   .searchBar {
     flex-wrap: wrap;
     margin: 0;
   }
+
   .searchInputField {
     min-width: 40px;
     padding: 5px;
   }
+
   .selectSearch {
     padding:5px;
     min-width: 20px;
   }
+
   .viewButton{
     min-width: 50px;
     width: 50px;
     padding: 0 !important;
   }
+
   .searchContent {
     padding-top: 0;
   }

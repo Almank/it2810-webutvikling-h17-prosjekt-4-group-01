@@ -16,7 +16,7 @@
   font-size: 48px;
 }
 
-.profileIcon {
+.profileIcon, .cloudIcon {
   font-size: 30px;
   text-align: center;
   margin-bottom: 4px;
