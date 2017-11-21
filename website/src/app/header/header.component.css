@@ -40,17 +40,24 @@
   color: rgba(254,253,253,1);
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 620px) {
   .playIcon {
     height: 36px;
     width: 36px;
     font-size: 32px;
     top:23px;
   }
+  #cloudText{
+      display: none;
+  }
+  .cloudbutton{
+      margin-left: 25%;
+  }
 
   .pageTitle {
     top:15px;
     font-size: 26px;
+    display: none;
   }
 
   .mat-toolbar.mat-primary {
