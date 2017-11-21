@@ -21,7 +21,8 @@ function handleError(res, reason, message, code) {
 router.post('/register', function (req, res) {
   db.collection('users').findOne({'username': req.body.username}, function (err, user) {
     if (!user) {
-      if (req.body.username !== '' && req.body.password !== '') {
+      if (req.body.username !== '' && req.body.username !== undefined &&
+          req.body.password !== '' && req.body.password !== undefined) {
         let hashedPassword = bcrypt.hashSync(req.body.password, 8);
         let new_user = new userModel({
           username: req.body.username,
@@ -229,7 +230,7 @@ router.post('/history/data', function (req, res) {
   }
   db.collection('movies').find({_id: {$in: historyList}}).toArray(function (err, docs) {
     if (err) {
-      handleError(res, err.message, "Failed to get movies with no actors.");
+      handleError(res, err.message, "Failed to get movies.");
     } else {
       const mapped = {};
       for (let key in docs) {
@@ -264,6 +265,8 @@ router.get('/wordcloud', function (req, res) {
   });
 });
 
+
+/** Get movie information */
 // Uppercase first letter in each word and return regex to be searchable.
 function splitElements(str) {
   if (str === undefined || str === '') {
@@ -431,7 +434,7 @@ router.get('/movies/modal', function (req, res) {
   // Sort and limit matches
     .sort().toArray(function (err, docs) {
     if (err) {
-      handleError(res, err.message, "Failed to get movies with no actors.");
+      handleError(res, err.message, "Failed to get modal movie data.");
     } else {
       res.status(200).json(docs);
     }
