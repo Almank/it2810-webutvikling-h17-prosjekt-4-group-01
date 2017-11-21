@@ -8,7 +8,7 @@ import {  Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, Beh
   <div>
       <h4 class="cloudtitle">Moviegenres in our database; the bigger they are, the more we got! <mat-icon class="cloudIcon">cloud</mat-icon></h4>
       <div class="cloudcontainer" *ngIf="isDataAvailable">
-        <div class="cloud" AgWordCloud [wordData]="wordData" [options]="options" [width]=900 [height]=500 [color]="colors"></div>
+        <div class="cloud" AgWordCloud [wordData]="wordData" [options]="options" [width]=700 [color]="colors"></div>
       </div>
   </div>
 
@@ -32,7 +32,7 @@ export class WordcloudComponent implements OnInit {
 		  bottom: 5,
 		  left: 5
 	  },
-	  labels: true // false to hide hover labels
+	  labels: false // false to hide hover labels
   };
 
   constructor(private wordcloud: WordcloudService) {
