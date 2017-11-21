@@ -57,3 +57,10 @@ snack-bar-container.alert-negative{
 snack-bar-container.alert-positive{
   background-color: darkgreen;
 }
+
+@media screen and (max-width: 650px) {
+    .login-container{
+        height: 100%;
+        margin: 5%;
+    }
+}

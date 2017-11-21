@@ -69,6 +69,8 @@ mat-tab-header{
 @media screen and (max-width: 650px) {
   .profile-container {
     width: 100%;
+    min-height: 100%;
+    height: auto;
   }
   .mat-card {
     width: 100%;
@@ -93,5 +95,13 @@ mat-tab-header{
     justify-content: space-around;
   }
 
+  .mat-tab-body-wrapper{
+      margin-left: 5%;
+      margin-right: 5%;
+
+  }
+  .gridList{
+      margin-bottom: 5%;
+  }
 
 }
