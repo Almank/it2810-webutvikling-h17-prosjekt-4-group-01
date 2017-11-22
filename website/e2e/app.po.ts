@@ -34,7 +34,7 @@ export class MainPage {
   }
 
   getCloudTitle() {
-    return element(by.css('.cloudtitle')).getText();
+    return element(by.css('.cloudTitle')).getText();
   }
 
   /** Search Bar and Filters **/
