@@ -3,6 +3,7 @@ import { getTestBed } from '@angular/core/testing';
 import { XHRBackend, BaseRequestOptions, HttpModule, Http, Response, ResponseOptions } from '@angular/http';
 import {MockBackend, MockConnection} from '@angular/http/testing';
 
+  /** Mocking service */
   class MockMovieDetailsService {
     openDialog(data, auth, token) {
       if (auth) {
@@ -14,6 +15,7 @@ import {MockBackend, MockConnection} from '@angular/http/testing';
     }
   }
 
+  /** Setup test */
   describe('Movie Details Service', () => {
     let mockBackend: MockBackend;
     beforeEach(async(() => {
