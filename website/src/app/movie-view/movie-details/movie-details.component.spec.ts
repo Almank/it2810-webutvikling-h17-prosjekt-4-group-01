@@ -107,15 +107,15 @@ describe('MovieDetailsComponent', () => {
   });
 
   it('should change toggled when toggle favorite is ran', () => {
-    expect(component.toggled).toBeFalsy()
+    expect(component.toggled).toBeFalsy();
     component.toggleFavorite('', false);
-    expect(component.toggled).toBeTruthy()
+    expect(component.toggled).toBeTruthy();
   });
 
   it('should change buttonClicked when toggle favorite is ran', () => {
-    expect(component.buttonClicked).toBeFalsy()
+    expect(component.buttonClicked).toBeFalsy();
     component.toggleFavorite('', false);
-    expect(component.buttonClicked).toBeTruthy()
+    expect(component.buttonClicked).toBeTruthy();
   });
 
   it('yellow function should return correct toggle variable', () => {
