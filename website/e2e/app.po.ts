@@ -16,4 +16,12 @@ export class MainPage {
   getUsernameStatus() {
     return element(by.css('#userText')).getText();
   }
+
+  getCloudText() {
+    return element(by.css('#cloudText')).getText();
+  }
+
+  getCloudIcon() {
+    return element(by.css('.cloudIcon')).getText();
+  }
 }

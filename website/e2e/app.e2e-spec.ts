@@ -25,6 +25,16 @@ describe('website Header', () => {
   it('should display sign-in if not logged in', () => {
     expect(home.getUsernameStatus()).toEqual('Sign-In');
   });
+
+  // Expect user to be able to see the wordcloud text
+  it('should display wordcloud', () => {
+    expect(home.getCloudText()).toEqual('Wordcloud');
+  });
+
+  // Expect user to be able to see the cloud
+  it('should display wordIcon', () => {
+    expect(home.getCloudIcon()).toEqual('cloud');
+  });
 });
 
 /** End Test Header Component **/
