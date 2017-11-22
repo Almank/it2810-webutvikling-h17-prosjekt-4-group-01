@@ -11,6 +11,8 @@ export class WordcloudComponent implements OnInit {
    wordData: AgWordCloudData[] = [];
    isDataAvailable:boolean = false
 
+  cloudTitle = "Movie genres in our database; the bigger they are, the more we got!"
+
    colors = ["#BFF2E8", "#89BDC6", "#F4FAFF", "#7C9EB2", "#E876A0"]
 
   options = {

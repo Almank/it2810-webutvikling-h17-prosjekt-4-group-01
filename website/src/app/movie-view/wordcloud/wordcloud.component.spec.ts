@@ -34,7 +34,7 @@ class MockWordcloudService {
 describe('WordcloudComponent', () => {
   let component: WordcloudComponent;
   let fixture: ComponentFixture<WordcloudComponent>;
-  let debugElement: DebugElement[];
+  let debugElement: DebugElement;
   let htmlElement: HTMLElement;
 
   beforeEach(async(() => {
@@ -52,13 +52,21 @@ describe('WordcloudComponent', () => {
     expect(component).toBeTruthy();
   }));
 
+  /** Test to not have available data at initial render */
   it('should not have available data at initial render', () =>{
     expect(component.isDataAvailable).toBe(false);
   });
 
+  /** Test to have no wordData at initial render */
   it('should have no wordData at initial render', () =>{
       var mockData: AgWordCloudData[] = [];
     expect(component.wordData).toEqual(mockData);
   });
 
+  /** Test to display correct cloud title */
+  it('should display cloudIcon', () => {
+    debugElement = fixture.debugElement.query(By.css('h4'));
+    htmlElement = debugElement.nativeElement;
+    expect(htmlElement.textContent).toEqual('');
+  });
 });
