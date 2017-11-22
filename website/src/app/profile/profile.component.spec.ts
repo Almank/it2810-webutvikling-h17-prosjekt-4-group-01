@@ -37,8 +37,8 @@ describe('ProfileComponent', () => {
         {"_id":"5a1424534bc8d140dcfe22fa","poster":"https://images-na.ssl-images-amazon.com/images/M/MV5BMWU4N2FjNzYtNTVkNC00NzQ0LTg0MjAtYTJlMjFhNGUxZDFmXkEyXkFqcGdeQXVyNjc1NTYyMjg@._V1_SX300.jpg","actors":["Martin Balsam","John Fiedler","Lee J. Cobb","E.G. Marshall"],"director":["Sidney Lumet"],"genre":["Crime","Drama"],"year":1957,"title":"12 Angry Men"}
     ];
 
-
     fixture.detectChanges();
+
   });
 
   it('should create', () => {
@@ -49,6 +49,12 @@ describe('ProfileComponent', () => {
     debugElement = fixture.debugElement.query(By.css('#profileusername'));
     htmlElement = debugElement.nativeElement;
     expect(htmlElement.textContent).toEqual('test');
+  });
+
+  it('should display Logout-button properly', () => {
+    debugElement = fixture.debugElement.query(By.css('.logout-button'));
+    htmlElement = debugElement.nativeElement;
+    expect(htmlElement.textContent).toEqual('Logout');
   });
 
   it('should display favorite movie title', () => {

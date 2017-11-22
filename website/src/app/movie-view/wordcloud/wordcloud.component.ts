@@ -47,7 +47,7 @@ export class WordcloudComponent implements OnInit {
       this.isDataAvailable = true;
   });
   }
-//Gets the wordcloud data from the API
+//Gets the wordcloud data from the WordcloudService
   constructWordcloud(){
       return this.wordcloud.getWordcloud().then(data => {
           let result = [];
