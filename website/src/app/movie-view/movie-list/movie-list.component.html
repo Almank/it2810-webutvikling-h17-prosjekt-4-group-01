@@ -1,7 +1,7 @@
 <div class="content">
   <h1 class="title">Search Blockbuster for your favourite movies!</h1>
   <div class="searchContent" [class.fixedSearch]="fixedSearch">
-
+  <!-- The class searchbar includes the grid/listview, searchbar and title/director/actor dropdown box  -->
     <div class="searchBar">
       <div id="viewBtnWrap">
       <span matTooltip="{{this.viewTooltip}}">
@@ -14,7 +14,7 @@
       <span matTooltip="Search movies">
         <input #input class="searchInputField" (keyup)="searchDatabase(input.value.toLowerCase())" autofocus placeholder="Search for movies">
       </span>
-
+      <!-- Returns different values depending on selected dropdown with default to title  -->
       <span matTooltip="Choose search">
         <mat-select class="selectSearch" [value]="1" (change)=setSearch($event)>
             <mat-option class="searchOption mat-selected mat-active" aria-selected="true" [value]="1">
@@ -29,7 +29,7 @@
         </mat-select>
       </span>
     </div>
-
+    <!-- Filter button is the dropdown for additional search criteria  -->
     <div class="showFilter">
       <p class="titleFilter">Filter search</p>
       <span matTooltip="Show filters">
@@ -38,7 +38,7 @@
         </button>
       </span>
     </div>
-
+    <!-- Inputs for year and genre  -->
     <div class="filterWrapper" [class.showFilterToggle]="showFilter">
         <div class="inputYear">
           <span matTooltip="From year">
@@ -83,7 +83,7 @@
     </mat-grid-list>
 
   </div>
-
+  <!-- Columns displayed in the listview  -->
   <div class="container mat-elevation-z8" [class.show]="show">
 
     <mat-table #table [dataSource]="dataSource" >
@@ -108,7 +108,7 @@
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"  (click)="openDialog(row)"></mat-row>
     </mat-table>
-
+    <!--Sets initial page values on the list  -->
     <mat-paginator #paginator
                    [length]="pageLength"
                    [pageSize]="10"

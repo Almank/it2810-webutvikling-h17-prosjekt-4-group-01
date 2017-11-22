@@ -69,7 +69,9 @@ export class MovieListComponent implements OnInit {
     }
   }
 
-  /** Change button and how the movies a loaded Grid/List */
+  /** Change button and how the movies a loaded Grid/List
+   * the variables have and need tells how many movies we already have and how many more we need in order
+   * to load dynamically. Setting have to 0 will therefore load in from start */
   toggleButton(): void {
     this.show = !this.show;
     this.show ? this.viewIcon = 'view_comfy' : this.viewIcon = 'format_list_bulleted';
@@ -119,7 +121,7 @@ export class MovieListComponent implements OnInit {
     }
   }
 
-  /** Resize amount of columns based on screen width */
+  /** Resize amount of columns based on screen width. */
   @HostListener('window:resize', ['$event'])
   onResize() {
     if (window.innerWidth < 480) {
@@ -163,7 +165,8 @@ export class MovieListComponent implements OnInit {
     return this.dataChange.value;
   }
 
-  /** Reset list when searching. */
+  /** Reset list when searching.
+   * valid refresh makes sure that you only reset the site once when the searchbar is empty */
   searchDatabase(value) {
     if (!this.show) {
       this.paginator.pageSize = 16;
@@ -189,7 +192,7 @@ export class MovieListComponent implements OnInit {
       }
   }
 
-  /** Decide if it should search for title, director or actor */
+  /** Decide if it should search for title, director or actor, dictated by the drop down box to the right of searchbar*/
   searchFor() {
     if (this.searchCriteria === 1) {
       this.searchTitle = this.searchWord;
@@ -206,7 +209,8 @@ export class MovieListComponent implements OnInit {
     this.searchActor = '';
   }
 
-  /** Change page in list. */
+  /** Change page in list. Dynamically loads through getting current have movies and potential need depending on
+   * pagesize. */
   changeValues(event) {
     this.have = this.data.length;
     this.paginator.pageIndex = event.pageIndex;
