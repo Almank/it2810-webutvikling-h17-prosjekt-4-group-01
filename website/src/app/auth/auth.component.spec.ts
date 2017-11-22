@@ -41,6 +41,7 @@ describe('AuthComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  // Test display username and password
   it('should display username and password', () => {
     let debugElement: DebugElement[];
     debugElement = fixture.debugElement.queryAll(By.css('.field label'));
@@ -50,6 +51,7 @@ describe('AuthComponent', () => {
     }
   });
 
+  // Test display login and register
   it('should display login and register', () => {
     let debugElement: DebugElement[];
     debugElement = fixture.debugElement.queryAll(By.css('.save-button'));
@@ -59,6 +61,7 @@ describe('AuthComponent', () => {
     }
   });
 
+  // Test error pop up.
   it('should show error pop up', () => {
     component.onUserError('alert', 'test error', true);
     snackBar.open('alert');
