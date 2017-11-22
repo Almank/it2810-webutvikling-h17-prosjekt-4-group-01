@@ -22,7 +22,8 @@ installed on your computer.
 - MongoDB
 ```
 Then you can proceed to cloning the project, and installing the dependencies inside
-the `/website` folder using `npm install`.
+the `/website` folder using:  
+`npm install`.
 
 When all dependencies are finished downloading, you are ready to run the initial script
 to fill your database with data from the omdbApi. (This requires that you have a [mongoDB](https://docs.mongodb.com/manual/installation/) running beforehand) All you have to do then, is to run 
