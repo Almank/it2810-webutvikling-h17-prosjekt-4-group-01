@@ -71,6 +71,14 @@ describe('website home', () => {
     });
   });
 
+  // Expect selectSearch button to show options
+  it('should open selectSearch with searchoptions', () => {
+    home.getSelectSearch().click();
+    expect(home.SelectSearchOption('mat-option-0')).toBeTruthy();
+    home.chooseSearchOptionDirector().click();
+    expect(home.getCurrentSearchOption()).toEqual('Director');
+  });
+
   // Expect homepage to load wordcloud on click, and find cloudtitle.
   it('should navigate to wordcloud', () => {
     home.getCloudButton().click();

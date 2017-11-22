@@ -37,8 +37,32 @@ export class MainPage {
     return element(by.css('.cloudtitle')).getText();
   }
 
+  /** Search Bar and Filters **/
   getToggleGridButton() {
     return element(by.css('.viewButton'));
+  }
+
+  getSelectSearch() {
+    return element(by.css('.selectSearch'));
+  }
+
+  SelectSearchOption(option) {
+    const attributes = element(by.css('.selectSearch')).getAttribute('aria-activedescendant');
+    return attributes.then(data => {
+      if (data === option) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
+
+  chooseSearchOptionDirector() {
+    return element(by.xpath('//*[@id="mat-option-1"]'));
+  }
+
+  getCurrentSearchOption() {
+    return element(by.xpath('//*[@id="mat-select-0"]/div/div[1]/span/span')).getText();
   }
 
   // Iterate through classes received and checks if the class show is represented.
