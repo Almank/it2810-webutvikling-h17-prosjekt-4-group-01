@@ -41,12 +41,11 @@ describe('MovieListComponent', () => {
     expect(component).toBeTruthy();
   }));
 
-  it('should toggle gridview button', async(() => {
+  it('should toggle grid view button', async(() => {
     expect(component.show).toBeFalsy();
     component.toggleButton();
     expect(component.show).toBeTruthy();
   }));
-
   it('should toggle filter button', async(() => {
     expect(component.showFilter).toBeFalsy();
     component.toggleFilterButton();

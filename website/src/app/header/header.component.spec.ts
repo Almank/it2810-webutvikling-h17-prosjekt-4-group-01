@@ -28,16 +28,15 @@ describe('HeaderComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  
-  /** Test to display actual username */
-  it('should display actual username', () => {
+
+  /** Test to display correct username in header */
+  it('should display actual username in header', () => {
     debugElement = fixture.debugElement.query(By.css('#userText'));
     htmlElement = debugElement.nativeElement;
     expect(htmlElement.textContent).toEqual('Sign-In');
   });
 
-
-  /** Test to display playIcon */
+  /** Test to display play icon */
   it('should display playIcon', () => {
     debugElement = fixture.debugElement.query(By.css('mat-icon'));
     htmlElement = debugElement.nativeElement;
@@ -45,10 +44,25 @@ describe('HeaderComponent', () => {
   });
 
   /** Test to change play icon */
-  it('should change change Play Icon', () => {
+  it('should change Play Icon on toggle', () => {
     const initialValue = component.playIcon;
     component.toggleIcon();
     const newValue = component.playIcon;
     expect(newValue).toEqual('play_circle_outline');
   });
+
+  /** Test to display account icon */
+  it('should display accountIcon', () => {
+    debugElement = fixture.debugElement.query(By.css('.profileIcon'));
+    htmlElement = debugElement.nativeElement;
+    expect(htmlElement.textContent).toEqual('account_circle');
+  });
+
+  /** Test to display cloud icon */
+  it('should display cloudIcon', () => {
+    debugElement = fixture.debugElement.query(By.css('.cloudIcon'));
+    htmlElement = debugElement.nativeElement;
+    expect(htmlElement.textContent).toEqual('cloud');
+  });
+
 });
