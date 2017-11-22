@@ -22,18 +22,29 @@ describe('HeaderComponent', () => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('mat-icon'));
-    htmlElement = debugElement.nativeElement;
-  });
 
+  });
+  /** Test to create header-component */
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  
+  /** Test to display actual username */
+  it('should display actual username', () => {
+    debugElement = fixture.debugElement.query(By.css('#userText'));
+    htmlElement = debugElement.nativeElement;
+    expect(htmlElement.textContent).toEqual('Sign-In');
+  });
 
+
+  /** Test to display playIcon */
   it('should display playIcon', () => {
+    debugElement = fixture.debugElement.query(By.css('mat-icon'));
+    htmlElement = debugElement.nativeElement;
     expect(htmlElement.textContent).toEqual('play_circle_filled');
   });
 
+  /** Test to change play icon */
   it('should change change Play Icon', () => {
     const initialValue = component.playIcon;
     component.toggleIcon();
