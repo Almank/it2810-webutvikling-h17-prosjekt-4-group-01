@@ -1,8 +1,5 @@
-import {async, Component, ComponentFixture, TestBed, MAT_DIALOG_DATA, MatDialogModule, MatDialogRef,
-  MatFormFieldModule, CommonModule, RouterTestingModule, FormsModule, HttpClientModule, MovieDetailsService
-} from '../../import-module';
-
-import { getTestBed, inject } from '@angular/core/testing';
+import {async, TestBed, FormsModule } from '../../import-module';
+import { getTestBed } from '@angular/core/testing';
 import { XHRBackend, BaseRequestOptions, HttpModule, Http, Response, ResponseOptions } from '@angular/http';
 import {MockBackend, MockConnection} from '@angular/http/testing';
 
