@@ -17,12 +17,24 @@ export class MainPage {
     return element(by.css('#userText')).getText();
   }
 
+  getHomeLink() {
+    return element(by.css('.pageTitleContainer'));
+  }
+
   getCloudText() {
     return element(by.css('#cloudText')).getText();
   }
 
   getCloudIcon() {
     return element(by.css('.cloudIcon')).getText();
+  }
+
+  getCloudButton() {
+    return element(by.css('.cloudbutton'));
+  }
+
+  getCloudTitle() {
+    return element(by.css('.cloudtitle')).getText();
   }
 
   getToggleGridButton() {

@@ -70,5 +70,18 @@ describe('website home', () => {
       expect(data).toBe(true);
     });
   });
+
+  // Expect homepage to load wordcloud on click, and find cloudtitle.
+  it('should navigate to wordcloud', () => {
+    home.getCloudButton().click();
+    expect(home.getCloudTitle())
+      .toEqual('Moviegenres in our database; the bigger they are, the more we got! cloud');
+  });
+
+  // Expect to return to home after visiting wordcloud
+  it('should navigate back to homepage by titlebutton', () => {
+    home.getHomeLink().click();
+    expect(home.getHeaderTitle()).toBeTruthy();
+  });
 });
 /** End Test Home **/
