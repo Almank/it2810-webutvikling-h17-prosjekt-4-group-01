@@ -34,3 +34,11 @@ serve it. Proceed with the following commands inside the `/website` folder.
 - `node server.js`
 
 You may now visit your local website on `localhost:8084`.
+
+### The Projects Tests
+If you would like to run through the projects tests, you have to make sure that you have
+installed all dependencies using `npm install` first.
+To proceed running the tests, use the commands:
+ - Front-end tests: `npm run-script test`
+ - Back-end tests: `npm run-script test-backend`
+ - End-to-End tests: `npm run-script e2e`
