@@ -24,13 +24,13 @@ installed on your computer.
 Then you can proceed to cloning the project, and installing the dependencies inside
 the `/website` folder using `npm install`.
 
-When all dependencies are finished downloading, your ready to run the initial script
+When all dependencies are finished downloading, you are ready to run the initial script
 to fill your database with data from the omdbApi. All you have to do, is to run 
 the `omdb-transfer.js` script using `node`.
 
 Finally to make the website available locally, you have to build a distribution and 
 serve it. Proceed with the following commands inside the `/website` folder.  
-- `ng build`
+- `npm run build`
 - `node server.js`
 
 You may now visit your local website on `localhost:8084`.
