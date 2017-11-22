@@ -33,7 +33,7 @@ export class MovieListComponent implements OnInit {
   need = 16;
   pageLength = 0;
   genres = ['Action', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Crime', 'Drama', 'Family', 'Fantasy',
-    'Film-Noir', 'Horror', 'History', 'Music', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Sport', 'Sport', 'War',
+    'Film-Noir', 'Horror', 'History', 'Music', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Sport', 'War',
     'Western'];
   selectedGenre: any = [];
   auth: boolean;
