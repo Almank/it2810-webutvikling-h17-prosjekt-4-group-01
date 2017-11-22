@@ -1,7 +1,7 @@
 import {MainPage} from './app.po';
 
-/** Test Header Component **/
 
+/** Test Header Component **/
 describe('website Header', () => {
   let home: MainPage;
 
@@ -36,5 +36,39 @@ describe('website Header', () => {
     expect(home.getCloudIcon()).toEqual('cloud');
   });
 });
-
 /** End Test Header Component **/
+
+
+/** Test Home **/
+describe('website home', () => {
+  let home: MainPage;
+
+  // Render homepage before executing tests
+  beforeEach(() => {
+    home = new MainPage();
+  });
+
+  // Expect toggleGridButton to work
+  it('should toggle gridview', () => {
+    home.getToggleGridButton().click();
+    home.getToggledGrid().then(data => {
+      expect(data).toBe(true);
+    });
+    home.getToggleGridButton().click();
+    home.getToggledGrid().then(data => {
+      expect(data).toBe(false);
+    });
+  });
+
+  // Expect toggleFilterButton to show filters
+  it('should toggle/show filters', () => {
+    home.getToggledFilters().then(data => {
+      expect(data).toBe(false);
+    });
+    home.getToggleFilterButton().click();
+    home.getToggledFilters().then(data => {
+      expect(data).toBe(true);
+    });
+  });
+});
+/** End Test Home **/
