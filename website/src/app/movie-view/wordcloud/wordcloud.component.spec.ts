@@ -9,7 +9,6 @@ import { inject } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-
 class MockWordcloudService {
   constructor(){}
   getWordcloud() {
@@ -61,7 +60,5 @@ describe('WordcloudComponent', () => {
       var mockData: AgWordCloudData[] = [];
     expect(component.wordData).toEqual(mockData);
   });
-
-
 
 });

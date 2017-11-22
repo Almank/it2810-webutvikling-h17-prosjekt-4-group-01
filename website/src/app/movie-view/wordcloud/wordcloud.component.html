@@ -1,0 +1,6 @@
+<div>
+  <h4 class="cloudtitle">Movie genres in our database; the bigger they are, the more we got!</h4>
+  <div class="cloudcontainer" *ngIf="isDataAvailable">
+    <div class="cloud" AgWordCloud [wordData]="wordData" [options]="options" [width]=700 [color]="colors"></div>
+  </div>
+</div>
