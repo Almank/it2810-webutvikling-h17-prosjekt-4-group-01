@@ -1,8 +1,11 @@
 # Project 4 - Angular
 ### it2810-webutvikling-h17-prosjekt-4-group-01
 Welcome to our repository! To read further about our project in detail, 
-please visit our [**wiki**](https://github.com/IT2810/it2810-webutvikling-h17-prosjekt-4-group-01/wiki/Project-4---Wiki)  
-The wiki also serves as [**documentation**](https://github.com/IT2810/it2810-webutvikling-h17-prosjekt-4-group-01/wiki/Project-4---Wiki)!
+please visit our [**wiki**](https://github.com/IT2810/it2810-webutvikling-h17-prosjekt-4-group-01/wiki/Project-4---Documentation)
+which also serves as our documentation!
+
+If you are evaluating the project, you might want to check out the
+[**Evaluation section**](https://github.com/IT2810/it2810-webutvikling-h17-prosjekt-4-group-01/wiki/Evalueringskriterie-rettet-dokumentasjon) of our wiki. 
 
 **Authors of the projects:**
 - Martin Lunde
@@ -10,10 +13,6 @@ The wiki also serves as [**documentation**](https://github.com/IT2810/it2810-web
 - Petter Lohne
 - Thayanan Tharmapalan
 - Steffen Helgeland
-
-### Table of contents:
-1. [Running Website Locally](#Local)
-2. [The Projects Tests](#Tests)
 
 ### Running Website Locally <a name="Local"></a>
 To run the website locally, you have to make sure you have the following dependencies
@@ -35,41 +34,3 @@ serve it. Proceed with the following commands inside the `/website` folder.
 - `node server.js`
 
 You may now visit your local website on `localhost:8084`.
-
-### The Projects Tests <a name="Tests"></a>
-
-If you would like to run through the projects tests, you have to make sure that you have
-installed all dependencies using `npm install` first.
-
-To proceed running the tests, use the commands:
-- Front-end tests: `npm run-script test`
-- Back-end tests: `npm run-script test-backend`
-- End-to-End tests: `npm run-script e2e`
-#### Test Structure
-
-The testing environment consists of the packages `Jasmine`, `Karma` and `Protractor`.
-These ensure that we have a structured environment, and can easily write more tests underway
-the project.  
-
-All test files are located in the `/src` folder, and have the file ending `.spec.ts`.  
-You may think that the tests are scattered around the repository, but in good old fashioned
-angular style, they are not. They are actually bundled together with its parent component, such
-that you always will know where to find the bug/error that broke the test upon failure.
-
-Current test files and their location:
-```
-- api.component.spec.ts           (/src)
-- app.component.spec.ts           (/src/app)
-- auth.component.spec.ts          (/src/app/auth)
-- header.component.spec.ts        (/src/app/header)
-- movie-details.component.spec.ts (/src/app/movie-view/movie-details)
-- movie-list.component.spec.ts    (/src/app/movie-view/movie-list)
-- profile.component.spec.ts       (/src/app/profile)
-- search-bar.component.spec.ts    (/src/app/search-bar)
-```
-
-End-to-End tests:
-```
-- app.e2e-spec.ts                 (/e2e)
-- app.po.ts                       (/e2e)
-```
