@@ -41,7 +41,7 @@ import {MockBackend, MockConnection} from '@angular/http/testing';
       mockBackend = getTestBed().get(MockBackend);
     }));
 
-    it('Should be run correctly', done => {
+    it('Should run correctly', done => {
       let mockMovieDetailsService: MockMovieDetailsService;
 
       getTestBed().compileComponents().then(() => {
