@@ -25,10 +25,13 @@ describe('MovieListComponent', () => {
       providers: [{provide: MovieListService}, MovieDetailsService, ProfileService, ProfileHistoryService, Favorite],
     }).compileComponents();
   }));
-  
+  beforeEach(() => {
+    fixture = TestBed.createComponent(MovieListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
   it('should create the MovieList', async(() => {
-    const fixture = TestBed.createComponent(MovieListComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
+    expect(component).toBeTruthy();
   }));
 });
