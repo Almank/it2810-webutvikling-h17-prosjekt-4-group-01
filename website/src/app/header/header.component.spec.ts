@@ -1,6 +1,5 @@
 import {async, ComponentFixture, TestBed, HeaderComponent, MatIconModule, MatToolbar, MatToolbarRow, CommonModule
 } from '../import-module';
-
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
