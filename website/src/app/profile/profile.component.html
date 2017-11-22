@@ -33,10 +33,9 @@
         </mat-card-content>
       </mat-tab>
 
-      <mat-tab label="Search History">
-        <h4 class="title">Search History</h4>
+      <mat-tab label="History">
+        <h4 class="title">Recently viewd movies</h4>
         <hr class="card-hr">
-        <p>Future table of content</p>
         <mat-grid-list cols="4" rowHeight="1:1.45" gutterSize="12px" [class.show]="!show" class="gridList">
           <mat-grid-tile *ngFor="let movie of userHistory" (click)="openDialog(movie)" title={{movie.title}}>
             <img id="gridPoster" src="{{movie.poster}}" alt="">
