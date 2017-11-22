@@ -41,14 +41,24 @@ describe('MovieListComponent', () => {
     expect(component).toBeTruthy();
   }));
 
+  /** Test to toggle grid view button */
   it('should toggle grid view button', async(() => {
     expect(component.show).toBeFalsy();
     component.toggleButton();
     expect(component.show).toBeTruthy();
   }));
+
+  /** Test to toggle filter button */
   it('should toggle filter button', async(() => {
     expect(component.showFilter).toBeFalsy();
     component.toggleFilterButton();
     expect(component.showFilter).toBeTruthy();
   }));
+
+  /** Test to display correct view icon */
+  it('should display view icon', () => {
+    debugElement = fixture.debugElement.query(By.css('.viewGrid'));
+    htmlElement = debugElement.nativeElement;
+    expect(htmlElement.textContent).toEqual('');
+  });
 });

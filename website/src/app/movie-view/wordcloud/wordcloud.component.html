@@ -1,0 +1,6 @@
+<div>
+  <h4 class="cloudTitle">{{cloudTitle}}</h4>
+  <div class="cloudcontainer" *ngIf="isDataAvailable">
+    <div class="cloud" AgWordCloud [wordData]="wordData" [options]="options" [width]=700 [color]="colors"></div>
+  </div>
+</div>
