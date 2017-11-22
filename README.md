@@ -31,6 +31,8 @@ Be sure to follow the guide above, and do not proceed without mongoDB running (e
 
 All you have to do then, is to run the omdb-transfer script using:  
 `node omdb-transfer.js`
+Be sure to download a minimum of 20%; then you may exit the script if you want to proceed. (ctrl + C)
+**Note! The script does not close automatically**
 
 Finally to make the website available locally, you have to build a distribution and 
 serve it. Proceed with the following commands inside the `/website` folder.  
