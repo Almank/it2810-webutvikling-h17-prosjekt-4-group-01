@@ -25,17 +25,10 @@ describe('MovieListComponent', () => {
       providers: [{provide: MovieListService}, MovieDetailsService, ProfileService, ProfileHistoryService, Favorite],
     }).compileComponents();
   }));
-  beforeEach(() => {
-    fixture = TestBed.createComponent(MovieListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
+  
   it('should create the MovieList', async(() => {
-    expect(component).toBeTruthy();
-  }));
-
-  it ('should toggle between title and director', async(() => {
-
+    const fixture = TestBed.createComponent(MovieListComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app).toBeTruthy();
   }));
 });
