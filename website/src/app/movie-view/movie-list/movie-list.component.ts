@@ -106,8 +106,8 @@ export class MovieListComponent implements OnInit {
       } else if ((document.documentElement.scrollTop < 140) || (document.body.scrollTop < 140)) {
         this.fixedSearch = false;
       }
-      if ((document.documentElement.scrollTop + document.documentElement.offsetHeight === document.documentElement.scrollHeight)
-      || (document.body.scrollTop + document.body.offsetHeight === document.body.scrollHeight)) {
+      if ((document.documentElement.scrollTop + document.documentElement.offsetHeight > document.documentElement.scrollHeight - 10)
+      || (document.body.scrollTop + document.body.offsetHeight > document.body.scrollHeight - 10)) {
         this.have += 16;
         this.need = 16;
         if (this.searchWord !== '' || this.searchWord !== undefined) {
