@@ -7,7 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
+    "test-backend": "node spec/support/jasmine-reporter.js",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -46,6 +46,7 @@
     "codelyzer": "~3.2.0",
     "express": "^4.16.2",
     "jasmine": "^2.8.0",
+    "jasmine-console-reporter": "^2.0.1",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "^4.2.1",
     "karma": "~1.7.0",
