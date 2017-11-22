@@ -4,18 +4,49 @@
 }
 
 .register-login-card{
-  margin: 20px;
-  width: 70%;
+  margin: 20px !important;
+  width: 350px !important;
+}
+
+.mat-card {
+  min-width: 350px !important;
 }
 
 .password-form{
   margin-top: 20px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .login-password, .login-username{
+  width: 150px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+.mat-tab-labels {
+  justify-content: center;
   display: flex;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.field label {
+  margin-left: 3px;
+  margin-bottom: 2px;
+}
+
+.save-button {
+  width: 164px;
+  background-color: #34384c !important;
+  color: #FEFDFD !important;
+  margin-bottom: 25px;
 }
 
 /* alert styling */
@@ -25,4 +56,11 @@ snack-bar-container.alert-negative{
 
 snack-bar-container.alert-positive{
   background-color: darkgreen;
+}
+
+@media screen and (max-width: 650px) {
+    .login-container{
+        height: 100%;
+        margin: 5%;
+    }
 }

@@ -1,6 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {isObject} from 'util';
+import {isObject, Component, OnInit, ViewEncapsulation, AuthenticationService} from '../import-module';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 
@@ -11,9 +9,10 @@ import {MatSnackBar} from '@angular/material';
   encapsulation: ViewEncapsulation.None,
 })
 export class AuthComponent implements OnInit {
-  private headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-  constructor(private http: HttpClient, private router: Router, public snackBar: MatSnackBar) {
+  // Upon clicking the sign-in icon on the navbar, the login page shows based on of the user
+  // is already logged in or not. The constructor ensures that the browser navigates properly.
+  constructor(private auth: AuthenticationService, private router: Router, public snackBar: MatSnackBar) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (session === null) {
       this.router.navigate(['/login']);
@@ -25,36 +24,35 @@ export class AuthComponent implements OnInit {
   ngOnInit() {
   }
 
+  // When the register form is invoked in the HTML it calls onRegister,
+  // which calls the api to create a new user.
   onRegister(form) {
-    const params = JSON.stringify({
-      username: form.value.username,
-      password: form.value.password,
-    });
-    this.http.post('/api/register', params, {headers: this.headers}).subscribe(data => {
+    const register = this.auth.onRegister(form);
+    register.then(data => {
       if (isObject(data)) {
-        console.log(data);
-        this.router.navigate(['/profile']);
+        this.onLogin(form);
       }
     }, err => {
       this.onUserError(err.error.message, 'dismiss', false);
     });
   }
 
+  // onLogin does almost the same as onRegister, but logs the user in instead.
   onLogin(form) {
-    const params = JSON.stringify({
-      username: form.value.username,
-      password: form.value.password,
-    });
-    this.http.post('/api/login', params, {headers: this.headers}).subscribe(data => {
+    const login = this.auth.onLogin(form);
+    login.then(data => {
       if (isObject(data)) {
+        // if data is valid, save data to localstorage as a session for the client to use.
         if (data['auth']) {
           localStorage.setItem('session', JSON.stringify({
             token: data['token'],
             auth: data['auth'],
             username: form.value.username,
+            favorites: [],
           }));
           console.log('token saved to LS and user is logged in');
           this.router.navigate(['/profile']);
+          location.reload();
         }
       }
     }, err => {
@@ -62,6 +60,8 @@ export class AuthComponent implements OnInit {
     });
   }
 
+  // onUserError is invoked when a user tries to login with wrong credentials or
+  // registering an already exisiting user. It shows a little notice about the error.
   onUserError(message: string, action: string, positive: boolean) {
     let extra = 'alert-negative';
     if (positive) {

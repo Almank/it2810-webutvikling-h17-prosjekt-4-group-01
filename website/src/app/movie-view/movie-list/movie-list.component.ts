@@ -1,11 +1,12 @@
-import {  MovieList, Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, BehaviorSubject,
-  Observable, HttpClient, MovieDetailsComponent, MatSelectModule, HostListener } from '../../import-module';
-
-import { HttpHeaders } from '@angular/common/http';
+import {  MovieList, Component, OnInit, ViewChild, MatDialog, MatPaginator, BehaviorSubject,
+  HostListener, MovieSource } from '../../import-module';
+/** Importing these separately as the site crashes if they are barreled */
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import { MovieListService } from '../movie-view.service';
+import { MovieDetailsService } from '../movie-details/movie-details.service';
+import {ProfileService} from '../../profile/profile.service';
 
 @Component({
   selector: 'movieList',
@@ -14,12 +15,10 @@ import { MovieListService } from '../movie-view.service';
 })
 
 export class MovieListComponent implements OnInit {
-  private headers = new HttpHeaders({'Content-Type': 'application/json'});
-  displayedColumns = ['title', 'year', 'genre', ];
+  displayedColumns = ['title', 'year', 'genre'];
   dataSource: MovieSource | null;
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
-  dialogResult = '';
   movieList: MovieList[];
   searchTitle = '';
   searchActor = '';
@@ -31,36 +30,29 @@ export class MovieListComponent implements OnInit {
   startYear: any = 0;
   endYear: any = new Date().getFullYear();
   have = 0;
-  need = 10;
+  need = 16;
   pageLength = 0;
-  genres = [
-    {viewValue: 'Action'},
-    {viewValue: 'Adventure'},
-    {viewValue: 'Animation'},
-    {viewValue: 'Biography'},
-    {viewValue: 'Comedy'},
-    {viewValue: 'Crime'},
-    {viewValue: 'Drama'},
-    {viewValue: 'Family'},
-    {viewValue: 'Fantasy'},
-    {viewValue: 'Film-Noir'},
-    {viewValue: 'Horror'},
-    {viewValue: 'History'},
-    {viewValue: 'Music'},
-    {viewValue: 'Musical'},
-    {viewValue: 'Mystery'},
-    {viewValue: 'Romance'},
-    {viewValue: 'Sci-Fi'},
-    {viewValue: 'Sport'},
-    {viewValue: 'Thriller'},
-    {viewValue: 'War'},
-    {viewValue: 'Western'}];
+  genres = ['Action', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Crime', 'Drama', 'Family', 'Fantasy',
+    'Film-Noir', 'Horror', 'History', 'Music', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Sport', 'Sport', 'War',
+    'Western'];
   selectedGenre: any = [];
   auth: boolean;
   token: string;
-  show = true;
+  show = false;
+  showFilter = false;
+  arrow = 'keyboard_arrow_down';
+  viewIcon = 'format_list_bulleted';
+  viewTooltip = 'Grid view';
+  fixedSearch = false;
+  colNum = 4;
+  sorts = ['Title Desc', 'Title Asc', 'Year Desc', 'Year Asc', 'Genre Desc', 'Genre Asc'];
+  selectedSort: string;
+  descAsc: string;
+  sortCriteria = 1;
 
-  constructor(public dialog: MatDialog, private movieListService: MovieListService, private http: HttpClient) {
+
+  constructor(public dialog: MatDialog, private movieListService: MovieListService,
+              private modal: MovieDetailsService, public profile: ProfileService) {
     const session = JSON.parse(localStorage.getItem('session'));
     if (!(session === null || session.auth === false)) {
       this.auth = session.auth;
@@ -68,40 +60,83 @@ export class MovieListComponent implements OnInit {
     }
   }
 
+  /** Get movies and resize columns of movies based on screen size. */
   ngOnInit(): void {
     this.getMovieList();
+    this.onResize();
+    if (this.auth) {
+      this.profile.validateToken(this.token);
+    }
   }
 
+  /** Change button and how the movies a loaded Grid/List
+   * the variables have and need tells how many movies we already have and how many more we need in order
+   * to load dynamically. Setting have to 0 will therefore load in from start */
   toggleButton(): void {
     this.show = !this.show;
+    this.show ? this.viewIcon = 'view_comfy' : this.viewIcon = 'format_list_bulleted';
+    this.show ? this.viewTooltip = 'Grid view' : this.viewTooltip = 'List view';
     if (!this.show) {
-      this.paginator.pageSize = 12;
-      this.need = 12;
+      this.paginator.pageSize = 16;
+      this.need = 16;
       this.have = 0;
       this.dataChange = new BehaviorSubject<MovieList[]>([]);
-      this.getMovieList();
+      if (this.searchWord !== '' || this.searchWord !== undefined) {
+        this.searchFor();
+      } else {
+        this.getMovieList();
+      }
     }
     if (this.show) {
       this.paginator.pageSize = 10;
+      this.fixedSearch = false;
     }
   }
 
+  /** Change filter icon when clicked. */
+  toggleFilterButton(): void {
+      this.showFilter = !this.showFilter;
+      this.showFilter ? this.arrow = 'keyboard_arrow_up' : this.arrow = 'keyboard_arrow_down';
+  }
+
+  /** Load more movies when user scroll to the bottom. */
   @HostListener('window:scroll', [])
   onScroll(): void {
     if (!this.show) {
-      if (document.documentElement.scrollTop + document.documentElement.offsetHeight === document.documentElement.scrollHeight) {
-        this.have += 12;
-        this.need = 12;
-        this.getMovieList();
+      if ((document.documentElement.scrollTop > 140) || (document.body.scrollTop > 140)) {
+        this.fixedSearch = true;
+      } else if ((document.documentElement.scrollTop < 140) || (document.body.scrollTop < 140)) {
+        this.fixedSearch = false;
+      }
+      if ((document.documentElement.scrollTop + document.documentElement.offsetHeight > document.documentElement.scrollHeight - 10)
+      || (document.body.scrollTop + document.body.offsetHeight > document.body.scrollHeight - 10)) {
+        this.have += 16;
+        this.need = 16;
+        if (this.searchWord !== '' || this.searchWord !== undefined) {
+          this.searchFor();
+        } else {
+          this.getMovieList();
+        }
       }
     }
   }
 
+  /** Resize amount of columns based on screen width. */
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    if (window.innerWidth < 480) {
+      this.colNum = 1;
+    } else {
+      this.colNum = 4;
+    }
+  }
+
+  /** Get amount of matches from search. */
   getAmountOfMatches(): void {
     this.movieListService.getAmountOfMovies(this).then(length => this.pageLength = length);
   }
 
-  /** Hvorfor heter begge funksjonene get movielist????? */
+  /** Get movies and amount from service file. */
   getMovieList(): void {
     this.getAmountOfMatches();
     this.movieListService.getMovieList(this).then(movies => this.createList(movies));
@@ -109,58 +144,15 @@ export class MovieListComponent implements OnInit {
 
   /** Sets the Movie data displyed on in the Pop-up. */
   openDialog(data) {
-    // If user is logged in, check if movie is favorited
-    if (this.auth) {
-      const params = JSON.stringify({
-        token: this.token,
-        movie_id: data._id,
-      });
-      this.http.post('/api/favorites/exists', params, {headers: this.headers}).subscribe(favorites => {
-        if (favorites) {
-          this.generateModal(data, true);
-        } else {
-          this.generateModal(data, false);
-        }
-      });
-    } else {
-      this.generateModal(data, false);
-    }
+    this.modal.openDialog(data, this.auth, this.token);
   }
 
-  generateModal(data, exists) {
-    // Generate modal data
-    this.movieListService.getMovieModal(data).then( movies => {
-      data = {
-        '_id': data._id,
-        'title': data.title,
-        'poster': movies[0].poster,
-        'plot': movies[0].plot,
-        'runtime': movies[0].runtime,
-        'actors': data.actors,
-        'director': data.director,
-        'genre': data.genre,
-        'year': data.year,
-        'favorited': exists,
-        'auth': this.auth,
-      };
-      const dialogRef = this.dialog.open(MovieDetailsComponent, {
-        data,
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        this.dialogResult = result;
-      });
-    });
-  }
-
+  /** Create a new list of movies */
   createList(movieData) {
     this.dataSource = new MovieSource(this, this.paginator);
-    /** Fill up the database with 25 movies. */
     for (let i = 0; i < movieData.length ; i++) {
       const copiedData = this.data;
-      if (!(this.checkDuplicate(copiedData, i, movieData))) {
         copiedData.push(movieData[i]);
-      }
       this.dataChange.next(copiedData);
     }
     if (this.validRefresh === true) {
@@ -168,17 +160,17 @@ export class MovieListComponent implements OnInit {
     }
   }
 
-  checkDuplicate(copiedData, i, movieList) {
-    for (let k = 0; k < copiedData.length; k++) {
-      return movieList[i]._id === copiedData[k]._id;
-    }
-  }
-
+  /** Get data information */
   get data(): MovieList[] {
     return this.dataChange.value;
   }
 
+  /** Reset list when searching.
+   * valid refresh makes sure that you only reset the site once when the searchbar is empty */
   searchDatabase(value) {
+    if (!this.show) {
+      this.paginator.pageSize = 16;
+    }
     if (value === '' && this.validRefresh === true) {
       this.searchWord = '';
       this.validRefresh = false;
@@ -200,6 +192,7 @@ export class MovieListComponent implements OnInit {
       }
   }
 
+  /** Decide if it should search for title, director or actor, dictated by the drop down box to the right of searchbar*/
   searchFor() {
     if (this.searchCriteria === 1) {
       this.searchTitle = this.searchWord;
@@ -216,6 +209,8 @@ export class MovieListComponent implements OnInit {
     this.searchActor = '';
   }
 
+  /** Change page in list. Dynamically loads through getting current have movies and potential need depending on
+   * pagesize. */
   changeValues(event) {
     this.have = this.data.length;
     this.paginator.pageIndex = event.pageIndex;
@@ -228,12 +223,15 @@ export class MovieListComponent implements OnInit {
     }
   }
 
-  setSearch() {
+  /** Search on changing searching value */
+  setSearch(num) {
+    this.searchCriteria = num.value;
     if (this.searchWord !== '') {
       this.searchDatabase(this.searchWord);
     }
   }
 
+  /** Get year from filter. */
   setYear(event, type) {
     if (type === 'start') {
       this.startYear = event;
@@ -250,9 +248,10 @@ export class MovieListComponent implements OnInit {
     this.searchDatabase(this.searchWord);
   }
 
+  /** Set genres from filter */
   setGenre(event) {
     this.selectedGenre = '';
-    if (event.value[0] !== undefined) {
+    if (event.value[0] !== undefined && event.value[0] !== 'All') {
       for (const genre of event.value) {
         this.selectedGenre += genre;
         this.selectedGenre += ',';
@@ -263,33 +262,23 @@ export class MovieListComponent implements OnInit {
     this.searchDatabase(this.searchWord);
   }
 
-
-}
-
-/**
- * Data source to provide what data should be rendered in the table. Note that the data source
- * can retrieve its data in any way. In this case, the data source is provided a reference
- * It is not the data source's responsibility to manage
- * the underlying data. Instead, it only needs to take the data and send the table exactly what
- * should be rendered.
- **/
-export class MovieSource extends DataSource<any> {
-  constructor(private _movieComponent: MovieListComponent, private _paginator: MatPaginator) {
-    super();
+  /** Set sort variables */
+  setSort(event) {
+    const selected = event.value.toLowerCase();
+    const index = selected.indexOf(' ');
+    this.selectedSort = selected.substr(0, index);
+    const direction = selected.substr(index + 1);
+    if (direction === 'desc') {
+            this.descAsc = 'true';
+        }else if (direction === 'asc)') {
+            this.descAsc = 'false';
+    }
+    if (direction === 'desc') {
+            this.descAsc = 'false';
+        }else if (direction === 'asc') {
+            this.descAsc = 'true';
+    }
+    this.validRefresh = true;
+    this.searchDatabase(this.searchWord);
   }
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<MovieList[]> {
-    const displayDataChanges = [
-      this._movieComponent.dataChange,
-      this._paginator.page,
-    ];
-    return Observable.merge(...displayDataChanges).map(() => {
-      const data = this._movieComponent.data.slice();
-  /** Grab the page's slice of data. */
-      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-      return data.splice(startIndex, this._paginator.pageSize);
-    });
-  }
-  disconnect() {}
-
 }

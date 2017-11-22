@@ -1,24 +1,64 @@
-import {TestBed, async, MovieListComponent} from '../../import-module';
-import {
-  MatDialogModule, MatIconModule, MatInputModule, MatOptionModule, MatPaginatorModule,
-  MatTableModule
-} from '@angular/material';
+import {TestBed, async, ComponentFixture, MovieListComponent,  MatDialogModule, MatIconModule, MatInputModule, MatOptionModule, MatPaginatorModule,
+  MatTableModule, HttpClientModule, MatTooltipModule, MatSelectModule, MatGridListModule, MatSnackBarModule} from '../../import-module';
+/** Importing these separately as the site crashes if they are barreled */
 import {MovieListService} from '../movie-view.service';
-import {HttpClientModule} from '@angular/common/http';
+import {MovieDetailsService} from '../movie-details/movie-details.service';
+import {ProfileService} from '../../profile/profile.service';
+import {RouterTestingModule} from '@angular/router/testing';
+import {ProfileHistoryService} from '../../profile/profile.history.service';
+import {Favorite} from '../../profile/profile.favorite.service';
 
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 describe('MovieListComponent', () => {
+  let component: MovieListComponent;
+  let fixture: ComponentFixture<MovieListComponent>;
+  let debugElement: DebugElement;
+  let htmlElement: HTMLElement;
+
+  class MockMovieListService {
+    getMovieList(){};
+    getAmountOfMovies() {};
+    getMovieModal() {};
+
+  }
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatInputModule, MatIconModule, MatTableModule, MatPaginatorModule, MatDialogModule, HttpClientModule,
-        MatOptionModule],
+        MatOptionModule, MatTooltipModule, MatSelectModule, MatGridListModule, MatSnackBarModule, RouterTestingModule],
       declarations: [MovieListComponent],
-      providers: [{provide: MovieListService}],
+      providers: [{provide: MovieListService, useClass: MockMovieListService}, MovieDetailsService, ProfileService, ProfileHistoryService, Favorite],
     }).compileComponents();
   }));
+  beforeEach(() => {
+    fixture = TestBed.createComponent(MovieListComponent);
+    component = fixture.componentInstance;
+  });
+
   it('should create the MovieList', async(() => {
-    const fixture = TestBed.createComponent(MovieListComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
+    expect(component).toBeTruthy();
   }));
+
+  /** Test to toggle grid view button */
+  it('should toggle grid view button', async(() => {
+    expect(component.show).toBeFalsy();
+    component.toggleButton();
+    expect(component.show).toBeTruthy();
+  }));
+
+  /** Test to toggle filter button */
+  it('should toggle filter button', async(() => {
+    expect(component.showFilter).toBeFalsy();
+    component.toggleFilterButton();
+    expect(component.showFilter).toBeTruthy();
+  }));
+
+  /** Test to display correct view icon */
+  it('should display view icon', () => {
+    debugElement = fixture.debugElement.query(By.css('.viewGrid'));
+    htmlElement = debugElement.nativeElement;
+    expect(htmlElement.textContent).toEqual('');
+  });
 });

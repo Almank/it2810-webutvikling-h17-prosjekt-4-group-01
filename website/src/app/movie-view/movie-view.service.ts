@@ -6,17 +6,22 @@ export class MovieListService {
 
   constructor(private http: HttpClient) {}
 
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // For demo purposes only
+    return Promise.reject(error.message || error);
+  }
+
+  /** Get movies with filter and sort variables */
   getMovieList(comp): Promise<MovieList[]> {
-    if (!(comp.selectedGenre === undefined || comp.selectedGenre === '')) {
-      comp.selectedGenre = comp.selectedGenre.slice(0, -1);
-    }
     const params = new HttpParams()
       .set('have', comp.have) .set('need', comp.need)
       .set('year', comp.startYear + '-' + comp.endYear)
       .set('genre', comp.selectedGenre)
       .set('title', comp.searchTitle)
       .set('director', comp.searchDirector)
-      .set('actors', comp.searchActor);
+      .set('actors', comp.searchActor)
+      .set('sort', comp.selectedSort)
+      .set('desc', comp.descAsc);
     return this.http.get('/api/movies/list', { params }).toPromise()
       .then(data => {
         if (isObject(data)) {
@@ -25,13 +30,16 @@ export class MovieListService {
       .catch(this.handleError);
   }
 
+  /** Get amount of movies matching search. */
   getAmountOfMovies(comp) {
     const params = new HttpParams()
       .set('year', comp.startYear + '-' + comp.endYear)
       .set('genre', comp.selectedGenre)
       .set('title', comp.searchTitle)
       .set('director', comp.searchDirector)
-      .set('actors', comp.searchActor);
+      .set('actors', comp.searchActor)
+      .set('sort', comp.selectedSort)
+      .set('desc', comp.descAsc);
     return this.http.get('/api/movies/amount', { params }).toPromise()
       .then(data => {
           return  (data);
@@ -39,6 +47,7 @@ export class MovieListService {
       .catch(this.handleError);
   }
 
+  /** Get details for movie modal */
   getMovieModal(listData): Promise<MovieList[]> {
     const params = new HttpParams().set('title', listData.title);
     return this.http.get('/api/movies/modal', { params })
@@ -49,10 +58,4 @@ export class MovieListService {
         }})
       .catch(this.handleError);
   }
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
-  }
-
 }

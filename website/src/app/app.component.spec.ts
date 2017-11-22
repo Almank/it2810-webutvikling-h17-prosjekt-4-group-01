@@ -1,8 +1,5 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {AppComponent} from './app.component';
-import {HeaderComponent} from './header/header.component';
-import {RouterTestingModule} from '@angular/router/testing';
-import {MatIconModule, MatToolbar, MatToolbarRow} from '@angular/material';
+import {async, ComponentFixture, TestBed, AppComponent, HeaderComponent, RouterTestingModule, MatIconModule,
+  MatToolbar, MatToolbarRow} from './import-module';
 
 describe('AppComponent', () => {
   let component: AppComponent;

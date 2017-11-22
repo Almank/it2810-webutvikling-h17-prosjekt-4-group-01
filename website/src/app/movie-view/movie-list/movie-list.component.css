@@ -1,24 +1,28 @@
-/* Movie Table */
-.example-container {
-  display: none;
+.content{
+  display: flex;
+  flex-direction: column;
+  background-color: #1E2339;
+}
 
+/* Movie Table */
+.container {
+  display: none;
   flex-direction: column;
   min-width: 300px;
   width: 65%;
-  margin: auto;
   text-align: center;
+  margin: auto auto 25px auto;
+  -webkit-box-shadow: 0px 4px 33px 4px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 4px 33px 4px rgba(0,0,0,0.75);
+  box-shadow: 0px 4px 33px 4px rgba(0,0,0,0.75);
+  z-index: 0;
 }
 
-.example-header {
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  padding-left: 24px;
-  font-size: 20px;
+.changebutton{
+    display:none;
 }
-
-.show {
-  display: block;
+.changebutton{
+    display:none;
 }
 
 .mat-table {
@@ -28,8 +32,13 @@
 }
 
 .mat-header-cell{
-  font-weight: 900;
+  font-weight: 400;
   font-size: 21px;
+  color: #FEFDFD;
+}
+
+.mat-header-row {
+  background-color: #34384c;
 }
 
 .mat-cell{
@@ -61,89 +70,169 @@
   cursor: pointer;
 }
 
-.mat-header-row, .mat-row {
-  font-family: GeosansLight;
+/* Toggle table/grid */
+.show {
+  display: block;
 }
 
-/* Paginator inside the table */
-.mat-paginator, .mat-paginator-page-size .mat-select-trigger {
+#viewBtnWrap{
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 5px;
+}
 
-  font-family: GeosansLight;
+/* Set navbar to fixed, must be important to override material angular */
+.fixedSearch {
+  position: fixed !important;
+  top: 0;
+  z-index: 1;
+}
+
+.marginTop {
+  margin-top:125px;
+}
+
+/* Search functionality */
+.title {
+  color: #FEFDFD;
+  margin: 5px;
+  text-align: center;
+}
+
+.titleFilter {
+  color: rgba(254,253,253,0.4);
+  margin: 3px 0 0 0;
+}
+
+.mat-button {
+  height: 50px;
+}
+
+.viewFilter {
+  width: 75px;
+  height: 25px;
+}
+
+.filterArrow {
+  color: rgba(254,253,253,0.4);
+  top: 5px;
+  vertical-align: top;
+}
+
+.showFilter {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.showFilterToggle {
+  display: flex !important;
+}
+
+.searchContent {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-self: center;
+  width: 100%;
+  padding:0 0 5px 0;
+  background-color: #1E2339;
+}
+
+.searchOptions {
+  display: flex;
+  color: #FEFDFD;
+  justify-content: space-around;
+}
+
+.searchInputField {
+  border: 0.5px solid rgba(254,253,253,0.4);
+  background-color: #1E2339;
+  color: #FEFDFD;
+  padding: 10px 15px;
+  margin:15px 0 5px 0;
+  height: 29px;
+  min-width: 300px;
+  max-width: 500px;
   font-size: 16px;
 }
 
-.mat-select-value-text span {
-  font-family: GeosansLight;
-}
-
-.mat-select-value{
-  font-family: GeosansLight;
-}
-
-.mat-option {
-  font-family: GeosansLight !important;
-}
-
-.mat-option-text{
-  font-family: GeosansLight !important;
-}
-
-/* Search form */
-.example-form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
-  display: block;
-  margin: auto;
-  padding-top: 25px;
-  padding-bottom: 18px;
-}
-
-.example-full-width {
-  width: 100%;
-}
-
-.mat-hint {
-  padding-left: 25px;
+.searchBar {
+  display: flex;
+  justify-content: center;
+  margin: 0 5%;
 }
 
 .inputYear {
-  width: 80px;
+  margin-right: 10px;
+}
+
+.inputYearNum, .viewGrid, .inputYear, .form-check-inline label {
+  color: rgba(254,253,253,0.4);
 }
 
 .inputYearTextField {
   text-align: center;
+  color: rgba(254,253,253,0.4);
+  border: 1px solid rgba(254,253,253,0.4);
+  background-color: #1E2339;
+  height: 25px;
+  font-size: 14px;
+  width: 60px;
 }
 
-#viewBtnWrap{
-    margin-left: 18%;
-    margin-bottom: 10px;
+.inputYearNum {
+  font-size: 9px;
+  width: 60px;
+  margin-top:3px;
+  margin-right: 0;
 }
 
-.content{
-  display: flex;
-  flex-direction: column;
+.selectSearch, .selectGenre {
+  font-size: 20px;
+  padding: 10px 15px;
+  background-color: #1E2339;
+  color: rgba(254,253,253,0.4) !important;
+  border: 1px solid rgba(254,253,253,0.4);
+  border-radius: 0;
+  margin: 15px 15px 5px 0;
+  border-left: 0;
+}
+
+.selectSearch {
+  min-width: 40px;
+  max-width: 70px;
+  width: auto;
+}
+
+.searchOption, .mat-select-panel .mat-optgroup-label, .mat-select-panel .mat-option {
+  font-size: 16px !important;
+  height: 2em !important;
+  line-height: 2em !important;
+}
+
+.mat-form-field-placeholder-wrapper {
+  height: auto;
+  width: auto;
+}
+
+.selectGenre {
+  border: 1px solid rgba(254,253,253,0.4);
+  font-size: 10px;
+  margin-top: 0;
+  margin-right: 10px;
+  padding: 0;
+  height: 26.5px;
+  width: 90px;
+}
+
+.filterWrapper {
+  display: none;
   justify-content: center;
+  height: 40px;
 }
 
-/* Search form */
-.example-form {
-  min-width: 300px;
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
-  display: block;
-  margin: auto;
-  padding-top: 25px;
-  padding-bottom: 18px;
-}
-.example-full-width {
-  width: 100%;
-}
-.mat-hint {
-  padding-left: 25px;
-}
+/* Grid view */
 img{
   height: 100%;
   width: 100%;
@@ -152,28 +241,62 @@ img{
 mat-grid-tile {
   background: white;
   margin: 10px;
+  -webkit-box-shadow: 0px 6px 22px -2px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 6px 22px -2px rgba(0,0,0,0.75);
+  box-shadow: 0px 6px 22px -2px rgba(0,0,0,0.75);
 }
+
 mat-grid-tile:hover mat-grid-tile-footer{
-  background-color: #3f94b5;
+  background-color: #34384c;
   cursor: pointer;
 }
+
 .mat-grid-tile:hover {
   cursor: pointer;
   opacity: 0.90;
 }
+
 mat-grid-list {
   display: none;
   padding-bottom: 25px !important;
-  margin-top: 20px;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin: 0 16.8% 25px 16.8%;
 }
 
-mat-grid-tile-footer {
-  font-family: Webly Sleek Kursiv;
-  font-weight: bold;
+.gridList {
+  background-color: #1E2339;
 }
-#viewBtnWrap{
-  margin-left: 18%;
-  margin-bottom: 10px;
+
+/* Responsive styles for small screens. */
+@media screen and (max-width: 480px) {
+
+  .container {
+    width: auto;
+    min-width: 100px;
+    margin:0;
+  }
+
+  .searchBar {
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  .searchInputField {
+    min-width: 40px;
+    padding: 5px;
+  }
+
+  .selectSearch {
+    padding:5px;
+    min-width: 20px;
+  }
+
+  .viewButton{
+    min-width: 50px;
+    width: 50px;
+    padding: 0 !important;
+  }
+
+  .searchContent {
+    padding-top: 0;
+  }
 }

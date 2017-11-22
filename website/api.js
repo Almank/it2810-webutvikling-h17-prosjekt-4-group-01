@@ -10,80 +10,49 @@ const config = {'secret': 'supersecretkey'};
 
 const bcrypt = require('bcryptjs');
 
-// Uppercase first letter in each word and return regex to be searchable.
-function splitElements(str) {
-  if (str === undefined || str === '') {
-    return { $exists: true }
-  }
-  str = str.split(' ');
-  let newArr = '';
-  for (let i = 0; i < str.length; i++) {
-    // Add space between words.
-    if (str.length > 1 && i > 0) {
-      newArr += ' '
-    }
-    newArr += str[i].charAt(0).toUpperCase() + str[i].substr(1);
-  }
-  return { "$regex": newArr }
-}
-
-// Get start and end year to filter.
-function splitYear(str) {
-  if (str === undefined || str === '') {
-    return [0, 9999];
-  } else {
-    return str.split("-").map((item) => {
-      return parseInt(item.trim());
-    });
-  }
-}
-
-// GET api listing.
-router.get('/', (req, res) => {
-    res.send('api works');
-});
-
 //Error handler used by all.
 function handleError(res, reason, message, code) {
-    console.log("ERROR: " + reason);
-    res.status(code || 500).json({"error": message});
+  console.log("ERROR: " + reason);
+  res.status(code || 500).json({"error": message});
 }
 
+/** User Authentication **/
 // Register user
-router.post('/register', function(req, res){
-    db.collection('users').findOne({'username': req.body.username}, function (err, user) {
-      if (!user){
-        if (req.body.username !== '' && req.body.password !== ''){
-          let hashedPassword = bcrypt.hashSync(req.body.password, 8);
-          let new_user = new userModel({
-            username: req.body.username,
-            password: hashedPassword,
-          });
-          db.collection('users').save(new_user,
-            function(err, docs) {
-              if (err) {
-                handleError(res, err);
-              } else {
-                let token = jwt.sign({ id: userModel._id }, config.secret, {
-                  expiresIn: 86400
-                });
-                res.status(200).send({ auth: true, token: token });
-              }
+router.post('/register', function (req, res) {
+  db.collection('users').findOne({'username': req.body.username}, function (err, user) {
+    if (!user) {
+      if (req.body.username !== '' && req.body.username !== undefined &&
+          req.body.password !== '' && req.body.password !== undefined) {
+        let hashedPassword = bcrypt.hashSync(req.body.password, 8);
+        let new_user = new userModel({
+          username: req.body.username,
+          password: hashedPassword,
+        });
+        db.collection('users').save(new_user,
+          function (err, docs) {
+            if (err) {
+              handleError(res, err);
+            } else {
+              let token = jwt.sign({id: userModel._id}, config.secret, {
+                expiresIn: 86400
+              });
+              res.status(200).send({auth: true, token: token});
             }
-          );
-        } else {
-          res.status(409).send({message: "One of the fields are empty."});
-        }
+          }
+        );
       } else {
-        res.status(409).send({message: 'User already exist in the database'});
+        res.status(409).send({message: "One of the fields are empty."});
       }
-    });
+    } else {
+      res.status(409).send({message: 'User already exist in the database'});
+    }
+  });
 });
 
 //Authenticate user
 function authenticate(username, password, fn) {
   db.collection('users').findOne({'username': username}, function (err, user) {
-    if(user !== null) {
+    if (user !== null) {
       if (bcrypt.compareSync(password, user.password)) {
         return fn(null, user);
       } else {
@@ -101,39 +70,39 @@ router.post('/login/verify', function (req, res) {
   let verifiedToken = jwt.decode(req.body.token, config.secret);
   let date = String(dateNow.getTime()).slice(0, 10);
   date = Number(date);
-  if (verifiedToken.exp < date){
+  if (verifiedToken.exp < date) {
     res.status(401).json({validation: false, message: 'Your session has expired, please login again'});
-  } else {
+  } else {
     res.status(200).json({validation: true, message: 'Session has expired'});
   }
 });
 
 //Login
-router.post('/login', function(req, res){
-    authenticate(req.body.username, req.body.password, function (err, user) {
-      if (err){
-        res.status(401).send({ auth: false, token: null, message: err.message});
-      } else {
-        let token = jwt.sign({ id: user._id }, config.secret, {
-          expiresIn: 86400
-        });
-        res.status(200).send({ auth: true, token: token});
-      }
-    });
+router.post('/login', function (req, res) {
+  authenticate(req.body.username, req.body.password, function (err, user) {
+    if (err) {
+      res.status(401).send({auth: false, token: null, message: err.message});
+    } else {
+      let token = jwt.sign({id: user._id}, config.secret, {
+        expiresIn: 86400
+      });
+      res.status(200).send({auth: true, token: token});
+    }
+  });
 });
 
 //Change password
 router.post('/new_password', function (req, res) {
   let verifiedToken = jwt.verify(req.body.token, config.secret);
   db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
-    if(user !== null) {
+    if (user !== null) {
       if (bcrypt.compareSync(req.body.oldPassword, user.password)) {
         user.password = bcrypt.hashSync(req.body.newPassword, 8);
         db.collection('users').save(user,
-          function(err, docs) {
+          function (err, docs) {
             if (err) {
               handleError(res, err);
-            }else {
+            } else {
               res.status(200).json(docs);
             }
           }
@@ -145,12 +114,28 @@ router.post('/new_password', function (req, res) {
   });
 });
 
-//Get Favorites
+/** Favorites **/
+//Get Favorite
 router.post('/favorites', function (req, res) {
   let verifiedToken = jwt.verify(req.body.token, config.secret);
   db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
-    if(user !== null) {
+    if (err) {
+      handleError(res, err.message, "Failed to find token.");
+    }
+    if (user !== null) {
       res.status(200).json(user.favorites);
+    }
+  });
+});
+
+//Get Favorites Movie Data
+router.post('/favorites/data', function (req, res) {
+  const favoriteList = req.body.favoriteList;
+  db.collection('movies').find({_id: {$in: favoriteList}}).toArray(function (err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get favorites.");
+    } else {
+      res.status(200).json(docs);
     }
   });
 });
@@ -160,8 +145,11 @@ router.post('/favorites/exists', function (req, res) {
   let exists = false;
   let verifiedToken = jwt.verify(req.body.token, config.secret);
   db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
-    if(user !== null) {
-      if (user.favorites.indexOf(req.body.movie_id) >= 0){
+    if (err) {
+      handleError(res, err.message, "Failed to see if favorite exist");
+    }
+    if (user !== null) {
+      if (user.favorites.indexOf(req.body.movie_id) >= 0) {
         exists = true;
       }
       res.status(200).json(exists);
@@ -173,7 +161,7 @@ router.post('/favorites/exists', function (req, res) {
 router.post('/favorites/modify', function (req, res) {
   let verifiedToken = jwt.verify(req.body.token, config.secret);
   db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
-    if(user !== null) {
+    if (user !== null) {
       if (req.body.newFavorite) {
         user.favorites.push(req.body.movie_id);
       } else {
@@ -183,10 +171,10 @@ router.post('/favorites/modify', function (req, res) {
         }
       }
       db.collection('users').save(user,
-        function(err, docs) {
+        function (err, docs) {
           if (err) {
-            handleError(res, err);
-          }else {
+            handleError(res, err.message, "Failed to modify favorite");
+          } else {
             res.status(200).json(docs);
           }
         }
@@ -195,20 +183,134 @@ router.post('/favorites/modify', function (req, res) {
   });
 });
 
-function getSortVariable(str, bool) {
-    let num = 1;
-    if (bool === 'true') {
-        num = -1;
+/** User History **/
+// UserHistory - Get list of movie id's from user session
+router.post('/history', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if (user !== null) {
+      const response = [];
+      for (let key in user.searchHistory) {
+        response.push(user.searchHistory[key].id);
+      }
+      res.status(200).send(response);
     }
-    if (str === 'year'){
-      return {'year': num}
-    } else if (str === 'genre'){
-      return {'genre': num}
+  });
+});
+
+// UserHistory - Add a new movie id to user session
+router.post('/history/add', function (req, res) {
+  let verifiedToken = jwt.verify(req.body.token, config.secret);
+  db.collection('users').findOne({'_id': verifiedToken.id}, function (err, user) {
+    if (user !== null) {
+      const save = [];
+      for (let key in req.body.movie_ids) {
+        save.push({key: key, id: req.body.movie_ids[key]});
+      }
+      user.searchHistory = save;
+      db.collection('users').save(user,
+        function (err, docs) {
+          if (err) {
+            handleError(res, err);
+          } else {
+            res.status(200).json(docs);
+          }
+        }
+      );
+    }
+  });
+});
+
+// UserHistory - Find movie data and map it to the users history.
+router.post('/history/data', function (req, res) {
+  const historyList = req.body.historyList;
+  const mapping = {};
+  for (let key in historyList) {
+    mapping[key] = historyList[key];
+  }
+  db.collection('movies').find({_id: {$in: historyList}}).toArray(function (err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get movies.");
     } else {
-      return {'title': num}
+      const mapped = {};
+      for (let key in docs) {
+        mapped[docs[key]._id] = docs[key];
+      }
+      res.status(200).json({mapping: mapping, mapped: mapped});
     }
+  });
+});
+
+/** WordCloud **/
+// Scan database and calculate genre data
+router.get('/wordcloud', function (req, res) {
+  let genreData = {};
+  db.collection('movies').find().toArray(function (err, data) {
+    for (let key in data) {
+      let genreList = data[key].genre;
+      for (let key2 in genreList) {
+        let genre = genreList[key2];
+        if (!genreData.hasOwnProperty(genre)) {
+          genreData[genre] = 1;
+        } else {
+          genreData[genre] += 1;
+        }
+      }
+    }
+    if (err) {
+      handleError(res, err.message, "Failed to get genres to wordcloud");
+    } else {
+      res.status(200).json(genreData);
+    }
+  });
+});
+
+
+/** Get movie information */
+// Uppercase first letter in each word and return regex to be searchable.
+function splitElements(str) {
+  if (str === undefined || str === '') {
+    return {$exists: true}
+  }
+  str = str.split(' ');
+  let newArr = '';
+  for (let i = 0; i < str.length; i++) {
+    // Add space between words.
+    if (str.length > 1 && i > 0) {
+      newArr += ' '
+    }
+    newArr += str[i].charAt(0).toUpperCase() + str[i].substr(1);
+  }
+  return {"$regex": newArr}
 }
 
+// Get start and end year to filter.
+function splitYear(str) {
+  if (str === undefined || str === '') {
+    return [0, 9999];
+  } else {
+    return str.split("-").map((item) => {
+      return parseInt(item.trim());
+    });
+  }
+}
+
+// Find what to sort on function
+function getSortVariable(str, bool) {
+  let num = 1;
+  if (bool === 'true') {
+    num = -1;
+  }
+  if (str === 'year') {
+    return {'year': num}
+  } else if (str === 'genre') {
+    return {'genre': num}
+  } else {
+    return {'title': num}
+  }
+}
+
+// Find genre and add them to a regex to be searchable.
 function getGenres(genres) {
   if (genres === undefined || genres === '') {
     return ''
@@ -219,7 +321,6 @@ function getGenres(genres) {
       return item.trim()
     });
   }
-
   let genreElem = [];
   for (let genre of genres) {
     genreElem.push({genre: {$regex: ".*" + genre + ".*"}});
@@ -228,53 +329,57 @@ function getGenres(genres) {
 }
 
 // Get movies
-router.get('/movies/list', function(req, res) {
+router.get('/movies/list', function (req, res) {
 
-    let page = parseInt(req.query.page * req.query.limit);
-    let limit = parseInt(req.query.limit);
-    const have = req.query.have;
-    const need = req.query.need;
+  // Set all variables from get request
+  let page = parseInt(req.query.page * req.query.limit);
+  let limit = parseInt(req.query.limit);
+  const have = req.query.have;
+  const need = req.query.need;
 
-    if (have !== undefined && need !== undefined){
-      page = parseInt(have);
-      limit = parseInt(need);
+  if (have !== undefined && need !== undefined) {
+    page = parseInt(have);
+    limit = parseInt(need);
+  }
+  const genre = getGenres(req.query.genre);
+  const title = splitElements(req.query.title);
+  const year = splitYear(req.query.year);
+  const actors = splitElements(req.query.actors);
+  const director = splitElements(req.query.director);
+  const sort = getSortVariable(req.query.sort, req.query.desc);
+
+  // Filter variables
+  let filter = {
+    title: title,
+    year: {$gte: year[0], $lte: year[1]},
+    actors: actors,
+    director: director
+  };
+  if (genre.length > 0) {
+    filter['$and'] = genre;
+  }
+
+  db.collection('movies').find(
+    filter,
+    // Remove properties from query
+    {
+      readMore: 0,
+      plot: 0,
+      runtime: 0
+    })
+  // Sort and limit matches
+    .sort(sort).limit(limit).skip(page).toArray(function (err, docs) {
+
+    if (err) {
+      handleError(res, err.message, "Failed to get movies.");
+    } else {
+      res.status(200).json(docs);
     }
-    const genre = getGenres(req.query.genre);
-    const title = splitElements(req.query.title);
-    const year = splitYear(req.query.year);
-    const actors = splitElements(req.query.actors);
-    const director = splitElements(req.query.director);
-    const sort = getSortVariable(req.query.sort, req.query.desc);
-
-    let filter = { title: title,
-        year: { $gte: year[0], $lte: year[1] },
-        actors: actors,
-        director: director };
-    if (genre.length > 0) {
-      filter['$and'] = genre;
-    }
-
-    db.collection('movies').find(
-      // Filter correct values
-      filter,
-      // Remove properties from query
-      {
-        readMore: 0,
-        plot: 0,
-        runtime: 0
-      })
-      // Sort and limit matches
-      .sort(sort).limit(limit).skip(page).toArray(function(err, docs) {
-
-      if (err) {
-        handleError(res, err.message, "Failed to get movies with no actors.");
-      } else {
-        res.status(200).json(docs);
-      }
-    });
+  });
 });
 
-router.get('/movies/amount', function(req, res) {
+// Get amount of movies matching search.
+router.get('/movies/amount', function (req, res) {
 
   const genre = getGenres(req.query.genre);
   const title = splitElements(req.query.title);
@@ -282,44 +387,54 @@ router.get('/movies/amount', function(req, res) {
   const actors = splitElements(req.query.actors);
   const director = splitElements(req.query.director);
 
-  let filter = { title: title,
-    year: { $gte: year[0], $lte: year[1] },
+  let filter = {
+    title: title,
+    year: {$gte: year[0], $lte: year[1]},
     actors: actors,
-    director: director };
+    director: director
+  };
   if (genre.length > 0) {
     filter['$and'] = genre;
   }
   db.collection('movies').find(
     filter,
-    {readMore: 0, plot: 0, runtime: 0, title: 0, poster: 0, actors: 0, director: 0, year: 0}).toArray(function(err, docs) {
-      if (err) {
+    {
+      readMore: 0,
+      plot: 0,
+      runtime: 0,
+      title: 0,
+      poster: 0,
+      actors: 0,
+      director: 0,
+      year: 0
+    }).toArray(function (err, docs) {
+    if (err) {
       handleError(res, err.message, "Failed to get amount of movies.");
     } else {
-
       res.status(200).json(docs.length);
     }
   });
 });
 
-router.get('/movies/modal', function(req, res) {
+
+// Get detailed info for movies.
+router.get('/movies/modal', function (req, res) {
 
   db.collection('movies').find(
     // Filter correct values
-    { title: req.query.title },
+    {title: req.query.title},
     // Remove properties from query
     {
       title: 0,
-      readMore: 0,
       genre: 0,
       year: 0,
       actors: 0,
       director: 0,
     })
   // Sort and limit matches
-    .sort().toArray(function(err, docs) {
-
+    .sort().toArray(function (err, docs) {
     if (err) {
-      handleError(res, err.message, "Failed to get movies with no actors.");
+      handleError(res, err.message, "Failed to get modal movie data.");
     } else {
       res.status(200).json(docs);
     }
