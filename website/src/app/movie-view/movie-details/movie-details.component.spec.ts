@@ -1,5 +1,5 @@
-import {async, ComponentFixture, TestBed, MovieDetailsComponent, MAT_DIALOG_DATA, MatDialogModule, MatDialogRef,
-  MatFormFieldModule, CommonModule, Favorite, RouterTestingModule, FormsModule, HttpClientModule
+import {async, Component, ComponentFixture, TestBed, MovieDetailsComponent, MAT_DIALOG_DATA, MatDialogModule, MatDialogRef,
+  MatFormFieldModule, CommonModule, Favorite, RouterTestingModule, FormsModule, HttpClientModule,
 } from '../../import-module';
 
 import { DebugElement } from '@angular/core';
@@ -12,17 +12,23 @@ describe('MovieDetailsComponent', () => {
   let debugElement: DebugElement[];
   let htmlElement: HTMLElement;
 
+  /** Mock for favorite service is needed to check toggleFavorite func in movie details component.
+   * Function is empty because the call does not affect the function itself */
+  class MockFavoriteService {
+    favorite(id) {}
+  }
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatDialogModule, CommonModule, RouterTestingModule, FormsModule, HttpClientModule, MatFormFieldModule],
       declarations: [MovieDetailsComponent],
-      providers: [{provide: MatDialogRef, useValue: {}}, {provide: MAT_DIALOG_DATA}, {provide: Favorite} ],
-    })
-      .compileComponents();
+      providers: [{provide: MatDialogRef, useValue: {}}, {provide: MAT_DIALOG_DATA}, {provide: Favorite, useClass: MockFavoriteService }],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MovieDetailsComponent);
+
     component = fixture.componentInstance;
     component.data = {
       '_id': 0,
@@ -98,5 +104,23 @@ describe('MovieDetailsComponent', () => {
       htmlElement = debugElement[i].nativeElement;
       expect(htmlElement.textContent).toEqual(component.data.plot);
     }
+  });
+
+  it('should change toggled when toggle favorite is ran', () => {
+    expect(component.toggled).toBeFalsy()
+    component.toggleFavorite('', false);
+    expect(component.toggled).toBeTruthy()
+  });
+
+  it('should change buttonClicked when toggle favorite is ran', () => {
+    expect(component.buttonClicked).toBeFalsy()
+    component.toggleFavorite('', false);
+    expect(component.buttonClicked).toBeTruthy()
+  });
+
+  it('yellow function should return correct toggle variable', () => {
+    expect(component.yellow).toBeFalsy();
+    component.toggleFavorite('', false);
+    expect(component.yellow).toBeTruthy();
   });
 });
