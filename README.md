@@ -1,7 +1,7 @@
 # Project 4 - Angular
 ### it2810-webutvikling-h17-prosjekt-4-group-01
 Welcome to our repository! To read further about our project in detail, 
-please visit our [**wiki**](https://github.com/IT2810/it2810-webutvikling-h17-prosjekt-4-group-01/wiki/Project-4---Documentation)
+please visit our [**wiki**](https://github.com/IT2810/it2810-webutvikling-h17-prosjekt-4-group-01/wiki/Project-4-Documentation)
 which also serves as our documentation!
 
 If you are evaluating the project, you might want to check out the
