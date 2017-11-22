@@ -25,8 +25,9 @@ Then you can proceed to cloning the project, and installing the dependencies ins
 the `/website` folder using `npm install`.
 
 When all dependencies are finished downloading, you are ready to run the initial script
-to fill your database with data from the omdbApi. All you have to do, is to run 
-the `omdb-transfer.js` script using `node`.
+to fill your database with data from the omdbApi. (This requires that you have a [mongoDB](https://docs.mongodb.com/manual/installation/) running beforehand) All you have to do then, is to run 
+the omdb-transfer script using:  
+`node omdb-transfer.js`
 
 Finally to make the website available locally, you have to build a distribution and 
 serve it. Proceed with the following commands inside the `/website` folder.  
