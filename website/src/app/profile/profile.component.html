@@ -10,7 +10,7 @@
           <hr class="card-hr">
         <mat-card-header class="mat-card-header">
           <mat-card-title>
-            <p>Username:</p><strong>{{user}}</strong>
+            <p>Username:</p><p id="profileusername"><strong>{{user}}</strong></p>
           </mat-card-title>
           <img src="https://source.unsplash.com/random/200x200">
         </mat-card-header>
@@ -40,7 +40,7 @@
         <mat-grid-list cols="4" rowHeight="1:1.45" gutterSize="12px" [class.show]="!show" class="gridList">
           <mat-grid-tile *ngFor="let movie of userHistory" (click)="openDialog(movie)" title={{movie.title}}>
             <img id="gridPoster" src="{{movie.poster}}" alt="">
-            <mat-grid-tile-footer>{{movie.title}}</mat-grid-tile-footer>
+            <mat-grid-tile-footer id="historyTitle">{{movie.title}}</mat-grid-tile-footer>
           </mat-grid-tile>
         </mat-grid-list>
       </mat-tab>
@@ -52,7 +52,7 @@
           <mat-grid-list cols="4" rowHeight="1:1.45" gutterSize="12px" [class.show]="!show" class="gridList">
             <mat-grid-tile *ngFor="let favorite of favorites" (click)="openDialog(favorite)" title={{favorite.title}}>
               <img id="gridPoster" src="{{favorite.poster}}" alt="">
-              <mat-grid-tile-footer>{{favorite.title}}</mat-grid-tile-footer>
+              <mat-grid-tile-footer id="favTitle">{{favorite.title}}</mat-grid-tile-footer>
             </mat-grid-tile>
           </mat-grid-list>
         </div>
