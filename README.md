@@ -26,8 +26,10 @@ the `/website` folder using:
 `npm install`.
 
 When all dependencies are finished downloading, you are ready to run the initial script
-to fill your database with data from the omdbApi. (This requires that you have a [mongoDB](https://docs.mongodb.com/manual/installation/) running beforehand) All you have to do then, is to run 
-the omdb-transfer script using:  
+to fill your database with data from the omdbApi. (This requires that you have a [mongoDB](https://docs.mongodb.com/manual/installation/) running beforehand) 
+Be sure to follow the guide above, and do not proceed without mongoDB running (else the back-end tests and website wont run locally).
+
+All you have to do then, is to run the omdb-transfer script using:  
 `node omdb-transfer.js`
 
 Finally to make the website available locally, you have to build a distribution and 
@@ -42,5 +44,7 @@ If you would like to run through the projects tests, you have to make sure that 
 installed all dependencies using `npm install` first.
 To proceed running the tests, use the commands:
  - Front-end tests: `npm run-script test`
- - Back-end tests: `npm run-script test-backend`
  - End-to-End tests: `npm run-script e2e`
+ - Back-end tests: `npm run-script test-backend`
+ 
+ **Note! If you were not able to install MongoDB, the back-end tests wont run, however the others will!**
