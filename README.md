@@ -42,8 +42,8 @@ If you would like to run through the projects tests, you have to make sure that 
 installed all dependencies using `npm install` first.
 
 To proceed running the tests, use the commands:
-- Front-end tests: `npm test`
-- Back-end tests: `npm test-backend`
+- Front-end tests: `npm run-script test`
+- Back-end tests: `npm run-script test-backend`
 - End-to-End tests: `npm e2e`
 #### Test Structure
 
