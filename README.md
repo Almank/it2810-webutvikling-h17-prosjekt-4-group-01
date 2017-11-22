@@ -44,7 +44,7 @@ installed all dependencies using `npm install` first.
 To proceed running the tests, use the commands:
 - Front-end tests: `npm run-script test`
 - Back-end tests: `npm run-script test-backend`
-- End-to-End tests: `npm e2e`
+- End-to-End tests: `npm run-script e2e`
 #### Test Structure
 
 The testing environment consists of the packages `Jasmine`, `Karma` and `Protractor`.
