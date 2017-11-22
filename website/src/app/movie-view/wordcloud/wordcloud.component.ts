@@ -4,20 +4,14 @@ import {  Component, OnInit, ViewChild, MatDialog, DataSource, MatPaginator, Beh
   import { WordcloudService } from './wordcloud.service';
 @Component({
   selector: 'wordcloud',
-  template: `
-  <div>
-      <h4 class="cloudtitle">Moviegenres in our database; the bigger they are, the more we got! <mat-icon class="cloudIcon">cloud</mat-icon></h4>
-      <div class="cloudcontainer" *ngIf="isDataAvailable">
-        <div class="cloud" AgWordCloud [wordData]="wordData" [options]="options" [width]=700 [color]="colors"></div>
-      </div>
-  </div>
-
-  `,
+  templateUrl: './wordcloud.component.html',
   styleUrls: ['./wordcloud.component.css'],
 })
 export class WordcloudComponent implements OnInit {
    wordData: AgWordCloudData[] = [];
    isDataAvailable:boolean = false
+
+  cloudTitle = "Movie genres in our database; the bigger they are, the more we got!"
 
    colors = ["#BFF2E8", "#89BDC6", "#F4FAFF", "#7C9EB2", "#E876A0"]
 

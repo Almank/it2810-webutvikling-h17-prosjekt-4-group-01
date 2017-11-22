@@ -83,7 +83,7 @@ describe('website home', () => {
   it('should navigate to wordcloud', () => {
     home.getCloudButton().click();
     expect(home.getCloudTitle())
-      .toEqual('Moviegenres in our database; the bigger they are, the more we got! cloud');
+      .toEqual('Movie genres in our database; the bigger they are, the more we got!');
   });
 
   // Expect to return to home after visiting wordcloud

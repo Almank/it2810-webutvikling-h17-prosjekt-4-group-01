@@ -27,7 +27,6 @@ export class AuthComponent implements OnInit {
   // When the register form is invoked in the HTML it calls onRegister,
   // which calls the api to create a new user.
   onRegister(form) {
-    console.log(form);
     const register = this.auth.onRegister(form);
     register.then(data => {
       if (isObject(data)) {
