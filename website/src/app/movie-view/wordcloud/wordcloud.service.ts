@@ -5,6 +5,7 @@ import 'rxjs/add/operator/toPromise';
 export class WordcloudService {
 
     constructor(private http: HttpClient) {}
+    //Gets wordcloud data from the API
     getWordcloud() {
       const params = new HttpParams();
       return this.http.get('/api/wordcloud', { params }).toPromise()
