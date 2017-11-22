@@ -61,5 +61,4 @@ describe('MovieListComponent', () => {
     htmlElement = debugElement.nativeElement;
     expect(htmlElement.textContent).toEqual('');
   });
-
 });
