@@ -41,9 +41,4 @@ describe('HeaderComponent', () => {
     const newValue = component.playIcon;
     expect(newValue).toEqual('play_circle_outline');
   });
-
-  it('should display user status', () => {
-    expect(htmlElement.textContent).toEqual('play_circle_filled');
-  });
-
 });
