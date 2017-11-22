@@ -64,7 +64,7 @@ describe('WordcloudComponent', () => {
   });
 
   /** Test to display correct cloud title */
-  it('should display cloudIcon', () => {
+  it('should display cloud title', () => {
     debugElement = fixture.debugElement.query(By.css('h4'));
     htmlElement = debugElement.nativeElement;
     expect(htmlElement.textContent).toEqual('');
