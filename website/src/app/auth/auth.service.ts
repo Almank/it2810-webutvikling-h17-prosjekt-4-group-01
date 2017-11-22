@@ -18,6 +18,7 @@ export class AuthenticationService {
     return this.http.post('/api/register', params, {headers: this.headers})
       .toPromise()
       .then(data => {
+        console.log('REGISTER: ', data);
         return data;
       });
   }
